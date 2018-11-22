@@ -9,6 +9,8 @@ public class AsynchronousClient {
     // The port number for the remote device.
     private int port;
 
+    private string LocalIPAddress = (new LocalIP()).Address();
+
     // ManualResetEvent instances signal completion.
     private ManualResetEvent connectDone =
         new ManualResetEvent(false);
@@ -20,16 +22,19 @@ public class AsynchronousClient {
     // The response from the remote device.
     private String response = String.Empty;
 
-    private void StartClient(int inpPort) {
-				port = inpPort;
+    public void StartClient() {
         // Connect to a remote device.
+        Debug.Log("Client: start called.");
         try {
             // Establish the remote endpoint for the socket.
             // The name of the
             // remote device is "host.contoso.com".
-            IPHostEntry ipHostInfo = Dns.GetHostEntry("LOCALHOST");
-            IPAddress ipAddress    = ipHostInfo.AddressList[0];
-            IPEndPoint remoteEP    = new IPEndPoint(ipAddress, port);
+            //IPHostEntry ipHostInfo = Dns.GetHostEntry("10.72.1.88");
+            //IPAddress ipAddress    = ipHostInfo.AddressList[0];
+            //IPEndPoint remoteEP    = new IPEndPoint(ipAddress, port);            
+            //IPHostEntry ipHostInfo = Dns.GetHostEntry("10.72.1.88");
+            IPAddress ipAddress = IPAddress.Parse(LocalIPAddress);
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8888);
 
             // Create a TCP/IP socket.
             Socket client = new Socket(ipAddress.AddressFamily,
@@ -68,7 +73,7 @@ public class AsynchronousClient {
             // Complete the connection.
             client.EndConnect(ar);
 
-            Debug.Log("Client: Socket connected to" +
+            Debug.Log("Client: Socket connected to " +
                 client.RemoteEndPoint.ToString());
 
             // Signal that the connection has been made.
