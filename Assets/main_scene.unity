@@ -237,6 +237,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e4b6902156a4ceda6b7b2d5038bd9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1192599180 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: f088767c35110f74c8373ded017da262, type: 3}
+  m_PrefabInternal: {fileID: 1543380793}
+--- !u!114 &1192599183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1192599180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22fdc0a472776ed4183d7681d914cc2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Urinal
 --- !u!1 &1221771484
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,4 +25,10 @@ public class LocalIP {
         }
         return localIP;
     }
+
+    public int Port()
+    {
+        int port = 80;
+        return port;
+    }
 }

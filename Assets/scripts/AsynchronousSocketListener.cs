@@ -22,6 +22,7 @@ public class AsynchronousSocketListener {
     public ManualResetEvent allDone = new ManualResetEvent(false);
 
     private string LocalIPAddress = (new LocalIP()).Address();
+    private int Port = (new LocalIP()).Port();
 
     public AsynchronousSocketListener() {
     }
@@ -35,7 +36,7 @@ public class AsynchronousSocketListener {
         //IPAddress ipAddress      = ipHostInfo.AddressList[0];
         //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, inpPort);
         IPAddress ipAddress = IPAddress.Parse(LocalIPAddress);
-        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 8888);
+        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Port);
 
         // Create a TCP/IP socket.
         Socket listener = new Socket(ipAddress.AddressFamily,

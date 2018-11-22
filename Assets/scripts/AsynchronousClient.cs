@@ -34,7 +34,7 @@ public class AsynchronousClient {
             //IPEndPoint remoteEP    = new IPEndPoint(ipAddress, port);            
             //IPHostEntry ipHostInfo = Dns.GetHostEntry("10.72.1.88");
             IPAddress ipAddress = IPAddress.Parse(LocalIPAddress);
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 8888);
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 5678);
 
             // Create a TCP/IP socket.
             Socket client = new Socket(ipAddress.AddressFamily,

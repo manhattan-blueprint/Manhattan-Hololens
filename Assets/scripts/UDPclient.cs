@@ -10,7 +10,6 @@ using System.Threading;
 
 
 public class UDPclient : MonoBehaviour {
-    private int port = 8888;
     private string IPAddress;
 
 	ConnectionConfig config;
@@ -23,16 +22,17 @@ public class UDPclient : MonoBehaviour {
     AsynchronousClient client = new AsynchronousClient();
 
     private string LocalIPAdress = (new LocalIP()).Address();
+    private int Port = (new LocalIP()).Port();
 
     public void Start() {
         Debug.Log("World initialized with both client and server on IP "
-            + IPAddress + " through port  + 8888");
+            + IPAddress + " through port " + Port);
 
         serverThread = new Thread(new ThreadStart(listener.StartListening));
-        clientThread = new Thread(new ThreadStart(client.StartClient));
-
         serverThread.Start();
-        clientThread.Start();
+
+        //clientThread = new Thread(new ThreadStart(client.StartClient));
+        //clientThread.Start();
     }
 
     //This is the function that serializes the message before sending it
