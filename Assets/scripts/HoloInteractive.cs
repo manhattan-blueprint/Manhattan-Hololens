@@ -28,17 +28,17 @@ public class HoloInteractive : MonoBehaviour {
             // hitInfo's point represents the position being gazed at
             // hitInfo's collider GameObject represents the hologram being gazed at
 
-            Debug.Log(objectName + " is being looked at now!");
             if (!rayCasted)
             {
+                Debug.Log(objectName + " is being looked at now!");
                 rayCasted = true;
             }
         }
         else
         {
-            Debug.Log(objectName + " is not being looked at anymore");
             if (rayCasted)
             {
+                Debug.Log(objectName + " is not being looked at anymore");
                 rayCasted = false;
             }
         }
