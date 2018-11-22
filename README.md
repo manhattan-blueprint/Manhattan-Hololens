@@ -3,25 +3,18 @@ Note: the readme for this branch is written as a progression of thought. A prope
 
 Hololens implementation for the Manhattan Games Project, Blueprint.
 
+# Set Up Hololens from Scratch with Unity
+* Install latest version of unity and Windows.
+* Add this package: https://github.com/Microsoft/MixedRealityToolkit-Unity/releases/tag/2017.4.2.0
+* Set build options to Windows Universal Platform
+* Follow this set up: https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-210
+* Should probably work
+
 ## What Networking Options are Available for Hololens
 Hololens specs - https://www.windowscentral.com/hololens-hardware-specs
 
-## Unity Network Transport Low Level API
-Regardless, a low level API will be required.
-Unity docs - https://docs.unity3d.com/Manual/UNetUsingTransport.html
-Informative video - https://www.youtube.com/watch?v=qGkkaNkq8co
-
-Better to use serializer? - https://docs.unity3d.com/Manual/UNetReaderWriter.html
-
-## Building a UI
-A UI will be best for displaying info on connection while debugging.
-Building a UI - https://unity3d.com/learn/tutorials/s/user-interface-ui
-
-## Testing
-The final solution requires a Hololens to talk to an Android phone. Therefore if a way of using a custom UDP connection with the simulator is viable for development then that will be done; otherwise the Hololens application will have to be built every time and redeployed in order to attempt speaking to the phone directly.
-
-## Hololens Mixed Reality Toolkit
-https://github.com/Microsoft/MixedRealityToolkit-Unity
+## Current networking implementation
+Custom asynchronous server socket interface running on a separate thread, based off of: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example
 
 ### Gaze
 https://docs.microsoft.com/en-us/windows/mixed-reality/gaze-in-unity
