@@ -2,100 +2,126 @@
 //Create a Text GameObject (Create>UI>Text) and attach it to the My Text field in the Inspector of your GameObject
 //Press the space bar in Play Mode to see the Text change.
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Networking;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 
 public class UDPclient : MonoBehaviour {
 
-	// Debug text on screen.
-	public Text debugText;
-
 	// Network variables.
 	private const int MAX_CONNECTION = 2;
-
 	private int port = 8888;
 
 	private int hostId;
-	private int webHostId;
 	private int connectionId;
-
-	private int reliableChannel;
-	private int unreliableChannel;
-
-	private bool isConnected = false;
+	private int channelId;
 	private byte error;
-
-	// Network variables.
+    
 	ConnectionConfig config;
 	HostTopology topology;
+    
+    // Get local IP address of device.
+    public string LocalIPAddress()
+    {
+        IPHostEntry host;
+        string localIP = "";
+        host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+                break;
+            }
+        }
+        return localIP;
+    }
 
-	public void Connect() {
-	}
-
-	private void Start() {
-		// Set text of info text.
-		debugText.text = "Starting connection.";
-		debugText.color = new Color(0.0f, 1.0f, 0.0f);
-		debugText.fontSize = 14;
+    private void Start() {
+        Debug.Log("Initializing Network");
 
 		// Initializing the Transport Layer with no arguments (default settings)
 		NetworkTransport.Init();
 
 		// Initialize connection configuration and add a channel
 		config = new ConnectionConfig();
-		int reliableChannelID  = config.AddChannel(QosType.Reliable);
-		int unreliableChannelID  = config.AddChannel(QosType.Unreliable);
+		channelId  = config.AddChannel(QosType.Reliable);
 
 		// Maximum of 2 connections
 		topology = new HostTopology(config, MAX_CONNECTION);
 
 		// Get a host ID (I.P. address?)
-		hostId = NetworkTransport.AddHost(topology, 8888);
-		connectionId = NetworkTransport.Connect(hostId, "LOCALHOST", port, 0, out error);
+		hostId = NetworkTransport.AddHost(topology, port);
 
-		debugText.text = "Connected.";
+        Debug.Log("Host IP: " + LocalIPAddress());
+    } 
+    
+    //This is the function that serializes the message before sending it
+    void sendMessage(string textInput)
+    {
+        byte error;
+        byte[] buffer = new byte[1024];
+        Stream message = new MemoryStream(buffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Serialize the message
+        formatter.Serialize(message, textInput);
 
-		isConnected = true;
-	}
+        //Send the message from the "client" with the serialized message and the connection information
+        NetworkTransport.Send(hostId, connectionId, channelId, buffer, (int)message.Position, out error);
 
-	private void Update() {
-		if(!isStarted) {
-			return;
-		}
+        //If there is an error, output message error to the console
+        if ((NetworkError)error != NetworkError.Ok)
+        {
+            Debug.Log("Message send error: " + (NetworkError)error);
+        }
+        Debug.Log("From " + hostId + " to " + connectionId + " : " + buffer);
+    }
 
-		int recHostId;
-		int connectionId;
-		int channelId;
-		byte[] recBuffer = new byte[1024];
-		int bufferSize = 1024;
-		int dataSize;
-		byte error;
-		NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
+    private void Update() {
+        {
+            int outHostId;
+            int outConnectionId;
+            int outChannelId;
+            byte[] buffer = new byte[1024];
+            int bufferSize = 1024;
+            int receiveSize;
+            byte error;
 
-		switch (recData)
-		{
-			case NetworkEventType.Nothing:					// No data received.
-				break;
-			case NetworkEventType.ConnectEvent:			// Someone has connected.
-				Debug.Log("Connection: " + connectionId + " has connected.")
-				break;
-			case NetworkEventType.DataEvent:				// Useful data.
-				break;
-			case NetworkEventType.DisconnectEvent:	// Someone has disconnected.
-				break;
-			case NetworkEventType.BroadcastEvent:		// ?
-				break;
-		}
+            NetworkEventType evnt = NetworkTransport.Receive(out outHostId, out outConnectionId, out outChannelId, buffer, bufferSize, out receiveSize, out error);
+            switch (evnt)
+            {
+                case NetworkEventType.ConnectEvent:
+                    if (outHostId == hostId &&
+                        outConnectionId == connectionId &&
+                        (NetworkError)error == NetworkError.Ok)
+                    {
+                        Debug.Log("Connected");
+                    }
+                    break;
+                case NetworkEventType.DisconnectEvent:
+                    if (outHostId == hostId &&
+                        outConnectionId == connectionId)
+                    {
+                        Debug.Log("Connected, error:" + error.ToString());
+                    }
+                    break;
+            }
+        }
 
+        // Press the space key to send a test message.
+        if (Input.GetKey(KeyCode.Space))
+        {
+            sendMessage("KILL ALL HUMANS.");
+        }
 
-		//Press the space key to change the Text message
-		if (Input.GetKey(KeyCode.Space))
-		{
-		    debugText.text = "Text has changed.";
-		}
-	}
+        // Press the F1 key to get status on connection.
+        if (Input.GetKey(KeyCode.F1))
+        {
+            Debug.Log("Current error state:" + error);
+        }
+    }
 }
