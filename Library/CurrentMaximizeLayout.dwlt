@@ -23,7 +23,7 @@ MonoBehaviour:
   m_MinSize: {x: 583, y: 471}
   m_MaxSize: {x: 14002, y: 14021}
   vertical: 0
-  controlID: 5691
+  controlID: 1641
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_MinSize: {x: 306, y: 471}
   m_MaxSize: {x: 10000, y: 14021}
   vertical: 1
-  controlID: 5692
+  controlID: 1617
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_MinSize: {x: 306, y: 221}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 5693
+  controlID: 1618
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -203,9 +203,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 14caffffe2f8ffffdefbffff00000000
+    m_SelectedIDs: f0470000
+    m_LastClickedID: 18416
+    m_ExpandedIDs: defbffff00000000f0470000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -287,9 +287,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.66756463, y: 0.60680103, z: 1.0108423}
+    m_Target: {x: 0.7881621, y: 0.43674362, z: 0.90636694}
     speed: 2
-    m_Value: {x: 0.66756463, y: 0.60680103, z: 1.0108423}
+    m_Value: {x: 0.7881621, y: 0.43674362, z: 0.90636694}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -321,9 +321,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.38967952, y: 0.20503245, z: -0.08943301, w: -0.8933719}
   m_Size:
-    m_Target: 4.507395
+    m_Target: 1.2073951
     speed: 2
-    m_Value: 4.507395
+    m_Value: 1.2073951
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -423,19 +423,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Holograms
+    - Assets
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Holograms
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\BVRL\Documents\Eli_GitHub\Manhattan-Hololens
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 423d0000
-    m_LastClickedID: 15682
+    scrollPos: {x: 0, y: 38}
+    m_SelectedIDs: 1c3c0000
+    m_LastClickedID: 15388
     m_ExpandedIDs: 000000001c3c00002e4300007c450000984500003846000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -489,8 +489,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: f0470000
+    m_LastClickedInstanceID: 18416
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c623000000000000823500006a280000
     m_RenameOverlay:
