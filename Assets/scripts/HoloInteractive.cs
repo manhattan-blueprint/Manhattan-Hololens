@@ -1,46 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using HoloToolkit.Unity.InputModule;
+    
+/// <summary>
+/// Very simple class that implements basic logic for a trigger button.
+/// </summary>
+public class HoloInteractive : MonoBehaviour, IInputHandler
+{
+    /// <summary>
+    /// Indicates whether the button is clickable or not.
+    /// </summary>
+    [Tooltip("Indicates whether the button is clickable or not.")]
+    public bool IsEnabled = true;
 
-public class HoloInteractive : MonoBehaviour {
+    public event Action ButtonPressed;
 
-    bool rayCasted = false;
+    public GameObject p_collectable;
 
-    public string objectName;
-
-	// Use this for initialization
-	void Start () {
-        Debug.Log(objectName + " ray casting initialized");
-	}
-
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Press the button programmatically.
+    /// </summary>
+    public void Press()
     {
-        RaycastHit hitInfo;
-        if (Physics.Raycast(
-                Camera.main.transform.position,
-                Camera.main.transform.forward,
-                out hitInfo,
-                20.0f,
-                Physics.DefaultRaycastLayers))
+        if (IsEnabled)
         {
-            // If the Raycast has succeeded and hit a hologram
-            // hitInfo's point represents the position being gazed at
-            // hitInfo's collider GameObject represents the hologram being gazed at
-
-            if (!rayCasted)
-            {
-                Debug.Log(objectName + " is being looked at now!");
-                rayCasted = true;
-            }
+            p_collectable.transform.localScale -= new Vector3(0.2f, 0, 0);
         }
-        else
+    }
+
+    void IInputHandler.OnInputDown(InputEventData eventData)
+    {
+        // Nothing.
+    }
+
+    void IInputHandler.OnInputUp(InputEventData eventData)
+    {
+        if (IsEnabled && eventData.PressType == InteractionSourcePressInfo.Select)
         {
-            if (rayCasted)
-            {
-                Debug.Log(objectName + " is not being looked at anymore");
-                rayCasted = false;
-            }
+            p_collectable.transform.localScale -= new Vector3(0.2f, 0, 0);
+            eventData.Use(); // Mark the event as used, so it doesn't fall through to other handlers.
         }
     }
 }
