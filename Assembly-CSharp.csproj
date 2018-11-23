@@ -575,11 +575,12 @@
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UICollection.cs" />
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityScaler.cs" />
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityUtilities.cs" />
-    <Compile Include="Assets\Scripts\AsynchronousClient.cs" />
-    <Compile Include="Assets\Scripts\AsynchronousSocketListener.cs" />
-    <Compile Include="Assets\Scripts\HoloInteractive.cs" />
-    <Compile Include="Assets\Scripts\LocalIP.cs" />
-    <Compile Include="Assets\Scripts\UDPclient.cs" />
+    <Compile Include="Assets\scripts\AsynchronousClient.cs" />
+    <Compile Include="Assets\scripts\AsynchronousSocketListener.cs" />
+    <Compile Include="Assets\scripts\HoloInteractive.cs" />
+    <Compile Include="Assets\scripts\HoloObject.cs" />
+    <Compile Include="Assets\scripts\LocalIP.cs" />
+    <Compile Include="Assets\scripts\UDPclient.cs" />
     <None Include="Assets\HoloToolkit\Utilities\Scripts\GLTF\Shaders\GLTFConstant.cginc" />
     <None Include="Assets\HoloToolkit\Common\Shaders\Obsolete\UnlitConfigurable.shader" />
     <None Include="Assets\HoloToolkit\UX\Shaders\HUXButtonShader.shader" />

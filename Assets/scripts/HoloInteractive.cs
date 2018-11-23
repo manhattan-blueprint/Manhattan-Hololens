@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using HoloToolkit.Unity.InputModule;
-    
+
 /// <summary>
 /// Very simple class that implements basic logic for a trigger button.
 /// </summary>
@@ -15,7 +15,18 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
 
     public event Action ButtonPressed;
 
-    public GameObject p_collectable;
+    public GameObject wood;
+    public HoloObject h_wood;
+
+    public GameObject ore;
+    public HoloObject h_ore;
+
+    public void Start()
+    {
+        Debug.Log("Start called in holointeractive.");
+        h_wood = new HoloObject(wood, "wood");
+        h_ore = new HoloObject(ore, "ore");
+    }
 
     /// <summary>
     /// Press the button programmatically.
@@ -24,7 +35,6 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
     {
         if (IsEnabled)
         {
-            p_collectable.transform.localScale -= new Vector3(0.2f, 0, 0);
         }
     }
 
@@ -37,8 +47,20 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
     {
         if (IsEnabled && eventData.PressType == InteractionSourcePressInfo.Select)
         {
-            p_collectable.transform.localScale -= new Vector3(0.2f, 0, 0);
-            eventData.Use(); // Mark the event as used, so it doesn't fall through to other handlers.
+            h_wood.doGather();
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            h_wood.reset();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            h_ore.reset();
         }
     }
 }
+
