@@ -1,6 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using HoloToolkit.Unity.InputModule;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 /// <summary>
 /// Very simple class that implements basic logic for a trigger button.
@@ -15,17 +19,51 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
 
     public event Action ButtonPressed;
 
-    public GameObject wood;
-    public HoloObject h_wood;
+    public TextMesh infoText;
 
-    public GameObject ore;
-    public HoloObject h_ore;
+    public GameObject gObject;
+    public HoloObject holoObject;
+
+    private string[] infoTexts = {"Hello Mr Blueprint!", "Tap to collect", "Follow the pointer", ""};
+    private int infoTextCounter = 0;
 
     public void Start()
     {
+        // Make objects respond to being tapped
         Debug.Log("Start called in holointeractive.");
-        h_wood = new HoloObject(wood, "wood");
-        h_ore = new HoloObject(ore, "ore");
+        holoObject = new HoloObject(gObject, "wood");
+
+        // Display info text
+        resetAll();
+    }
+
+    public void spawnObject(Vector3 position)
+    {
+        holoObject.reset();
+        gObject.transform.position = position;
+    }
+
+    public void resetAll()
+    {
+        spawnObject(new Vector3(0.0f, 0.0f, 3.5f));
+        infoText.transform.position = new Vector3(0.0f, 0.3f, 3.5f);
+        infoText.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        infoTextCounter = 0;
+        infoText.text = infoTexts[infoTextCounter];
+        Invoke("updateInfoText", 3);
+        Invoke("updateInfoText", 6);
+        Invoke("updateInfoText", 9);
+    }
+
+    public void updateInfoText()
+    {
+        infoTextCounter++;
+        infoText.text = infoTexts[infoTextCounter];
+    }
+
+    public void blankText()
+    {
+        infoText.text = "";
     }
 
     /// <summary>
@@ -47,20 +85,34 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
     {
         if (IsEnabled && eventData.PressType == InteractionSourcePressInfo.Select)
         {
-            h_wood.doGather();
+            holoObject.doGather();
         }
     }
 
     public void Update()
     {
+        if (holoObject.getHarvestState() == true)
+        {
+            double textOrientation = Mathf.Atan(gObject.transform.position.z / gObject.transform.position.x) + 90.0f;
+            Debug.Log(textOrientation);
+            infoText.transform.rotation = Quaternion.Euler(0.0f, (float)(-Mathf.Rad2Deg*textOrientation), 0.0f);
+            Debug.Log("Harvested text should be showing");
+            infoText.text = "You collected wood. Well done!";
+            Invoke("blankText", 3);
+            infoText.transform.position = gObject.transform.position;
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            h_wood.reset();
+            resetAll();
+            holoObject.reset();
         }
-        if (Input.GetKeyDown(KeyCode.W))
+
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            h_ore.reset();
+            spawnObject(new Vector3(UnityEngine.Random.Range(-4.0f, 4.0f), 0.0f, UnityEngine.Random.Range(-4.0f, 4.0f)));
         }
     }
+    
 }
 

@@ -10,6 +10,7 @@ public class HoloObject {
     private float shrinkAmount;
     private string objType;
     private Vector3 originalScale;
+    private bool harvested = false;
 
     public HoloObject (GameObject inpObject, string inpObjType)
     {
@@ -23,12 +24,15 @@ public class HoloObject {
     public void reset()
     {
         isVisible = true;
+        harvested = false;
         gameObject.transform.localScale = originalScale;
     }
     
     public void hide ()
     {
         gameObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+        isVisible = false;
+        harvested = true;
     }
 
     public void doGather ()
@@ -36,7 +40,7 @@ public class HoloObject {
         if (isVisible)
         {
             if (objType == "wood") {
-                if (gameObject.transform.localScale.x >= shrinkAmount)
+                if (gameObject.transform.localScale.x >= shrinkAmount * 1.1f)
                 {
                     gameObject.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
                 }
@@ -46,5 +50,17 @@ public class HoloObject {
                 }
             }
         }
+    }
+
+    // Returns harvest state. If harvest state is true then it sets it to false, so this function
+    // will only return true once for each object harvested!
+    public bool getHarvestState()
+    {
+        if (harvested)
+        {
+            harvested = false;
+            return true;
+        }
+        return false;
     }
 }
