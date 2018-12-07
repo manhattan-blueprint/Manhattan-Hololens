@@ -21,6 +21,8 @@ public class AsynchronousSocketListener {
     // Thread signal.
     public ManualResetEvent allDone = new ManualResetEvent(false);
 
+    public HoloInteractive holoInter;
+
     private string LocalIPAddress = (new LocalIP()).Address();
     private int Port = (new LocalIP()).Port();
 
@@ -104,23 +106,22 @@ public class AsynchronousSocketListener {
             // Check for end-of-file tag. If it is not there, read
             // more data.
             content = state.sb.ToString();
-            if (content.IndexOf("<EOF>") > -1) {
-                // All the data has been read from the
-                // client. Display it on the unity debug log.
-                Debug.Log("Server: Read " + content.Length +
-										" bytes from socket. \n Data: " + content);
-                // Echo the data back to the client.
-                Send(handler, content);
-            } else {
-                // Not all data received. Get more.
-                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
-            }
+
+            Debug.Log("Server: Read " + content.Length +
+                                    " bytes from socket. \n Data: " + content);
+
+            // Trigger the reset of the object (later should be the spawn of)
+            // holoInter.resetAll();
+
+            // All the data has been read from the
+            // client. Display it on the unity debug log.
+            // Echo the data back to the client.
+            Send(handler, content);
         }
     }
 
     private void Send(Socket handler, String data) {
-				Debug.Log("Server: Send called with data: " + data);
+		Debug.Log("Server: Send called with data: " + data);
 
         // Convert the string data to byte data using ASCII encoding.
         byte[] byteData = Encoding.ASCII.GetBytes(data);
