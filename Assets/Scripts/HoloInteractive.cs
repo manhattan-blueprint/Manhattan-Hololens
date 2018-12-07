@@ -30,7 +30,7 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
     public void Start()
     {
         // Make objects respond to being tapped
-        Debug.Log("Start called in holointeractive.");
+        // Debug.Log("Start called in holointeractive.");
         holoObject = new HoloObject(gObject, "wood");
 
         // Display info text
@@ -54,7 +54,6 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
         Invoke("updateInfoText", 3);
         Invoke("updateInfoText", 6);
         Invoke("updateInfoText", 9);
-        holoObject.reset();
     }
 
     public void updateInfoText()
@@ -95,8 +94,7 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
     {
         if (holoObject.getHarvestState() == true)
         {
-            double textOrientation = Mathf.Atan(gObject.transform.position.z / gObject.transform.position.x) + 90.0f;
-            Debug.Log(textOrientation);
+            double textOrientation = 0.0f;
             infoText.transform.rotation = Quaternion.Euler(0.0f, (float)(-Mathf.Rad2Deg*textOrientation), 0.0f);
             Debug.Log("Harvested text should be showing");
             infoText.text = "You collected wood. Well done!";
@@ -107,6 +105,7 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
         if (Input.GetKeyDown(KeyCode.Q))
         {
             resetAll();
+            holoObject.reset();
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
