@@ -26,7 +26,7 @@ public class UDPclient : MonoBehaviour {
 
     public void Start() {
         Debug.Log("World initialized with both client and server on IP "
-            + IPAddress + " through port " + Port);
+            + LocalIPAdress + " through port " + Port);
 
         serverThread = new Thread(new ThreadStart(listener.StartListening));
         serverThread.Start();
