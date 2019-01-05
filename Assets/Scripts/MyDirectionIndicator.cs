@@ -142,12 +142,15 @@ namespace HoloToolkit.Unity
         {
             // This will return true if the target's mesh is within the Main Camera's view frustums.
             Vector3 targetViewportPosition = mainCamera.WorldToViewportPoint(gameObject.transform.position);
-            return (targetViewportPosition.x > VisibilitySafeFactor && targetViewportPosition.x < 1 - VisibilitySafeFactor &&
-                    targetViewportPosition.y > VisibilitySafeFactor && targetViewportPosition.y < 1 - VisibilitySafeFactor &&
+            return (targetViewportPosition.x > VisibilitySafeFactor &&
+                    targetViewportPosition.x < 1 - VisibilitySafeFactor &&
+                    targetViewportPosition.y > VisibilitySafeFactor &&
+                    targetViewportPosition.y < 1 - VisibilitySafeFactor &&
                     targetViewportPosition.z > 0);
         }
 
-        private void GetDirectionIndicatorPositionAndRotation(Vector3 camToObjectDirection, Transform cameraTransform, out Vector3 position, out Quaternion rotation)
+        private void GetDirectionIndicatorPositionAndRotation(Vector3 camToObjectDirection,
+          Transform cameraTransform, out Vector3 position, out Quaternion rotation)
         {
             // Find position:
             // Save the cursor transform position in a variable.

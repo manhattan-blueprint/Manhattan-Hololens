@@ -67,16 +67,6 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
         infoText.text = "";
     }
 
-    /// <summary>
-    /// Press the button programmatically.
-    /// </summary>
-    public void Press()
-    {
-        if (IsEnabled)
-        {
-        }
-    }
-
     void IInputHandler.OnInputDown(InputEventData eventData)
     {
         // Nothing.
@@ -96,7 +86,6 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
         {
             double textOrientation = 0.0f;
             infoText.transform.rotation = Quaternion.Euler(0.0f, (float)(-Mathf.Rad2Deg*textOrientation), 0.0f);
-            Debug.Log("Harvested text should be showing");
             infoText.text = "You collected wood. Well done!";
             Invoke("blankText", 3);
             infoText.transform.position = gObject.transform.position;
@@ -113,6 +102,5 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
             spawnObject(new Vector3(UnityEngine.Random.Range(-4.0f, 4.0f), 0.0f, UnityEngine.Random.Range(-4.0f, 4.0f)));
         }
     }
-    
-}
 
+}
