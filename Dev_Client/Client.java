@@ -15,10 +15,8 @@ enum State {
     IDLE,                 // - Device socket not set yet
     GREET,                // - Send greet message to Hololens until response,
                           // send connected message to Hololens once received.
-    IDLE_IP,              // - Connected but not currently executing instructions
-    POP_BUFFER            // - Entered after item/items are added to the buffer.
-                          // Sends the item at top of buffer, and pops once
-                          // server has acknowledged the send
+    IDLE_IP,              // If there is anything in the buffer it tries to send
+                          // it repeatedly until it gets a mirrored response.
 }
 
 public class Client {
@@ -29,7 +27,7 @@ public class Client {
     Socket s;
     BufferedReader input;
     PrintWriter out;
-    long delayedTimer;
+    long delayedTime;
 
     // First item in the buffer is treated as the head
     ArrayList<String> buffer;
@@ -41,7 +39,7 @@ public class Client {
         this.state = State.IDLE;
 
         // Having this here makes timing logic more concise.
-        this.delayedTimer = System.currentTimeMillis();
+        this.delayedTime = System.currentTimeMillis();
     }
 
     public void Connect(String serverAddress, int port) throws Exception {
@@ -54,6 +52,7 @@ public class Client {
         this.out = new PrintWriter(s.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(s.getInputStream()));
         System.out.println("Client communication socket established. Swapping to state 'GREET'.");
+        out.println(greetMessage);
     }
 
     public Boolean IsRunning() throws Exception {
@@ -62,11 +61,11 @@ public class Client {
     }
 
     public void AddItemToBuffer(String Item) {
-        if (state == State.IDLE_IP || state == State.POP_BUFFER) {
+        if (state == State.IDLE_IP) {
             buffer.add(Item);
-            if (state != State.POP_BUFFER) {
-                System.out.println("Swapping to state 'POP_BUFFER'.");
-            }
+        }
+        else {
+            System.out.println("Connection not established yet; not adding item to buffer.");
         }
     }
 
@@ -87,34 +86,35 @@ public class Client {
                 // is no need to send more requests.
                 if (greetMessage.equals(response)) {
                     System.out.println("Greeting established! Swapping to state 'IDLE_IP'.");
-                    out.println(connectedMessage);
-                    delayedTimer = System.currentTimeMillis();
+                    // out.println(connectedMessage);
+                    delayedTime = System.currentTimeMillis();
                     state = State.IDLE_IP;
                     return;
                 }
-                if (currentTime >= delayedTimer) {
-                    out.println(connectedMessage);
-                    delayedTimer = System.currentTimeMillis() + 1000;
+                if (currentTime >= delayedTime) {
+                    System.out.println("Sending greeting message.");
+                    out.println(greetMessage);
+                    delayedTime = System.currentTimeMillis() + 1000;
                 }
                 break;
             case IDLE_IP:
-                // Nothing to do :)
-                break;
-            case POP_BUFFER:
-                String object = buffer.get(0);
-                if (object.equals(response)) {
-                    System.out.println("Object display acknowledged for " + object +"!");
-                    buffer.remove(object);
-                    delayedTimer = System.currentTimeMillis();
-                    if (buffer.size() == 0) {
-                        System.out.println("Buffer empty; Swapping to state 'IDLE_IP'.");
-                        state = State.IDLE_IP;
-                        return;
+                if (buffer.size() > 0) {
+                    String object = buffer.get(0);
+                    if (object.equals(response)) {
+                        System.out.println("Object display acknowledged for " + object +"!");
+                        buffer.remove(object);
+                        delayedTime = System.currentTimeMillis();
+                        if (buffer.size() == 0) {
+                            System.out.println("Buffer empty; Swapping to state 'IDLE_IP'.");
+                            state = State.IDLE_IP;
+                            return;
+                        }
                     }
-                }
-                if (currentTime >= delayedTimer) {
-                    out.println(object);
-                    delayedTimer = System.currentTimeMillis() + 1000;
+                    if (currentTime >= delayedTime) {
+                        System.out.println("Attempting to send object " + object);
+                        out.println(object);
+                        delayedTime = System.currentTimeMillis() + 1000;
+                    }
                 }
                 break;
         }
