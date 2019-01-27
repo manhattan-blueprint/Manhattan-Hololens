@@ -5,12 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-enum State {
-    IDLE,                 // - Device socket not set yet, display IP on screen
-    GREET,                // - Send greet message to phone until response,
-                          // send connected message to Hololens once received.
-    IDLE_IP               // - Connected, waiting for instructions
-}
 
 // State object for receiving data from remote device.
 public class StateObject {
@@ -24,23 +18,20 @@ public class AsynchronousSocketListener {
     public ManualResetEvent allDone;
     public HoloInteractive holoInter;
     LocalIP localIP;
+    ServerState serverState;
     private string localIPAddress;
     private int port;
 
-    public AsynchronousSocketListener() {
-        localIP = new LocalIP();
+    public AsynchronousSocketListener(LocalIP localIP, ServerState serverState) {
+        this.localIP = localIP;
+        this.serverState = serverState;
         allDone = new ManualResetEvent(false);
         localIPAddress = localIP.Address();
         port = localIP.Port();
     }
 
     public void StartListening() {
-        Debug.Log("Socket: start called.");
-        // Establish the local endpoint for the socket.
-        // The DNS name of the computer
-        //IPHostEntry ipHostInfo   = Dns.GetHostEntry(Dns.GetHostName());
-        //IPAddress ipAddress      = ipHostInfo.AddressList[0];
-        //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, inpPort);
+        Debug.Log("Server: initialized");
         IPAddress ipAddress = IPAddress.Parse(localIPAddress);
         IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
@@ -58,7 +49,7 @@ public class AsynchronousSocketListener {
                 allDone.Reset();
 
                 // Start an asynchronous socket to listen for connections.
-                Debug.Log("Server: Open to connections...");
+                Debug.Log("Server: open to connections...");
                 listener.BeginAccept(
                     new AsyncCallback(AcceptCallback),
                     listener );
@@ -71,10 +62,11 @@ public class AsynchronousSocketListener {
             Debug.Log("Server: " + e.ToString());
         }
 
-				Debug.Log("Server: Error caused exit.");
+				Debug.Log("Server: error caused exit.");
     }
 
     public void AcceptCallback(IAsyncResult ar) {
+        Debug.Log("Accepting callback");
         // Signal the main thread to continue.
         allDone.Set();
 
@@ -96,13 +88,12 @@ public class AsynchronousSocketListener {
         // from the asynchronous state object.
         StateObject state = (StateObject) ar.AsyncState;
         Socket handler = state.workSocket;
+        serverState.SetSocket(handler);
 
         // Read data from the client socket.
         int bytesRead = handler.EndReceive(ar);
 
         if (bytesRead > 0) {
-            Debug.Log("Some data received!");
-
             // There  might be more data, so store the data received so far.
             state.sb.Append(Encoding.ASCII.GetString(
                 state.buffer, 0, bytesRead));
@@ -111,21 +102,12 @@ public class AsynchronousSocketListener {
             // more data.
             content = state.sb.ToString();
 
-            Debug.Log("Server: Read " + content.Length +
-                                    " bytes from socket. \n Data: " + content);
-
-            // Trigger the reset of the object (later should be the spawn of)
-            // holoInter.resetAll();
-
-            // All the data has been read from the
-            // client. Display it on the unity debug log.
-            // Echo the data back to the client.
-            Send(handler, content);
+            serverState.SetContent(content);
         }
     }
 
-    private void Send(Socket handler, String data) {
-		Debug.Log("Server: Send called with data: " + data);
+    public void Send(Socket handler, String data) {
+        Debug.Log("Server: sending " + data + " to client");
 
         // Convert the string data to byte data using ASCII encoding.
         byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -136,13 +118,13 @@ public class AsynchronousSocketListener {
     }
 
     private void SendCallback(IAsyncResult ar) {
+        // allDone.Set();
         try {
             // Retrieve the socket from the state object.
             Socket handler = (Socket) ar.AsyncState;
 
             // Complete sending the data to the remote device.
             int bytesSent = handler.EndSend(ar);
-            Debug.Log("Server: Sent " + bytesSent + " bytes to client.");
 
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
