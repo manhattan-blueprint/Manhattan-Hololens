@@ -63,6 +63,7 @@ public class Client {
     public void AddItemToBuffer(String Item) {
         if (state == State.IDLE_IP) {
             buffer.add(Item);
+            System.out.println("Item " + "added to buffer");
         }
         else {
             System.out.println("Connection not established yet; not adding item to buffer.");
