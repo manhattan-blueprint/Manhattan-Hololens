@@ -34,42 +34,42 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
         holoObject = new HoloObject(gObject, "wood");
 
         // Display info text
-        resetAll();
+        ResetAll();
     }
 
-    public void spawnObject(Vector3 position)
+    public void SpawnObject(Vector3 position)
     {
         holoObject.reset();
         gObject.transform.position = position;
     }
 
-    public void resetAll()
+    public void ResetAll()
     {
         Debug.Log("Holointeractive object data reset");
-        spawnObject(new Vector3(0.0f, 0.0f, 3.5f));
+        SpawnObject(new Vector3(0.0f, 0.0f, 3.5f));
         infoText.transform.position = new Vector3(0.0f, 0.3f, 3.5f);
         infoText.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         infoTextCounter = 0;
         infoText.text = infoTexts[infoTextCounter];
-        Invoke("updateInfoText", 3);
-        Invoke("updateInfoText", 6);
-        Invoke("updateInfoText", 9);
+        Invoke("UpdateInfoText", 3);
+        Invoke("UpdateInfoText", 6);
+        Invoke("UpdateInfoText", 9);
     }
 
-    public void updateInfoText()
+    public void UpdateInfoText()
     {
         infoTextCounter++;
         infoText.text = infoTexts[infoTextCounter];
     }
 
-    public void blankText()
+    public void BlankText()
     {
         infoText.text = "";
     }
 
     void IInputHandler.OnInputDown(InputEventData eventData)
     {
-        // Nothing.
+        // Intentionally left blank; required for constructor.
     }
 
     void IInputHandler.OnInputUp(InputEventData eventData)
@@ -87,19 +87,19 @@ public class HoloInteractive : MonoBehaviour, IInputHandler
             double textOrientation = 0.0f;
             infoText.transform.rotation = Quaternion.Euler(0.0f, (float)(-Mathf.Rad2Deg*textOrientation), 0.0f);
             infoText.text = "You collected wood. Well done!";
-            Invoke("blankText", 3);
+            Invoke("BlankText", 3);
             infoText.transform.position = gObject.transform.position;
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            resetAll();
+            ResetAll();
             holoObject.reset();
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            spawnObject(new Vector3(UnityEngine.Random.Range(-4.0f, 4.0f), 0.0f, UnityEngine.Random.Range(-4.0f, 4.0f)));
+            SpawnObject(new Vector3(UnityEngine.Random.Range(-4.0f, 4.0f), 0.0f, UnityEngine.Random.Range(-4.0f, 4.0f)));
         }
     }
 
