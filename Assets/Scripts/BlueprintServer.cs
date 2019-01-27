@@ -18,15 +18,15 @@ public class BlueprintServer : MonoBehaviour {
     Thread clientThread;
     LocalIP localIP;
     AsynchronousSocketListener listener;
-    private string LocalIPAddress;
-    private int Port;
+    private string localIPAddress;
+    private int port;
 
     public void Start() {
         localIP = new LocalIP();
         listener = new AsynchronousSocketListener();
-        LocalIPAddress = localIP.Address();
+        localIPAddress = localIP.Address();
         port = localIP.Port();
-        Debug.Log("World initialized with server on IP " + LocalIPAddress + " through port " + Port);
+        Debug.Log("World initialized with server on IP " + localIPAddress + " through port " + port);
 
         serverThread = new Thread(new ThreadStart(listener.StartListening));
         serverThread.Start();
