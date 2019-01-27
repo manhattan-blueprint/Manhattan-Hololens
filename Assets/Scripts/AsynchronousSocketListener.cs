@@ -5,40 +5,44 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
+enum State {
+    IDLE,                 // - Device socket not set yet, display IP on screen
+    GREET,                // - Send greet message to phone until response,
+                          // send connected message to Hololens once received.
+    IDLE_IP               // - Connected, waiting for instructions
+}
+
 // State object for receiving data from remote device.
-public class StateObject{
-    // Client socket.
+public class StateObject {
     public Socket workSocket = null;
-    // Size of receive buffer.
-    public const int BufferSize = 256;
-    // Receive buffer.
+    public const int BufferSize = 256; // Size of receive buffer.
     public byte[] buffer = new byte[BufferSize];
-    // Received data string.
     public StringBuilder sb = new StringBuilder();
 }
 
 public class AsynchronousSocketListener {
-    // Thread signal.
-    public ManualResetEvent allDone = new ManualResetEvent(false);
-
+    public ManualResetEvent allDone;
     public HoloInteractive holoInter;
-
-    private string LocalIPAddress = (new LocalIP()).Address();
-    private int Port = (new LocalIP()).Port();
+    LocalIP localIP;
+    private string localIPAddress;
+    private int port;
 
     public AsynchronousSocketListener() {
+        localIP = new LocalIP();
+        allDone = new ManualResetEvent(false);
+        localIPAddress = localIP.Address();
+        port = localIP.Port();
     }
 
     public void StartListening() {
         Debug.Log("Socket: start called.");
         // Establish the local endpoint for the socket.
         // The DNS name of the computer
-        // running the listener is "host.contoso.com".
         //IPHostEntry ipHostInfo   = Dns.GetHostEntry(Dns.GetHostName());
         //IPAddress ipAddress      = ipHostInfo.AddressList[0];
         //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, inpPort);
-        IPAddress ipAddress = IPAddress.Parse(LocalIPAddress);
-        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Port);
+        IPAddress ipAddress = IPAddress.Parse(localIPAddress);
+        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
         // Create a TCP/IP socket.
         Socket listener = new Socket(ipAddress.AddressFamily,

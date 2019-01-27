@@ -13,7 +13,7 @@ public class BlueprintClient {
 
         try {
             client = new Client("hello_blueprint\0", "connected_blueprint\0");
-            client.SetSocket("192.168.43.91", 9050);
+            client.Connect("192.168.43.91", 9050);
         }
         catch(Exception e) {
             System.out.println("Error initializing server; " + e.getMessage());

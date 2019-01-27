@@ -1,6 +1,6 @@
-﻿//Attach this script to a GameObject for debugging.
-//Create a Text GameObject (Create>UI>Text) and attach it to the My Text field in the Inspector of your GameObject
-//Press the space bar in Play Mode to see the Text change.
+/*
+Retrieves the IP address and port to communicate on
+*/
 
 using UnityEngine;
 using UnityEngine.Networking;

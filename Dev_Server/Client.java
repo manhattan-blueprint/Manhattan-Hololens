@@ -44,7 +44,7 @@ public class Client {
         this.delayedTimer = System.currentTimeMillis();
     }
 
-    public void SetSocket(String serverAddress, int port) throws Exception {
+    public void Connect(String serverAddress, int port) throws Exception {
         this.buffer = new ArrayList<String>();
         this.serverAddress = serverAddress;
         System.out.println("Trying to open socket.");
