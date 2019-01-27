@@ -581,6 +581,7 @@
     <Compile Include="Assets\Scripts\HoloObject.cs" />
     <Compile Include="Assets\Scripts\LocalIP.cs" />
     <Compile Include="Assets\Scripts\MyDirectionIndicator.cs" />
+    <Compile Include="Assets\Scripts\ServerState.cs" />
     <None Include="Assets\HoloToolkit\Utilities\Scripts\GLTF\Shaders\GLTFConstant.cginc" />
     <None Include="Assets\HoloToolkit\Common\Shaders\Obsolete\UnlitConfigurable.shader" />
     <None Include="Assets\HoloToolkit\UX\Shaders\HUXButtonShader.shader" />

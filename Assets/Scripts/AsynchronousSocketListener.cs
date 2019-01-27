@@ -5,12 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-enum EventState {
-    IDLE,                 // - Device socket not set yet, display IP on screen
-    GREET,                // - Send greet message to phone until response,
-                          // send connected message to Hololens once received.
-    IDLE_IP               // - Connected, waiting for instructions
-}
 
 // State object for receiving data from remote device.
 public class StateObject {
@@ -24,22 +18,16 @@ public class AsynchronousSocketListener {
     public ManualResetEvent allDone;
     public HoloInteractive holoInter;
     LocalIP localIP;
+    ServerState serverState;
     private string localIPAddress;
     private int port;
-    EventState eventState;
 
-    private String greetMessage;
-    private String connectedMessage;
-
-    public AsynchronousSocketListener() {
-        localIP = new LocalIP();
+    public AsynchronousSocketListener(LocalIP localIP, ServerState serverState) {
+        this.localIP = localIP;
+        this.serverState = serverState;
         allDone = new ManualResetEvent(false);
         localIPAddress = localIP.Address();
         port = localIP.Port();
-
-        greetMessage = "hello_blueprint";
-        connectedMessage = "connected_blueprint";
-        eventState = EventState.IDLE;
     }
 
     public void StartListening() {
@@ -78,6 +66,7 @@ public class AsynchronousSocketListener {
     }
 
     public void AcceptCallback(IAsyncResult ar) {
+        Debug.Log("Accepting callback");
         // Signal the main thread to continue.
         allDone.Set();
 
@@ -99,6 +88,7 @@ public class AsynchronousSocketListener {
         // from the asynchronous state object.
         StateObject state = (StateObject) ar.AsyncState;
         Socket handler = state.workSocket;
+        serverState.SetSocket(handler);
 
         // Read data from the client socket.
         int bytesRead = handler.EndReceive(ar);
@@ -112,34 +102,11 @@ public class AsynchronousSocketListener {
             // more data.
             content = state.sb.ToString();
 
-            HandleEventState(content, handler);
+            serverState.SetContent(content);
         }
     }
 
-    private void HandleEventState(String content, Socket handler) {
-        Debug.Log("Server: read " + content);
-        switch (eventState) {
-            case EventState.IDLE:
-                if (string.Equals(content, greetMessage + "\n")) {
-                    Send(handler, greetMessage);
-                    Debug.Log("Server: swapping to state 'IDLE_IP'");
-                    eventState = EventState.IDLE_IP;
-                }
-                break;
-            case EventState.IDLE_IP:
-                if (content[0] == 'I') {
-                    Debug.Log("Server: received instruction");
-                }
-                else {
-                    Debug.Log("Server: unexpected message received");
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void Send(Socket handler, String data) {
+    public void Send(Socket handler, String data) {
         Debug.Log("Server: sending " + data + " to client");
 
         // Convert the string data to byte data using ASCII encoding.
@@ -151,6 +118,7 @@ public class AsynchronousSocketListener {
     }
 
     private void SendCallback(IAsyncResult ar) {
+        // allDone.Set();
         try {
             // Retrieve the socket from the state object.
             Socket handler = (Socket) ar.AsyncState;
