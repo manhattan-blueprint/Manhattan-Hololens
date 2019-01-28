@@ -88,7 +88,10 @@ public class AsynchronousSocketListener {
         // from the asynchronous state object.
         StateObject state = (StateObject) ar.AsyncState;
         Socket handler = state.workSocket;
-        serverState.SetSocket(handler);
+
+        // serverState uses the most recently connected device as the
+        // device in use
+        //serverState.SetSocket(handler);
 
         // Read data from the client socket.
         int bytesRead = handler.EndReceive(ar);
@@ -102,7 +105,7 @@ public class AsynchronousSocketListener {
             // more data.
             content = state.sb.ToString();
 
-            serverState.SetContent(content);
+            //serverState.SetContent(content);
         }
     }
 
@@ -126,11 +129,12 @@ public class AsynchronousSocketListener {
             // Complete sending the data to the remote device.
             int bytesSent = handler.EndSend(ar);
 
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
+            //handler.Shutdown(SocketShutdown.Both);
+            //handler.Close();
 
         } catch (Exception e) {
             Debug.Log("Server: " + e.ToString());
         }
+        Debug.Log("At end of SendCallback");
     }
 }
