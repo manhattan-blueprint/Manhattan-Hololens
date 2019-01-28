@@ -57,12 +57,16 @@ public class SynchronousSocketListener
                 int bytesRec = handler.Receive(bytes);
 
                 data = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                Debug.Log("Server: Received " + data);
+                Debug.Log("Server: Received " + bytesRec + " bytes, of form " + data);
 
-                serverState.AddInstruction(data);
-                
+                if (bytesRec > 0) {
+                    serverState.AddInstruction(data);
+                }
+
                 // Echo the data back to the client.  
                 byte[] msg = Encoding.ASCII.GetBytes(data);
+
+                Debug.Log("Server: Sending " + bytesRec + " bytes, of form " + msg);
 
                 handler.Send(msg);
             }

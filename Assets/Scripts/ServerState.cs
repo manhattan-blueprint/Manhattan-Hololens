@@ -4,6 +4,7 @@ of items to spawn if they have not yet been sent yet (unique only).
 */
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ServerState {
     
@@ -16,6 +17,7 @@ public class ServerState {
     public void AddInstruction(String instruction) {
         if (instruction[0] == 'I') { // Only want instructions to be added as spawnables.
             if (Unique(instruction)) { // Don't want duplicates in case the phone sends multiple.
+                Debug.Log("Adding instruction " + instruction);
                 Spawnable spawnable = new Spawnable(instruction);
                 spawnables.Add(spawnable);
             }

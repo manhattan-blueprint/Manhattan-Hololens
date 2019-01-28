@@ -7,7 +7,6 @@ the space bar in Play Mode to see the Text change.
 using UnityEngine;
 using System.Threading;
 using System;
-using System.Collections.Generic;
 
 // Useful for converting and storing messages into useful object data.
 public struct SpawnInfo {
