@@ -12,11 +12,9 @@ public class BlueprintClient {
         System.out.println("Starting client.");
 
         try {
-            client = new Client("hello_blueprint", "connected_blueprint");
-            client.Connect("192.168.43.91", 9050);
-            client.Update();
-            // client.Update();
-            client.AddItemToBuffer("I;test");
+            client = new Client("hello_blueprint\n");
+            client.SetSocket("192.168.43.91", 9050);
+            client.AddItemToBuffer("I;1.34;3.56;1.79;wood");
         }
         catch(Exception e) {
             System.out.println("Error initializing server; " + e.getMessage());

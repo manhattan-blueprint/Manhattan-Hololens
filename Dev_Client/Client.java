@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.InputStreamReader;
-import java.io.InputStreamReader;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.net.Socket;
 
@@ -21,37 +21,29 @@ enum State {
 
 public class Client {
     private String greetMessage;
-    private String connectedMessage;
     private String serverAddress;
     private State state;
-    Socket s;
-    BufferedReader input;
-    PrintWriter out;
-    long delayedTime;
+    private int port;
+    private long delayedTime;
 
     // First item in the buffer is treated as the head
     ArrayList<String> buffer;
 
     // Sets up the class, defining the strings used for communication.
-    Client(String greetMessage, String connectedMessage) throws Exception {
+    Client(String greetMessage) throws Exception {
         this.greetMessage = greetMessage;
-        this.connectedMessage = connectedMessage;
         this.state = State.IDLE;
+        buffer = new ArrayList<String>();
 
         // Having this here makes timing logic more concise.
         this.delayedTime = System.currentTimeMillis();
     }
 
-    public void Connect(String serverAddress, int port) throws Exception {
-        this.buffer = new ArrayList<String>();
+    public void SetSocket(String serverAddress, int port) throws Exception {
         this.serverAddress = serverAddress;
-        System.out.println("Trying to open socket.");
-        this.s = new Socket(serverAddress, port);
-        System.out.println("Socket opened.");
-        this.state = State.GREET;
-        this.out = new PrintWriter(s.getOutputStream(), true);
-        this.input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        System.out.println("Client communication socket established. Swapping to state 'GREET'.");
+        this.port = port;
+        System.out.println("Socket set to (" + serverAddress + ", " + port + ")");
+        this.state = State.IDLE_IP;
     }
 
     public Boolean IsRunning() throws Exception {
@@ -59,79 +51,72 @@ public class Client {
         return false;
     }
 
-    public void AddItemToBuffer(String Item) {
+    public void AddItemToBuffer(String Item) throws Exception {
         buffer.add(Item);
-        System.out.println("Item " + "added to buffer");
+        System.out.println("Item " + Item + " added to buffer");
     }
 
-    // Should be called frequently, ideally on an asynchronous thread.
+    public String SendAndRecv(String message) throws Exception {
+        Socket clientSocket = new Socket(serverAddress, 9050);
+        DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        String sentence = "hello_blueprint";
+        System.out.println("Sending: " + message);
+        outToServer.writeUTF(message);
+        outToServer.flush();
+        message = new String(inFromServer.readLine());
+        System.out.println("Received: " + message);
+        clientSocket.close();
+        return message;
+    }
+
     public void Update() throws Exception {
         long currentTime = System.currentTimeMillis();
 
         if (currentTime >= delayedTime) {
-            ReceiveSend();
+            switch(state) {
+                case IDLE:
+                    Idle();
+                    break;
+
+                case GREET:
+                    Greet();
+                    break;
+
+                case IDLE_IP:
+                    Idle_IP();
+                    break;
+            }
             delayedTime = System.currentTimeMillis() + 1000;
         }
+    }
 
-        // No point checking for receive updates unless something has been
-        // received.
-        if(input.ready()) {
-            ReceiveUpdate();
-            delayedTime = System.currentTimeMillis();
+    public void Idle() throws Exception {
+        // Nothing to do :)
+    }
+
+    public void Greet() throws Exception {
+        String response = SendAndRecv(greetMessage);
+        if (greetMessage.equals(response)) {
+            System.out.println("Greeting established! Swapping to state 'IDLE_IP'.");
+            state = State.IDLE_IP;
         }
     }
 
-    // Sends anything that needs to be sent.
-    public void ReceiveSend() throws Exception {
-        switch(state) {
-            case IDLE:
-                break;
+    public void Idle_IP() throws Exception {
+        if (buffer.size() > 0) { // No need to check anything if the buffer is empty
+            String object = buffer.get(0);
+            String response = SendAndRecv(object);
 
-            case GREET:
-                System.out.println("Sending greeting message.");
-                out.println(greetMessage);
-                break;
-            case IDLE_IP:
-                if (buffer.size() > 0) { // No need to check anything if the buffer is empty
-                    String object = buffer.get(0);
-                    System.out.println("Attempting to send object " + object);
-                    out.println(object);
-                }
-                break;
-        }
-    }
+            // byte[] objB = object.getBytes();
+            // byte[] resB = response.getBytes();
+            // System.out.println("Checking string <" + object + "> equals <" + response + ">");
+            // System.out.println("Checking bytes <" + objB + "> equals <" + resB + ">");
 
-    // Receives off the input string and processes accordingly.
-    public void ReceiveUpdate() throws Exception {
-        String response = input.readLine();
-
-        // Useful for debugging
-        if (response != null) { System.out.println("Received " + response); }
-
-        switch(state) {
-            case IDLE:
-                // Nothing to do :)
-                break;
-
-            case GREET:
-                // If the device has already responded correctly then there
-                // is no need to send more requests.
-                if (greetMessage.equals(response)) {
-                    System.out.println("Greeting established! Swapping to state 'IDLE_IP'.");
-                    state = State.IDLE_IP;
-                    return;
-                }
-                break;
-
-            case IDLE_IP:
-                if (buffer.size() > 0) { // No need to check anything if the buffer is empty
-                    String object = buffer.get(0);
-                    if (object.equals(response)) {
-                        System.out.println("Object display acknowledged for " + object + "!");
-                        buffer.remove(object);
-                    }
-                }
-                break;
+            // if (object.equals(response)) {
+            System.out.println("Object display acknowledged for " + object + "!");
+            buffer.remove(object);
+            // }
         }
     }
 }
