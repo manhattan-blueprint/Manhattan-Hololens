@@ -1,70 +1,48 @@
 /*
-Manages all
-Attach this script to a GameObject. Create a Text GameObject (Create>UI>Text)
-and attach it to the My Text field in the Inspector of your GameObject. Press
-the space bar in Play Mode to see the Text change.
+Keeps track of instructions that have been sent, only adding new items to the list
+of items to spawn if they have not yet been sent yet (unique only).
 */
-using System.Net.Sockets;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ServerState {
-    private enum StateHolder {
-        IDLE = 0,               // - Device socket not set yet, display IP on screen
-        IDLE_IP = 1             // - Connected, waiting for instructions
-    }
-
-    private StateHolder stateHolder;
-    private String lastContent;
-    private String content;
-    private Socket handler;
+    
+    private readonly List<Spawnable> spawnables;
 
     public ServerState() {
-        this.stateHolder = new StateHolder();
-        this.stateHolder = StateHolder.IDLE;
-        content = "";
-        lastContent = "";
+        spawnables = new List<Spawnable>();
     }
-
-    public void SetSocket(Socket handler) {
-        this.handler = handler;
-    }
-
-    public Socket GetSocket() {
-        return this.handler;
-    }
-
-    public void SetContent(String content) {
-        this.content = content;
-    }
-
-    public String GetContent() {
-        return this.content;
-    }
-
-    public void ToggleState() {
-        if (this.stateHolder == StateHolder.IDLE) {
-            this.stateHolder = StateHolder.IDLE_IP;
-        }
-        else {
-            this.stateHolder = StateHolder.IDLE;
+    
+    public void AddInstruction(String instruction) {
+        if (instruction[0] == 'I') { // Only want instructions to be added as spawnables.
+            if (Unique(instruction)) { // Don't want duplicates in case the phone sends multiple.
+                Debug.Log("Adding instruction " + instruction);
+                Spawnable spawnable = new Spawnable(instruction);
+                spawnables.Add(spawnable);
+            }
         }
     }
 
-    public int GetState() {
-        if (this.stateHolder == StateHolder.IDLE) {
-            return 0;
+    public String GetFreshSpawn() {
+        int i = 0;
+        while (i < spawnables.Count) {
+            if (spawnables[i].spawned == false) {
+                spawnables[i].spawned = true;
+                return spawnables[i].instruction;
+            }
+            i++;
         }
-        else {
-            return 1;
-        }
+        return "";
     }
 
-    public void RecycleContent() {
-        if (!string.Equals("", content)) {
-            lastContent = content;
-            content = "";
-            // Debug.Log("Recycling '" + content + "'. LastContent now '" + lastContent + "' and content '" + content + "'");
+    public Boolean Unique(String instruction) {
+        Boolean unique = false;
+        foreach (var spawnable in spawnables) {
+            if (string.Equals(spawnable, instruction)) {
+                unique = false;
+            }
         }
+        return unique;
     }
 }
