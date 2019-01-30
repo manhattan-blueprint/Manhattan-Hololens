@@ -10,7 +10,7 @@ using System;
 
 // Useful for converting and storing messages into useful object data.
 public struct SpawnInfo {
-    public float xCo, yCo, zCo;
+    private float xCo, yCo, zCo;
     public String type;
 
     public SpawnInfo(String inpContent) {
@@ -22,24 +22,28 @@ public struct SpawnInfo {
         type = temp[4];
     }
 
+    public Vector3 GetPosition() {
+        return new Vector3(xCo, yCo, zCo);
+    }
+
     public void LogInfo() {
-        Debug.Log("Coords: (" + xCo + ", " + yCo + ", " + zCo + "), Type: " + type);
+        Debug.Log("SpawnInfo: Coords: (" + xCo + ", " + yCo + ", " + zCo + "), Type: " + type);
     }
 }
 
 public class BlueprintServer : MonoBehaviour {
     private Thread serverThread;
     private LocalIP localIP;
-    private SynchronousSocketListener listener;
+    private SocketListener listener;
     private ServerState serverState;
     private String greetMessage, connectedMessage;
-    HoloInteractive holoInteractive;
+    public GameObject gObject;
 
     public void Start() {
         localIP = new LocalIP();
         serverState = new ServerState();
-        listener = new SynchronousSocketListener(localIP, serverState);
-        Debug.Log("World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
+        listener = new SocketListener(localIP, serverState);
+        Debug.Log("BlueprintServer: World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
 
         greetMessage = "hello_blueprint";
         connectedMessage = "connected_blueprint";
@@ -53,8 +57,24 @@ public class BlueprintServer : MonoBehaviour {
     public void Update() {
         String instruction = serverState.GetFreshSpawn();
         if (!string.Equals("", instruction)) {
+            Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
             SpawnInfo spawnInfo = new SpawnInfo(instruction);
-            holoInteractive.SpawnObject(new Vector3(spawnInfo.xCo, spawnInfo.yCo, spawnInfo.zCo));
+            Spawn(spawnInfo.type, spawnInfo.GetPosition());
         }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Vector3 position = new Vector3(0.0f, 0.0f, 3.5f);
+            Spawn("wood", position);
+        }
+    }
+
+    public void Spawn(String type, Vector3 position) {
+        Debug.Log("BlueprintServer: loading " + type);
+        gObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
+
+        // Make it interactive
+        HoloInteractive holoInteractive = gObject.AddComponent<HoloInteractive>() as HoloInteractive;
+        holoInteractive.SetAttributes("wood", position);
     }
 }

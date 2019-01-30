@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ServerState {
-    
     private readonly List<Spawnable> spawnables;
 
     public ServerState() {
@@ -15,12 +14,20 @@ public class ServerState {
     }
     
     public void AddInstruction(String instruction) {
+        Debug.Log("Checking " + instruction + " or an instruction");
         if (instruction[0] == 'I') { // Only want instructions to be added as spawnables.
+            Debug.Log("Message is an instruction");
             if (Unique(instruction)) { // Don't want duplicates in case the phone sends multiple.
                 Debug.Log("Adding instruction " + instruction);
                 Spawnable spawnable = new Spawnable(instruction);
                 spawnables.Add(spawnable);
             }
+            else {
+                Debug.Log("Instruction not unique; not adding");
+            }
+        }
+        else {
+            Debug.Log("Message is not an instruction");
         }
     }
 
@@ -37,7 +44,7 @@ public class ServerState {
     }
 
     public Boolean Unique(String instruction) {
-        Boolean unique = false;
+        Boolean unique = true;
         foreach (var spawnable in spawnables) {
             if (string.Equals(spawnable, instruction)) {
                 unique = false;

@@ -3,8 +3,8 @@ Note: the readme for this branch is written as a progression of thought. A prope
 
 Hololens implementation for the Manhattan Games Project, Blueprint.
 
-## Set Up Hololens from Scratch with Unity
-* Install latest version of unity and Windows.
+## Set Up Hololens from Scratch with Unity (Windows only)
+* Install ~~latest~~ version 2017.2.0f3 of unity.
 * Add this package: https://github.com/Microsoft/MixedRealityToolkit-Unity/releases/tag/2017.4.2.0
 * Set build options to Windows Universal Platform
 * Follow this set up: https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-210
