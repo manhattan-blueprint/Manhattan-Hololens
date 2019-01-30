@@ -565,7 +565,6 @@
      <Compile Include="Assets\HoloToolkit\UX\Scripts\UICollection.cs" />
      <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityScaler.cs" />
      <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityUtilities.cs" />
-     <Compile Include="Assets\Scripts\AsynchronousSocketListener.cs" />
      <Compile Include="Assets\Scripts\BlueprintServer.cs" />
      <Compile Include="Assets\Scripts\HoloInteractive.cs" />
      <Compile Include="Assets\Scripts\LocalIP.cs" />

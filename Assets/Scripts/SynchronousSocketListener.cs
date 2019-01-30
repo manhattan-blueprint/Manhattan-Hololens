@@ -1,6 +1,13 @@
-using System;
-using System.Net;
-using System.Net.Sockets;
+#if NETFX_CORE
+    using Windows.Networking;
+    using Windows;
+#else
+    // Your standard code here
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
+#endif
+
 using System.Text;
 using UnityEngine;
 
@@ -67,8 +74,7 @@ public class SynchronousSocketListener
                 byte[] msg = Encoding.ASCII.GetBytes(data);
 
                 Debug.Log("Server: Sending " + bytesRec + " bytes, of form " + msg);
-
-                handler.Send(msg);
+   
             }
         }
 

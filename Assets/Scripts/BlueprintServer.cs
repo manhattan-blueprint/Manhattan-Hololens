@@ -4,19 +4,29 @@ Attach this script to a GameObject. Create a Text GameObject (Create>UI>Text)
 and attach it to the My Text field in the Inspector of your GameObject. Press
 the space bar in Play Mode to see the Text change.
 */
+#if NETFX_CORE
+    using Windows.Networking;
+    using Windows;
+    using Windows.System.Threading;
+#else
+    // Your standard code here
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading;
+#endif
+
 using UnityEngine;
-using System.Threading;
-using System;
 using HoloToolkit.Unity;
 
 // Useful for converting and storing messages into useful object data.
 public struct SpawnInfo {
     private float xCo, yCo, zCo;
-    public String type;
+    public string type;
 
-    public SpawnInfo(String inpContent) {
+    public SpawnInfo(string inpContent) {
         inpContent = inpContent.Replace("\n", "");
-        String[] temp = inpContent.Split(new string[] { ";" }, StringSplitOptions.None);
+        string[] temp = inpContent.Split(new string[] { ";" }, StringSplitOptions.None);
         xCo = float.Parse(temp[1], System.Globalization.CultureInfo.InvariantCulture);
         yCo = float.Parse(temp[2], System.Globalization.CultureInfo.InvariantCulture);
         zCo = float.Parse(temp[3], System.Globalization.CultureInfo.InvariantCulture);
@@ -33,7 +43,11 @@ public struct SpawnInfo {
 }
 
 public class BlueprintServer : MonoBehaviour {
-    private Thread serverThread;
+    #if NETFX_CORE
+    #else
+        private Thread serverThread;
+    #endif
+    
     private LocalIP localIP;
     private SocketListener listener;
     private ServerState serverState;
@@ -49,12 +63,16 @@ public class BlueprintServer : MonoBehaviour {
         Debug.Log("BlueprintServer: World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
 
         infoText.text = localIP.Address();
-        serverThread = new Thread(new ThreadStart(listener.StartListening));
+        #if NETFX_CORE
+            Windows.System.Threading.ThreadPool.RunAsync(listener.StartListening);
+        #else
+            serverThread = new Thread(new ThreadStart(listener.StartListening));
+        #endif
         serverThread.Start();
     }
 
     public void Update() {
-        String instruction = serverState.GetFreshSpawn();
+        string instruction = serverState.GetFreshSpawn();
         if (!string.Equals("", instruction)) {
             Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
             SpawnInfo spawnInfo = new SpawnInfo(instruction);
@@ -68,7 +86,7 @@ public class BlueprintServer : MonoBehaviour {
         }
     }
 
-    private void Spawn(String type, Vector3 position) {
+    private void Spawn(string type, Vector3 position) {
         Debug.Log("BlueprintServer: loading " + type);
         infoText.text = "";
         GameObject gObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
