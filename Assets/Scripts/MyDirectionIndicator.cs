@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Modified from Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
@@ -39,6 +39,12 @@ namespace HoloToolkit.Unity
 
         // Check if the cursor direction indicator is visible.
         private bool isDirectionIndicatorVisible;
+
+        public void SetAttributes(GameObject indicator, GameObject cursor)
+        {
+            this.DirectionIndicatorObject = indicator;
+            this.Cursor = cursor;
+        }
 
         public void Awake()
         {

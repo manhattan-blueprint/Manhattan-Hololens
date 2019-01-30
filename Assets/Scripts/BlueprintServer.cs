@@ -7,6 +7,7 @@ the space bar in Play Mode to see the Text change.
 using UnityEngine;
 using System.Threading;
 using System;
+using HoloToolkit.Unity;
 
 // Useful for converting and storing messages into useful object data.
 public struct SpawnInfo {
@@ -36,22 +37,20 @@ public class BlueprintServer : MonoBehaviour {
     private LocalIP localIP;
     private SocketListener listener;
     private ServerState serverState;
-    private String greetMessage, connectedMessage;
-    public GameObject gObject;
+
+    public GameObject cursor;
+    public TextMesh infoText;
 
     public void Start() {
+        // Initialize the synchronous socket listener
         localIP = new LocalIP();
         serverState = new ServerState();
         listener = new SocketListener(localIP, serverState);
         Debug.Log("BlueprintServer: World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
 
-        greetMessage = "hello_blueprint";
-        connectedMessage = "connected_blueprint";
+        infoText.text = localIP.Address();
         serverThread = new Thread(new ThreadStart(listener.StartListening));
         serverThread.Start();
-
-        SpawnInfo spawnInfo = new SpawnInfo("I;3.12;1.37;4.32;wood");
-        spawnInfo.LogInfo();
     }
 
     public void Update() {
@@ -69,12 +68,18 @@ public class BlueprintServer : MonoBehaviour {
         }
     }
 
-    public void Spawn(String type, Vector3 position) {
+    private void Spawn(String type, Vector3 position) {
         Debug.Log("BlueprintServer: loading " + type);
-        gObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
+        infoText.text = "";
+        GameObject gObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
 
         // Make it interactive
         HoloInteractive holoInteractive = gObject.AddComponent<HoloInteractive>() as HoloInteractive;
         holoInteractive.SetAttributes("wood", position);
+
+        // // Add direction indicator
+        // MyDirectionIndicator directionIndicator = gObject.AddComponent<MyDirectionIndicator>() as MyDirectionIndicator;
+        // GameObject indicator = Instantiate(Resources.Load("direction_indicator", typeof(GameObject))) as GameObject;
+        // directionIndicator.SetAttributes(indicator, cursor);
     }
 }
