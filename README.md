@@ -23,7 +23,6 @@ Hololens implementation for the Manhattan Games Project, Blueprint.
 ## UWP things
  * [Porting Unity games to UWP](https://blogs.windows.com/buildingapps/2016/04/18/intro-to-porting-unity-3d-games-to-uwp-building-and-deploying/)
 
- * [Submitting an item to the thread pool](
-https://docs.microsoft.com/en-us/windows/uwp/threading-async/submit-a-work-item-to-the-thread-pool)
+ * [Submitting an item to the thread pool](https://docs.microsoft.com/en-us/windows/uwp/threading-async/submit-a-work-item-to-the-thread-pool)
 
  * [Finding the IP address](https://stackoverflow.com/questions/33770429/how-do-i-find-the-local-ip-address-on-a-win-10-uwp-project) (dear god)
