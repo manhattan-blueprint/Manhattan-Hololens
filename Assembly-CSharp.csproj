@@ -572,7 +572,6 @@
      <Compile Include="Assets\Scripts\ServerState.cs" />
      <Compile Include="Assets\Scripts\SocketListener.cs" />
      <Compile Include="Assets\Scripts\Spawnable.cs" />
-     <Compile Include="Assets\Scripts\SynchronousSocketListener.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
      <Compile Include="Assets\Scripts\TrackCamera.cs" />
      <None Include="Assets\HoloToolkit\Utilities\Scripts\GLTF\Shaders\GLTFConstant.cginc" />

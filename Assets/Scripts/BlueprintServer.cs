@@ -8,8 +8,9 @@ the space bar in Play Mode to see the Text change.
     using Windows.Networking;
     using Windows;
     using Windows.System.Threading;
+    using Windows.Foundation;
+    using System.Text.RegularExpressions;
 #else
-    // Your standard code here
     using System;
     using System.Net;
     using System.Net.Sockets;
@@ -26,7 +27,11 @@ public struct SpawnInfo {
 
     public SpawnInfo(string inpContent) {
         inpContent = inpContent.Replace("\n", "");
-        string[] temp = inpContent.Split(new string[] { ";" }, StringSplitOptions.None);
+        #if NETFX_CORE
+            string[] temp = Regex.Split(inpContent, ";");
+        #else
+            string[] temp = inpContent.Split(new string[] { ";" }, StringSplitOptions.None);
+        #endif
         xCo = float.Parse(temp[1], System.Globalization.CultureInfo.InvariantCulture);
         yCo = float.Parse(temp[2], System.Globalization.CultureInfo.InvariantCulture);
         zCo = float.Parse(temp[3], System.Globalization.CultureInfo.InvariantCulture);
@@ -64,11 +69,15 @@ public class BlueprintServer : MonoBehaviour {
 
         infoText.text = localIP.Address();
         #if NETFX_CORE
-            Windows.System.Threading.ThreadPool.RunAsync(listener.StartListening);
+            IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+                (workItem) =>
+            {
+                listener.StartListening();
+            });
         #else
             serverThread = new Thread(new ThreadStart(listener.StartListening));
+            serverThread.Start();
         #endif
-        serverThread.Start();
     }
 
     public void Update() {
