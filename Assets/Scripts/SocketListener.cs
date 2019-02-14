@@ -1,14 +1,17 @@
 
 #if NETFX_CORE
-    using Windows.Networking.Sockets;
-    using Windows.Foundation;
-    using System.Diagnostics;
+using Windows.Networking.Sockets;
+using Windows.Foundation;
+using Windows.Storage.Streams;
+using System.Diagnostics;
+using System;
+using System.Text;
 #else
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Text;
-    using UnityEngine;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using UnityEngine;
 #endif
 
 public class SocketListener
@@ -33,33 +36,41 @@ public class SocketListener
 #if NETFX_CORE
     public void StartListening() {
         while (true) {
+            StreamSocketListener listener = new StreamSocketListener();
             try {
-                StreamSocketListener listener = new StreamSocketListener();
                 listener.ConnectionReceived += Listener_ConnectionReceived;
                 listener.BindServiceNameAsync("12345").AsTask().Wait();
             }
 
             catch (Exception e) {
-                Debug.Log("Listener: " + e.ToString());
+                Debug.WriteLine("Listener: " + e.ToString());
             }
         }
     }
 
     private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args) {
         Debug.WriteLine("Server: New connection");
+
+        string input;
         
-        using (var dw = new DataWriter(args.Socket.InputStream)) {
+        using (var dr = new DataReader(args.Socket.InputStream)) {
             dr.InputStreamOptions = InputStreamOptions.Partial;
 
-            await dr.LodAsync(18);
-            var input = dr.ReadString(18);
+            await dr.LoadAsync(18);
+            input = dr.ReadString(18);
     
             Debug.WriteLine("Server: Received " + input);
     
-            string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
+            //string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
             serverState.AddInstruction(input);
         }
         
+        using (var dw = new DataWriter(args.Socket.OutputStream)) {
+            Debug.WriteLine("Server: Sending " + input);
+            dw.WriteString(input);
+            await dw.StoreAsync();
+            dw.DetachStream();
+        }
     }
 #else
     public void StartListening() {

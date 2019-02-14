@@ -1,6 +1,6 @@
 WindowsStoreApps
 PlayerPath?
-C:/Users/Hololens/Documents/GitHub/builds/no_server
+C:/Users/Hololens/Documents/GitHub/builds/test_server
 SceneListBegin?
 Assets/Scenes/SampleScene.unity
 SceneListEnd?
