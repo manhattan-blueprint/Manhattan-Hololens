@@ -26,3 +26,19 @@ Hololens implementation for the Manhattan Games Project, Blueprint.
  * [Submitting an item to the thread pool](https://docs.microsoft.com/en-us/windows/uwp/threading-async/submit-a-work-item-to-the-thread-pool)
 
  * [Finding the IP address](https://stackoverflow.com/questions/33770429/how-do-i-find-the-local-ip-address-on-a-win-10-uwp-project) (dear god)
+
+ * [Using the Device Portal](https://docs.microsoft.com/en-us/windows/mixed-reality/using-the-windows-device-portal)
+   * My method: Connect both computer and Hololens
+
+ * [Install apps on Hololens](https://docs.microsoft.com/en-us/hololens/hololens-install-apps)
+
+ * [Deploy an app to Hololens](https://docs.microsoft.com/en-us/windows/mixed-reality/using-visual-studio)
+ * Build for 32 bit
+
+ * [Useful Github with lots of info](https://github.com/Microsoft/Windows-universal-samples)
+   * [In particular networking](https://github.com/Microsoft/Windows-universal-samples/tree/master/Samples/StreamSocket)
+
+ * [StreamSocketListener example](https://stackoverflow.com/questions/32665847/cannot-connect-to-streamsocketlistener)
+
+## Other stuff
+ * Installing Eduroam certificate: connect hololens to computer with certificate using the device portal and install transfer security certificate between hololens and computer. Afterwards connect back to Eduroam using the Hololens and put in student username and password. The page will say insecure, but proceed anyway. Log in using the Hololens log in details.
