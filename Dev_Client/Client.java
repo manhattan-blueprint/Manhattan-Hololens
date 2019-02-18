@@ -60,9 +60,8 @@ public class Client {
         Socket clientSocket = new Socket(serverAddress, 9050);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String sentence = "hello_blueprint";
         System.out.println("Sending: " + message);
-        outToServer.writeUTF(message);
+        outToServer.writeBytes(message);
         outToServer.flush();
         message = new String(inFromServer.readLine());
         System.out.println("Received: " + message);
