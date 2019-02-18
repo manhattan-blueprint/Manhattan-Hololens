@@ -21,7 +21,6 @@ public class SocketListener
     private LocalIP localIP;
     private string localIPAddress;
     private int port;
-    private StreamSocketListener listener;
 
     // Incoming data from the client.  
     public static string data = null;
@@ -36,20 +35,20 @@ public class SocketListener
     }
 
 #if NETFX_CORE
+    private StreamSocketListener listener;
+
     public async void StartListening()
     {
         UnityEngine.Debug.Log("Starting Listener");
         listener = new StreamSocketListener();
-        //while (true) {
-            try {
-                listener.ConnectionReceived += Listener_ConnectionReceived;
-                await listener.BindServiceNameAsync("9050");
-            }
+        try {
+            listener.ConnectionReceived += Listener_ConnectionReceived;
+            await listener.BindServiceNameAsync("9050");
+        }
 
-            catch (Exception e) {
-                UnityEngine.Debug.Log("Listener: " + e.ToString());
-            }
-        //}
+        catch (Exception e) {
+            UnityEngine.Debug.Log("Listener: " + e.ToString());
+        }
     }
 
     private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args) {

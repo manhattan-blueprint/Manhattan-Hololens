@@ -4,18 +4,20 @@ Attach this script to a GameObject. Create a Text GameObject (Create>UI>Text)
 and attach it to the My Text field in the Inspector of your GameObject. Press
 the space bar in Play Mode to see the Text change.
 */
+
 #if NETFX_CORE
-    using Windows.Foundation;
-    using System.Text.RegularExpressions;
+using Windows.Foundation;
+using System.Text.RegularExpressions;
 #else
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Threading;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 #endif
 
 using UnityEngine;
 using HoloToolkit.Unity;
+
 
 // Useful for converting and storing messages into useful object data.
 public struct SpawnInfo {
@@ -24,11 +26,11 @@ public struct SpawnInfo {
 
     public SpawnInfo(string inpContent) {
         inpContent = inpContent.Replace("\n", "");
-        #if NETFX_CORE
+#if NETFX_CORE
             string[] temp = Regex.Split(inpContent, ";");
-        #else
+#else
             string[] temp = inpContent.Split(new string[] { ";" }, StringSplitOptions.None);
-        #endif
+#endif
         xCo = float.Parse(temp[1], System.Globalization.CultureInfo.InvariantCulture);
         yCo = float.Parse(temp[2], System.Globalization.CultureInfo.InvariantCulture);
         zCo = float.Parse(temp[3], System.Globalization.CultureInfo.InvariantCulture);
@@ -45,10 +47,10 @@ public struct SpawnInfo {
 }
 
 public class BlueprintServer : MonoBehaviour {
-    #if NETFX_CORE
-    #else
-        private Thread serverThread;
-    #endif
+#if NETFX_CORE
+#else
+    private Thread serverThread;
+#endif
     
     private LocalIP localIP;
     private SocketListener listener;
@@ -65,16 +67,18 @@ public class BlueprintServer : MonoBehaviour {
         Debug.Log("BlueprintServer: World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
 
         infoText.text = localIP.Address();
-        #if NETFX_CORE
+#if NETFX_CORE
             IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
                 (workItem) =>
             {
                 listener.StartListening();
             });
-        #else
-            serverThread = new Thread(new ThreadStart(listener.StartListening));
-            serverThread.Start();
-        #endif
+#else
+        //serverThread = new Thread(new ThreadStart(listener.StartListening));
+        //serverThread.Start();
+
+        serverState.AddInstruction("I;0.0;0.0;3.0;wood");
+#endif
     }
 
     public void Update() {

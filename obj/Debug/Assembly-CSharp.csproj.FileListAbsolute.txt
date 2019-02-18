@@ -230,3 +230,7 @@ C:\Users\Oculus PC\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp
 C:\Users\Oculus PC\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\Oculus PC\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.dll
 C:\Users\Oculus PC\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.pdb
+C:\Users\Hololens\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\Hololens\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Hololens\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.dll
+C:\Users\Hololens\Documents\GitHub\Manhattan-Hololens\obj\Debug\Assembly-CSharp.pdb

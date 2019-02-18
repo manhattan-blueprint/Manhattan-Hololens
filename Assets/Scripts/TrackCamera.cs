@@ -18,10 +18,7 @@ public class TrackCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 cameraPosition = mainCamera.transform.position;
-        float projectionDistance = 3.0f;
-        Vector3 distFrom = new Vector3(0.0f, 0.0f, projectionDistance);
-        
-        this.transform.position = cameraPosition + distFrom;
+        this.transform.position = mainCamera.transform.position + mainCamera.transform.forward * 3.0f;
+        this.transform.rotation = mainCamera.transform.rotation;
     }
 }
