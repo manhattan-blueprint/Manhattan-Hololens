@@ -38,7 +38,11 @@ Hololens implementation for the Manhattan Games Project, Blueprint.
  * [Useful Github with lots of info](https://github.com/Microsoft/Windows-universal-samples)
    * [In particular networking](https://github.com/Microsoft/Windows-universal-samples/tree/master/Samples/StreamSocket)
 
+ * [Synchronous Socket Listener for UWP](https://docs.microsoft.com/en-us/windows/uwp/networking/sockets)
+
  * [StreamSocketListener example](https://stackoverflow.com/questions/32665847/cannot-connect-to-streamsocketlistener)
+
+ * [Hololens Emulator (useful for quick builds)](https://docs.microsoft.com/en-us/windows/mixed-reality/using-the-hololens-emulator)
 
 ## Other stuff
  * Installing Eduroam certificate: connect hololens to computer with certificate using the device portal and install transfer security certificate between hololens and computer. Afterwards connect back to Eduroam using the Hololens and put in student username and password. The page will say insecure, but proceed anyway. Log in using the Hololens log in details.

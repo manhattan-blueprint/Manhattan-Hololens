@@ -1,11 +1,10 @@
 
 #if NETFX_CORE
 using Windows.Networking.Sockets;
-using Windows.Foundation;
 using Windows.Storage.Streams;
 using System.Diagnostics;
 using System;
-using System.Text;
+using System.IO;
 #else
 using System;
 using System.Net;
@@ -34,39 +33,48 @@ public class SocketListener
     }
 
 #if NETFX_CORE
-    public void StartListening() {
-        while (true) {
-            StreamSocketListener listener = new StreamSocketListener();
+    public void StartListening()
+    {
+        UnityEngine.Debug.Log("Starting Listener");
+        StreamSocketListener listener = new StreamSocketListener();
+        //while (true) {
             try {
                 listener.ConnectionReceived += Listener_ConnectionReceived;
-                listener.BindServiceNameAsync("12345").AsTask().Wait();
+                listener.BindServiceNameAsync("9050").AsTask().Wait();
             }
 
             catch (Exception e) {
-                Debug.WriteLine("Listener: " + e.ToString());
+                UnityEngine.Debug.Log("Listener: " + e.ToString());
             }
-        }
+        //}
     }
 
     private async void Listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args) {
-        Debug.WriteLine("Server: New connection");
+        UnityEngine.Debug.Log("Server: New connection");
 
         string input;
-        
-        using (var dr = new DataReader(args.Socket.InputStream)) {
+
+        //using (var sr = new StreamReader(args.Socket.InputStream.AsStreamForRead()))
+        //{
+        //    input = await sr.ReadLineAsync();
+        //    UnityEngine.Debug.Log("ServerA: Received '" + input + "'");
+        //    serverState.AddInstruction(input);
+        //}
+
+        using (var dr = new DataReader(args.Socket.InputStream))
+        {
             dr.InputStreamOptions = InputStreamOptions.Partial;
 
             await dr.LoadAsync(18);
             input = dr.ReadString(18);
-    
-            Debug.WriteLine("Server: Received " + input);
-    
+            UnityEngine.Debug.Log("Server: Received '" + input + "'");
+
             //string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
             serverState.AddInstruction(input);
         }
-        
+
         using (var dw = new DataWriter(args.Socket.OutputStream)) {
-            Debug.WriteLine("Server: Sending " + input);
+            UnityEngine.Debug.Log("Server: Sending '" + input + "'");
             dw.WriteString(input);
             await dw.StoreAsync();
             dw.DetachStream();

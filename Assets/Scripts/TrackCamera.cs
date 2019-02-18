@@ -19,7 +19,7 @@ public class TrackCamera : MonoBehaviour
     void Update()
     {
         Vector3 cameraPosition = mainCamera.transform.position;
-        float projectionDistance = 2.0f;
+        float projectionDistance = 3.0f;
         Vector3 distFrom = new Vector3(0.0f, 0.0f, projectionDistance);
         
         this.transform.position = cameraPosition + distFrom;

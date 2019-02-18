@@ -5,9 +5,6 @@ and attach it to the My Text field in the Inspector of your GameObject. Press
 the space bar in Play Mode to see the Text change.
 */
 #if NETFX_CORE
-    using Windows.Networking;
-    using Windows;
-    using Windows.System.Threading;
     using Windows.Foundation;
     using System.Text.RegularExpressions;
 #else
