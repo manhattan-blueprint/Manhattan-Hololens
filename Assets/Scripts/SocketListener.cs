@@ -3,7 +3,9 @@
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 using System.Diagnostics;
+using System.Net.Sockets;
 using System;
+using System.Text;
 using System.IO;
 #else
 using System;
@@ -19,6 +21,7 @@ public class SocketListener
     private LocalIP localIP;
     private string localIPAddress;
     private int port;
+    private StreamSocketListener listener;
 
     // Incoming data from the client.  
     public static string data = null;
@@ -33,14 +36,14 @@ public class SocketListener
     }
 
 #if NETFX_CORE
-    public void StartListening()
+    public async void StartListening()
     {
         UnityEngine.Debug.Log("Starting Listener");
-        StreamSocketListener listener = new StreamSocketListener();
+        listener = new StreamSocketListener();
         //while (true) {
             try {
                 listener.ConnectionReceived += Listener_ConnectionReceived;
-                listener.BindServiceNameAsync("9050").AsTask().Wait();
+                await listener.BindServiceNameAsync("9050");
             }
 
             catch (Exception e) {
@@ -54,19 +57,17 @@ public class SocketListener
 
         string input;
 
-        //using (var sr = new StreamReader(args.Socket.InputStream.AsStreamForRead()))
-        //{
-        //    input = await sr.ReadLineAsync();
-        //    UnityEngine.Debug.Log("ServerA: Received '" + input + "'");
-        //    serverState.AddInstruction(input);
-        //}
-
         using (var dr = new DataReader(args.Socket.InputStream))
         {
-            dr.InputStreamOptions = InputStreamOptions.Partial;
+            //dr.InputStreamOptions = InputStreamOptions.Partial;
+
+            dr.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
+            dr.ByteOrder = ByteOrder.LittleEndian;
 
             await dr.LoadAsync(18);
-            input = dr.ReadString(18);
+
+            input = dr.ReadString(18) + "\n";
+
             UnityEngine.Debug.Log("Server: Received '" + input + "'");
 
             //string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
