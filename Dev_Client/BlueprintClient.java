@@ -12,9 +12,11 @@ public class BlueprintClient {
         System.out.println("Starting client.");
 
         try {
-            client = new Client("hello_blueprint\n");
-            client.SetSocket("192.168.43.91", 9050);
-            client.AddItemToBuffer("I;1.34;3.56;1.79;wood");
+            client = new Client("hello_blueprint\r\n");
+            client.SetSocket("192.168.43.160", 9050);
+            // client.AddItemToBuffer("I;0.0;0.5;3.5;wood\r\n");
+            // client.AddItemToBuffer("18");
+            client.AddItemToBuffer("I;0.0;0.5;3.5;wood\r\n");
         }
         catch(Exception e) {
             System.out.println("Error initializing server; " + e.getMessage());
@@ -34,3 +36,22 @@ public class BlueprintClient {
         }
     }
 }
+
+/* TODO:
+ * Achieve some server communication.
+ * Update to display nearest objects whenever displayed (if newest nearest
+   spawn, retain old one but update with new one).
+ * Fix IP to properly follow camera.
+ * Use same script to create cursor to show direction to object.
+ * Update to remove object if too far away.
+ * Use depth sensor camera to hide object if behind walls etc.
+   * (?) Determine if feasible to notify user of obstruction.
+ * Make similar games to those of on the phone.
+   * Spawn multiple of resource in quantity requested by phone.
+   * Update communication schema.
+  */
+
+
+/* BUGS
+Multiple entries in the retrieving IP bit?
+*/
