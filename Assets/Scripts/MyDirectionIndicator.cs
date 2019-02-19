@@ -5,17 +5,17 @@ using UnityEngine;
 
 namespace HoloToolkit.Unity
 {
-    /// <summary>
-    /// DirectionIndicator creates an indicator around the cursor showing
-    /// what direction to turn to find this GameObject.
-    /// </summary>
     public class MyDirectionIndicator : MonoBehaviour
     {
-        [Tooltip("The Cursor object the direction indicator will be positioned around.")]
+        readonly float indicatorScale = 0.2f;
+        readonly float forwardCutoff = 5.0f;
+
         private GameObject Cursor;
 
+        // Default object.
         [Tooltip("Model to display the direction to the object this script is attached to.")]
         private GameObject DirectionIndicatorObject;
+        private GameObject ForwardIndicatorObject;
 
         [Tooltip("Color to shade the direction indicator.")]
         public Color DirectionIndicatorColor = Color.blue;
@@ -39,25 +39,30 @@ namespace HoloToolkit.Unity
 
         // Check if the cursor direction indicator is visible.
         private bool isDirectionIndicatorVisible;
+        private bool wasDirectionIndicatorVisible;
 
         public void SetAttributes(GameObject indicator, GameObject cursor)
         {
-            this.DirectionIndicatorObject = indicator;
+            this.DirectionIndicatorObject = GameObject.Find("DirectionalIndicator");
             this.Cursor = GameObject.Find("DefaultCursor");
         }
 
         public void Awake()
         {
+            // Uses in game cursor and direction indicator; both must be named right or it will not work.
             if (Cursor == null)
             {
-                //Debug.LogError("Please include a GameObject for the cursor.");
                 this.Cursor = GameObject.Find("DefaultCursor");
             }
 
             if (DirectionIndicatorObject == null)
             {
                 this.DirectionIndicatorObject = GameObject.Find("DirectionalIndicator");
-                //Debug.LogError("Please include a GameObject for the Direction Indicator.");
+            }
+
+            if (ForwardIndicatorObject == null)
+            {
+                this.ForwardIndicatorObject = GameObject.Find("ForwardIndicator");
             }
 
             // Instantiate the direction indicator.
@@ -81,10 +86,6 @@ namespace HoloToolkit.Unity
             {
                 return null;
             }
-            if (this.transform.localScale.x <= 0.01f)
-            {
-                return null;
-            }
             GameObject indicator = Instantiate(directionIndicator);
 
             // Set local variables for the indicator.
@@ -92,7 +93,9 @@ namespace HoloToolkit.Unity
             directionIndicatorRenderer = indicator.GetComponent<Renderer>();
 
             // Start with the indicator disabled.
-            directionIndicatorRenderer.enabled = false;
+            wasDirectionIndicatorVisible = false;
+            isDirectionIndicatorVisible = false;
+            DirectionIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
 
             // Remove any colliders and rigidbodies so the indicators do not interfere with Unity's physics system.
             foreach (Collider indicatorCollider in indicator.GetComponents<Collider>())
@@ -129,6 +132,28 @@ namespace HoloToolkit.Unity
 
             // The cursor indicator should only be visible if the target is not visible.
             isDirectionIndicatorVisible = !IsTargetVisible(mainCamera);
+
+            // Need to hide or show object (done here with scale rather than renderer).
+            if (isDirectionIndicatorVisible && !wasDirectionIndicatorVisible)
+            {
+                DirectionIndicatorObject.transform.localScale = new Vector3(indicatorScale, indicatorScale, indicatorScale);
+                ForwardIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+                wasDirectionIndicatorVisible = isDirectionIndicatorVisible;
+            }
+
+            if (!isDirectionIndicatorVisible && wasDirectionIndicatorVisible)
+            {
+                DirectionIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+                ForwardIndicatorObject.transform.localScale = new Vector3(indicatorScale, indicatorScale/2.0f, indicatorScale);
+                wasDirectionIndicatorVisible = isDirectionIndicatorVisible;
+            }
+
+            // Don't want to show the forwards direction indicator if the player is too close.
+            if (Vector3.Distance(this.transform.position, mainCamera.transform.position) < forwardCutoff)
+            {
+                ForwardIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            }
+
             directionIndicatorRenderer.enabled = isDirectionIndicatorVisible;
 
             if (isDirectionIndicatorVisible)
