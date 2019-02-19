@@ -6,14 +6,17 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerState {
+public class ServerState
+{
     private readonly List<Spawnable> spawnables;
 
-    public ServerState() {
+    public ServerState()
+    {
         spawnables = new List<Spawnable>();
     }
     
-    public void AddInstruction(String instruction) {
+    public void AddInstruction(String instruction)
+    {
         Debug.Log("Checking " + instruction + " or an instruction");
         if (instruction[0] == 'I') { // Only want instructions to be added as spawnables.
             Debug.Log("Message is an instruction");
@@ -31,7 +34,8 @@ public class ServerState {
         }
     }
 
-    public String GetFreshSpawn() {
+    public String GetFreshSpawn()
+    {
         int i = 0;
         while (i < spawnables.Count) {
             if (spawnables[i].spawned == false) {
@@ -43,7 +47,8 @@ public class ServerState {
         return "";
     }
 
-    public Boolean Unique(String instruction) {
+    public Boolean Unique(String instruction)
+    {
         Boolean unique = true;
         foreach (var spawnable in spawnables) {
             if (string.Equals(spawnable, instruction)) {
@@ -51,5 +56,29 @@ public class ServerState {
             }
         }
         return unique;
+    }
+
+    public Boolean CheckComplete(String instruction)
+    {
+        int index = GetIndex(instruction);
+        if (index == -1)
+        {
+            return false;
+        }
+        return spawnables[index].collected;
+    }
+
+    private int GetIndex(String instruction)
+    {
+        int i = 0;
+        foreach (var spawnable in spawnables)
+        {
+            if (string.Equals(spawnable, instruction))
+            {
+                return i;
+            }
+            i += 1;
+        }
+        return -1;
     }
 }

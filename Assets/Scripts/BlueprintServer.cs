@@ -47,17 +47,18 @@ public struct SpawnInfo {
 }
 
 public class BlueprintServer : MonoBehaviour {
+    public GameObject cursor;
+    public TextMesh infoText;
+
+    private GameObject areaHighlight;
+    private LocalIP localIP;
+    private SocketListener listener;
+    private ServerState serverState;
+    private MinigameManager minigameManager;
 #if NETFX_CORE
 #else
     private Thread serverThread;
 #endif
-    
-    private LocalIP localIP;
-    private SocketListener listener;
-    private ServerState serverState;
-
-    public GameObject cursor;
-    public TextMesh infoText;
 
     public void Start() {
         // Initialize the synchronous socket listener
@@ -67,12 +68,14 @@ public class BlueprintServer : MonoBehaviour {
         Debug.Log("BlueprintServer: World initialized with server on IP " + localIP.Address() + " through port " + localIP.Port());
 
         infoText.text = localIP.Address();
+        minigameManager = GameObject.Find("Minigame").GetComponent(typeof(MinigameManager)) as MinigameManager;
+
 #if NETFX_CORE
-            IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
-                (workItem) =>
-            {
-                listener.StartListening();
-            });
+        IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
+            (workItem) =>
+        {
+            listener.StartListening();
+        });
 #else
         //serverThread = new Thread(new ThreadStart(listener.StartListening));
         //serverThread.Start();
@@ -82,32 +85,43 @@ public class BlueprintServer : MonoBehaviour {
     }
 
     public void Update() {
-        string instruction = serverState.GetFreshSpawn();
-        if (!string.Equals("", instruction)) {
-            Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
-            SpawnInfo spawnInfo = new SpawnInfo(instruction);
-            Spawn(spawnInfo.type, spawnInfo.GetPosition());
+        if (minigameManager.complete)
+        {
+            string instruction = serverState.GetFreshSpawn();
+            if (!string.Equals("", instruction))
+            {
+                Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
+                SpawnInfo spawnInfo = new SpawnInfo(instruction);
+                Spawn(instruction, spawnInfo.type, spawnInfo.GetPosition());
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Vector3 position = new Vector3(0.0f, 0.0f, 3.5f);
+                Spawn("Test Minigame", "wood", position);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (areaHighlight)
         {
-            Vector3 position = new Vector3(0.0f, 0.0f, 3.5f);
-            Spawn("wood", position);
+            Camera mainCamera = CameraCache.Main;
+            Vector3 newPos = areaHighlight.transform.position;
+            newPos[1] = mainCamera.transform.position.y;
+            areaHighlight.transform.position = newPos;
         }
     }
 
-    private void Spawn(string type, Vector3 position) {
+    private void Spawn(string instruction, string type, Vector3 position) {
         Debug.Log("BlueprintServer: loading " + type);
         infoText.text = "";
-        GameObject gObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
+        areaHighlight = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
+        areaHighlight.transform.position = position;
 
-        // Make it interactive
-        HoloInteractive holoInteractive = gObject.AddComponent<HoloInteractive>() as HoloInteractive;
-        holoInteractive.SetAttributes("wood", position);
+        minigameManager.StartMinigame(instruction, type, position);
+    }
 
-        // // Add direction indicator
-        // MyDirectionIndicator directionIndicator = gObject.AddComponent<MyDirectionIndicator>() as MyDirectionIndicator;
-        // GameObject indicator = Instantiate(Resources.Load("direction_indicator", typeof(GameObject))) as GameObject;
-        // directionIndicator.SetAttributes(indicator, cursor);
+    public void HideAreaHighlight()
+    {
+        Destroy(areaHighlight);
     }
 }

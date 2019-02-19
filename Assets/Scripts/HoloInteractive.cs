@@ -8,6 +8,8 @@ using System.Linq;
 
 public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler
 {
+    public bool hidden;
+
     private string objType;
     private Vector3 originalScale;
     private float shrinkAmount;
@@ -17,6 +19,7 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler
         Debug.Log("HoloInteractive: instantiated");
         originalScale = this.transform.localScale;
         shrinkAmount = this.transform.localScale.x / 8;
+        hidden = false;
     }
 
     public void SetAttributes(String objType, Vector3 position)
@@ -28,6 +31,7 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler
     public void Hide ()
     {
         this.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+        hidden = true;
     }
 
     public void ResetSize()
@@ -56,16 +60,17 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler
     public void OnInputClicked(InputClickedEventData eventData) 
     {
         Debug.Log("HoloInteractive: clicked");
-        if (objType == "wood") {
-        }
-        if (this.transform.localScale.x >= shrinkAmount * 1.1f)
+        if (objType == "shrink")
         {
-            this.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
-        }
-        else
-        {
-            Debug.Log(objType + " collected!");
-            Hide();
+            if (this.transform.localScale.x >= shrinkAmount * 1.1f)
+            {
+                this.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
+            }
+            else
+            {
+                Debug.Log(objType + " collected!");
+                Hide();
+            }
         }
     }
 }

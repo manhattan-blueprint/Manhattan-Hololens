@@ -1,5 +1,5 @@
 /*
-Retrieves the IP address and port to communicate on
+Minigame instances that can be spawned in.
 */
 using System;
 using UnityEditor;

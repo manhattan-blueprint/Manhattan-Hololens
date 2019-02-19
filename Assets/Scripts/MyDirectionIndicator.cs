@@ -7,8 +7,8 @@ namespace HoloToolkit.Unity
 {
     public class MyDirectionIndicator : MonoBehaviour
     {
-        readonly float indicatorScale = 0.2f;
-        readonly float forwardCutoff = 5.0f;
+        readonly float indicatorScale = 0.5f;
+        readonly float forwardCutoff = 3.0f;
 
         private GameObject Cursor;
 
@@ -96,6 +96,7 @@ namespace HoloToolkit.Unity
             wasDirectionIndicatorVisible = false;
             isDirectionIndicatorVisible = false;
             DirectionIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            ForwardIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
 
             // Remove any colliders and rigidbodies so the indicators do not interfere with Unity's physics system.
             foreach (Collider indicatorCollider in indicator.GetComponents<Collider>())

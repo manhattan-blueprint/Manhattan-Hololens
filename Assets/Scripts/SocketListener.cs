@@ -12,8 +12,8 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using UnityEngine;
 #endif
+using UnityEngine;
 
 public class SocketListener
 {
@@ -21,6 +21,7 @@ public class SocketListener
     private LocalIP localIP;
     private string localIPAddress;
     private int port;
+    private GameObject blueprintServer;
 
     // Incoming data from the client.  
     public static string data = null;
@@ -32,6 +33,8 @@ public class SocketListener
 
         // May be different when emulating due to multiple network cards
         localIPAddress = localIP.Address();
+
+        blueprintServer = GameObject.Find("server");
     }
 
 #if NETFX_CORE
@@ -63,9 +66,9 @@ public class SocketListener
             dr.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
             dr.ByteOrder = ByteOrder.LittleEndian;
 
-            await dr.LoadAsync(21);
+            await dr.LoadAsync(24);
 
-            input = dr.ReadString(21) + "\n";
+            input = dr.ReadString(24) + "\n";
 
             UnityEngine.Debug.Log("Server: Received '" + input + "'");
 
@@ -73,11 +76,25 @@ public class SocketListener
             serverState.AddInstruction(input);
         }
 
-        using (var dw = new DataWriter(args.Socket.OutputStream)) {
-            UnityEngine.Debug.Log("Server: Sending '" + input + "'");
-            dw.WriteString(input);
-            await dw.StoreAsync();
-            dw.DetachStream();
+        if (serverState.CheckComplete(input))
+        {
+            using (var dw = new DataWriter(args.Socket.OutputStream)) 
+            {
+                UnityEngine.Debug.Log("Server: Sending '" + input + "'");
+                dw.WriteString(input);
+                await dw.StoreAsync();
+                dw.DetachStream();
+            }
+        }
+        else 
+        {
+            using (var dw = new DataWriter(args.Socket.OutputStream)) 
+            {
+                UnityEngine.Debug.Log("Server: Sending 'Not complete'");
+                dw.WriteString("Not Complete");
+                await dw.StoreAsync();
+                dw.DetachStream();
+            }
         }
     }
 #else
