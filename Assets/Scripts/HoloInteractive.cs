@@ -64,6 +64,7 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler
         }
         else
         {
+            Debug.Log(objType + " collected!");
             Hide();
         }
     }

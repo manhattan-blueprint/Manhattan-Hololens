@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3859518706171230515}
   - component: {fileID: 4315175544153106551}
   - component: {fileID: 4178098965258182126}
-  - component: {fileID: 2994925687242430686}
+  - component: {fileID: 4249329763180530056}
   m_Layer: 0
   m_Name: wood
   m_TagString: Untagged
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 32ee3a5610d12f54fbf8299bcc77a3ea, type: 3}
+  - {fileID: 2100000, guid: a2d98f4c9bd8b8e499b193cdffc34e7f, type: 2}
   - {fileID: 2100002, guid: 32ee3a5610d12f54fbf8299bcc77a3ea, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -93,7 +93,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.305604, y: 5.1226406, z: 2.2761004}
   m_Center: {x: 0.0042195916, y: 0.6592916, z: -0.042372823}
---- !u!114 &2994925687242430686
+--- !u!114 &4249329763180530056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,8 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c686b5463115773478dfae4978cd5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cursor: {fileID: 1000012072213228, guid: a611e772ef8ddf64d8106a9cbb70f31c, type: 3}
-  DirectionIndicatorObject: {fileID: 3277115073933641575, guid: a62f6f77efdb20646acc4a0538b85b02,
+  DirectionIndicatorObject: {fileID: 4045489356512034863, guid: a62f6f77efdb20646acc4a0538b85b02,
     type: 3}
   DirectionIndicatorColor: {r: 0, g: 0, b: 1, a: 1}
   VisibilitySafeFactor: 0.1

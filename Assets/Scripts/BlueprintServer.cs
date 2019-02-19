@@ -77,7 +77,7 @@ public class BlueprintServer : MonoBehaviour {
         //serverThread = new Thread(new ThreadStart(listener.StartListening));
         //serverThread.Start();
 
-        serverState.AddInstruction("I;0.0;0.0;3.0;wood");
+        serverState.AddInstruction("I;0.0;0.0;-2.0;wood");
 #endif
     }
 

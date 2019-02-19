@@ -63,9 +63,9 @@ public class SocketListener
             dr.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
             dr.ByteOrder = ByteOrder.LittleEndian;
 
-            await dr.LoadAsync(18);
+            await dr.LoadAsync(21);
 
-            input = dr.ReadString(18) + "\n";
+            input = dr.ReadString(21) + "\n";
 
             UnityEngine.Debug.Log("Server: Received '" + input + "'");
 

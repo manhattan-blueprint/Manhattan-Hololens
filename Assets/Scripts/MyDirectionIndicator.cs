@@ -12,10 +12,10 @@ namespace HoloToolkit.Unity
     public class MyDirectionIndicator : MonoBehaviour
     {
         [Tooltip("The Cursor object the direction indicator will be positioned around.")]
-        public GameObject Cursor;
+        private GameObject Cursor;
 
         [Tooltip("Model to display the direction to the object this script is attached to.")]
-        public GameObject DirectionIndicatorObject;
+        private GameObject DirectionIndicatorObject;
 
         [Tooltip("Color to shade the direction indicator.")]
         public Color DirectionIndicatorColor = Color.blue;
@@ -43,19 +43,21 @@ namespace HoloToolkit.Unity
         public void SetAttributes(GameObject indicator, GameObject cursor)
         {
             this.DirectionIndicatorObject = indicator;
-            this.Cursor = cursor;
+            this.Cursor = GameObject.Find("DefaultCursor");
         }
 
         public void Awake()
         {
             if (Cursor == null)
             {
-                Debug.LogError("Please include a GameObject for the cursor.");
+                //Debug.LogError("Please include a GameObject for the cursor.");
+                this.Cursor = GameObject.Find("DefaultCursor");
             }
 
             if (DirectionIndicatorObject == null)
             {
-                Debug.LogError("Please include a GameObject for the Direction Indicator.");
+                this.DirectionIndicatorObject = GameObject.Find("DirectionalIndicator");
+                //Debug.LogError("Please include a GameObject for the Direction Indicator.");
             }
 
             // Instantiate the direction indicator.
