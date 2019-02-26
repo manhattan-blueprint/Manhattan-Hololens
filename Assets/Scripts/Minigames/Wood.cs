@@ -2,69 +2,59 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using HoloToolkit.Unity;
+using System.Linq;
 
 namespace Minigames
 {
     public class Wood : Minigame
     {
-        private int spawnQuantity;
-        private List<GameObject> objects;
-        private GameObject successBox;
-        private MinigameState state;
-        private GameObject areaHighlight;
-        private int numCollected;
-        private Vector3 epicentre;
+        public Vector3 epicentre { get; set; }
+        public MinigameState state { get; set; }
+        public List<GameObject> objects { get; set; }
+        public GameObject areaHighlight { get; set; }
+        public int collectedAmount { get; set; }
+        public TextManager textManager { get; set; }
+        public int amount { get; set; }
+        public string resourceType { get; set; }
+        public int uniqueID { get; set; }
 
-        public Wood(Vector3 epicenter, string type)
+        void Minigame.OnStart()
         {
-            this.epicentre = epicenter;
-            state = MinigameState.Idle;
-            objects = new List<GameObject>();
-
-            areaHighlight = MonoBehaviour.Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
-            areaHighlight.transform.position = epicenter;
-        }
-        
-        void Minigame.Start(int spawnQuantity)
-        {
-            this.spawnQuantity = spawnQuantity;
-
-            MonoBehaviour.Destroy(areaHighlight);
-
-            // Spawn in loads of trees and make them draggable.
-            for (int i = 0; i < spawnQuantity; i++)
+            // Spawn in loads of trees and make them click to shrink.
+            for (int i = 0; i < amount; i++)
             {
-                GameObject tree = MonoBehaviour.Instantiate(Resources.Load("tree", typeof(GameObject))) as GameObject;
-                tree.transform.position = epicentre + new Vector3(Random.Range(0.0f, 3.0f), 0.0f, Random.Range(0.0f, 3.0f));
+                GameObject tree = MonoBehaviour.Instantiate(Resources.Load("Objects/tree", typeof(GameObject))) as GameObject;
+                tree.transform.position = epicentre + new Vector3(Random.Range(-2.0f, 2.0f), 
+                    CameraCache.Main.transform.position.y, Random.Range(-2.0f, 2.0f));
                 HoloInteractive holoInteractive = tree.AddComponent<HoloInteractive>() as HoloInteractive;
-                holoInteractive.SetAttributes(InteractType.Drag);
+                holoInteractive.SetAttributes(InteractType.ClickShrink, 4);
                 objects.Add(tree);
             }
-            state = MinigameState.Started;
-
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.position = new Vector3(0, 1.5f, 0);
+            textManager.RequestText("Chop the trees down!");
         }
         
         void Minigame.Update()
         {
-
-        }
-        
-        int Minigame.Finish()
-        {
-            numCollected = 10;
-            return numCollected;
-        }
-
-        MinigameState Minigame.GetState()
-        {
-            return state;
-        }
-
-        Vector3 Minigame.GetEpicentre()
-        {
-            return epicentre;
+            foreach (var item in objects)
+            {
+                HoloInteractive holoInteractive = item.GetComponent<HoloInteractive>();
+                if (holoInteractive.interactState == InteractState.Touched)
+                {
+                    textManager.RequestReset();
+                }
+                if (holoInteractive.interactState == InteractState.Hidden)
+                {
+                    objects.Remove(item);
+                    MonoBehaviour.Destroy(item);
+                    collectedAmount += 1;
+                    return;
+                }
+            }
+            if (!objects.Any())
+            {
+                state = MinigameState.Completed;
+            }
         }
     }
 }

@@ -7,14 +7,15 @@ using System.Reflection;
 using System.Linq;
 
 public enum InteractType {Drag, Rotate, ClickShrink};
+public enum InteractState {Idle, Touched, Hidden};
 
 public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IManipulationHandler, INavigationHandler
 {
     readonly float rotSensitivity = 10.0f;
-    readonly float dragSensitivity = 3.0f;
-
-    public bool hidden;
+    readonly float dragSensitivity = 1.0f;
+    
     public InteractType interactType;
+    public InteractState interactState;
     
     private Vector3 originalScale;
     private float shrinkAmount;
@@ -22,9 +23,8 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
 
     public void Start()
     {
+        interactState = InteractState.Idle;
         originalScale = this.transform.localScale;
-        shrinkAmount = this.transform.localScale.x / 8;
-        hidden = false;
     }
 
     public void Update()
@@ -32,15 +32,16 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
 
     }
 
-    public void SetAttributes(InteractType interactType)
+    public void SetAttributes(InteractType interactType, int divs = 8)
     {
         this.interactType = interactType;
+        shrinkAmount = this.transform.localScale.y / (divs + 1);
     }
 
     public void Hide ()
     {
         this.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-        hidden = true;
+        interactState = InteractState.Hidden;
     }
 
     public void OnFocusEnter()
@@ -55,11 +56,13 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
 
     public void OnInputClicked(InputClickedEventData eventData)
     {
+        interactState = InteractState.Touched;
         if (interactType == InteractType.ClickShrink)
         {
-            if (this.transform.localScale.x >= shrinkAmount * 1.1f)
+            if (this.transform.localScale.y >= shrinkAmount * 1.1f)
             {
                 this.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
+                this.transform.position += new Vector3(0.0f, -shrinkAmount * 3.0f, 0.0f);
             }
             else
             {
@@ -72,7 +75,8 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
     // Click and hold to drag
     void IManipulationHandler.OnManipulationStarted(ManipulationEventData eventData)
     {
-        if (interactType == InteractType.Drag)
+        interactState = InteractState.Touched;
+        if (this.interactType == InteractType.Drag)
         {
             InputManager.Instance.PushModalInputHandler(gameObject);
             manipulationOriginalPosition = transform.position;
@@ -107,6 +111,7 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
     // Click and hold to rotate.
     void INavigationHandler.OnNavigationStarted(NavigationEventData eventData)
     {
+        interactState = InteractState.Touched;
         if (interactType == InteractType.Rotate)
         {
             InputManager.Instance.PushModalInputHandler(gameObject);

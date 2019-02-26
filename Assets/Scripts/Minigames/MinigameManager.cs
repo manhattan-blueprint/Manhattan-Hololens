@@ -5,23 +5,28 @@ Manages minigames
 using UnityEngine;
 using HoloToolkit.Unity;
 using System.Collections.Generic;
+using Server;
 
 namespace Minigames
 {
-    public class MinigameManager : MonoBehaviour
+    public class MinigameManager
     {
         private bool spawned;
         private string currentGame;
         private BlueprintServer blueprintServer;
         private List<Minigame> minigames;
+        public TextManager textManager;
+        private ServerState serverState;
 
-        public void Start()
+        public MinigameManager(ServerState serverState)
         {
             blueprintServer = GameObject.Find("Server").GetComponent(typeof(BlueprintServer)) as BlueprintServer;
+            textManager = GameObject.Find("TextManager").GetComponent(typeof(TextManager)) as TextManager;
             minigames = new List<Minigame>();
+            this.serverState = serverState;
         }
 
-        public void PlaceMinigame(string instruction, string game, Vector3 position)
+        public void PlaceMinigame(string game, Vector3 position, int amount, int uniqueID)
         {
             Debug.Log("New minigame being placed at " + position + " of game type " + game);
 
@@ -29,8 +34,9 @@ namespace Minigames
 
             switch (game)
             {
-                case "woo":
-                    minigame = new Wood(position, game);
+                case "Wood":
+                    minigame = new Wood();
+                    minigame.Initialize(game, position + new Vector3(0, -1.0f, 0), amount, uniqueID, textManager);
                     break;
 
                 default:
@@ -44,16 +50,13 @@ namespace Minigames
         {
             foreach (var minigame in minigames)
             {
-                MinigameState state = minigame.GetState();
+                MinigameState state = minigame.state;
                 switch (state)
                 {
                     case MinigameState.Idle:
-                        if (Vector3.Distance(minigame.GetEpicentre(), CameraCache.Main.transform.position) < 3.0f)
+                        if (Vector3.Distance(minigame.epicentre, CameraCache.Main.transform.position) < 3.0f)
                         {
-                            // This quantity is a placeholder for now; could be directed by the phone.
-                            int quantity = 10 /*Random.Range(5, 15)*/;
-
-                            minigame.Start(quantity);
+                            minigame.Start();
                         }
                         break;
 
@@ -62,8 +65,11 @@ namespace Minigames
                         break;
 
                     case MinigameState.Completed:
-                        minigame.Finish();
-                        break;
+                        Debug.Log("Minigame Complete");
+                        textManager.RequestText("You collected " + minigame.amount + " " + minigame.resourceType + "!", 2.0f);
+                        minigames.Remove(minigame);
+                        serverState.NotifyComplete(minigame.uniqueID);
+                        return;
                 }
             }
         }

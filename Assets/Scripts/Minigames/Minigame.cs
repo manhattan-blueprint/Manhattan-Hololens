@@ -14,18 +14,46 @@ namespace Minigames
 
     public interface Minigame
     {
-        // Returns the current game state.
-        MinigameState GetState();
+        // Fields.
+        Vector3 epicentre { get; set; }
+        MinigameState state { get; set; }
+        List<GameObject> objects { get; set; }
+        GameObject areaHighlight { get; set; }
+        int collectedAmount { get; set; }
+        TextManager textManager { get; set; }
+        int amount { get; set; }
+        string resourceType { get; set; }
+        int uniqueID { get; set; }
 
-        // Called once upon start of minigame.
-        void Start(int spawnQuantity);
-
-        // Called repeatedly in line with the manager during the minigame.
+        // Implementation Specific Functions.
+        void OnStart();
         void Update();
+    }
 
-        // Called once after minigame is complete.
-        int Finish();
-        
-        Vector3 GetEpicentre();
+    public static class MinigameHelper
+    {
+        public static void Initialize(this Minigame minigame, string game, Vector3 epicentre, int amount, int uniqueID, TextManager textManager)
+        {
+            minigame.epicentre = epicentre;
+            minigame.state = MinigameState.Idle;
+            minigame.objects = new List<GameObject>();
+            minigame.amount = amount;
+            minigame.collectedAmount = 0;
+            minigame.resourceType = game;
+            minigame.uniqueID = uniqueID;
+            minigame.textManager = textManager;
+
+            minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + game, typeof(GameObject))) as GameObject;
+            minigame.areaHighlight.transform.position = minigame.epicentre;
+
+        }
+
+        public static void Start(this Minigame minigame)
+        {
+            MonoBehaviour.Destroy(minigame.areaHighlight);
+            minigame.state = MinigameState.Started;
+
+            minigame.OnStart();
+        }
     }
 }

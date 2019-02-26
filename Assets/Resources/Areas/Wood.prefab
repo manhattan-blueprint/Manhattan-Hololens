@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4973699602188424813}
   - component: {fileID: 4567663589338630533}
   m_Layer: 0
-  m_Name: woo
+  m_Name: Wood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4973699602188424812}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2.41}
-  m_LocalScale: {x: 4, y: 1000, z: 4}
+  m_LocalScale: {x: 3, y: 1000, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9c8d4a8dc8afc18418bd451f02895586, type: 2}
+  - {fileID: 2100000, guid: e2928f8da53147c49b1b1979e1fe4907, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -44,7 +44,7 @@ namespace HoloToolkit.Unity
         public void SetAttributes(GameObject indicator, GameObject cursor)
         {
             this.DirectionIndicatorObject = GameObject.Find("DirectionalIndicator");
-            this.Cursor = GameObject.Find("DefaultCursor");
+            this.Cursor = GameObject.Find("CursorWithFeedback");
         }
 
         public void Awake()
@@ -52,7 +52,7 @@ namespace HoloToolkit.Unity
             // Uses in game cursor and direction indicator; both must be named right or it will not work.
             if (Cursor == null)
             {
-                this.Cursor = GameObject.Find("DefaultCursor");
+                this.Cursor = GameObject.Find("CursorWithFeedback");
             }
 
             if (DirectionIndicatorObject == null)
