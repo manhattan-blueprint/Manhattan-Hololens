@@ -575,7 +575,9 @@
     <Compile Include="Assets\Scripts\BlueprintServer.cs" />
     <Compile Include="Assets\Scripts\HoloInteractive.cs" />
     <Compile Include="Assets\Scripts\LocalIP.cs" />
-    <Compile Include="Assets\Scripts\MinigameManager.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Minigame.cs" />
+    <Compile Include="Assets\Scripts\Minigames\MinigameManager.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Wood.cs" />
     <Compile Include="Assets\Scripts\MyDirectionIndicator.cs" />
     <Compile Include="Assets\Scripts\ServerState.cs" />
     <Compile Include="Assets\Scripts\SocketListener.cs" />

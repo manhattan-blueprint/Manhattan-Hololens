@@ -17,6 +17,7 @@ using System.Threading;
 
 using UnityEngine;
 using HoloToolkit.Unity;
+using Minigames;
 
 
 // Useful for converting and storing messages into useful object data.
@@ -49,8 +50,7 @@ public struct SpawnInfo {
 public class BlueprintServer : MonoBehaviour {
     public GameObject cursor;
     public TextMesh infoText;
-
-    private GameObject areaHighlight;
+    
     private LocalIP localIP;
     private SocketListener listener;
     private ServerState serverState;
@@ -77,51 +77,28 @@ public class BlueprintServer : MonoBehaviour {
             listener.StartListening();
         });
 #else
+        // Uncomment for full unity server testing
         //serverThread = new Thread(new ThreadStart(listener.StartListening));
         //serverThread.Start();
 
-        serverState.AddInstruction("I;0.0;0.0;3.0;wood");
+        // Uncomment for object spawn testing
+        serverState.AddInstruction("I;0.0;0.0;5.0;woo");
 #endif
     }
 
     public void Update() {
-        if (minigameManager.complete)
+        string instruction = serverState.GetFreshSpawn();
+        if (!string.Equals("", instruction))
         {
-            string instruction = serverState.GetFreshSpawn();
-            if (!string.Equals("", instruction))
-            {
-                Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
-                SpawnInfo spawnInfo = new SpawnInfo(instruction);
-                Spawn(instruction, spawnInfo.type, spawnInfo.GetPosition());
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Vector3 position = new Vector3(0.0f, 0.0f, 3.5f);
-                Spawn("Test Minigame", "wood", position);
-            }
-        }
-
-        if (areaHighlight)
-        {
-            Camera mainCamera = CameraCache.Main;
-            Vector3 newPos = areaHighlight.transform.position;
-            newPos[1] = mainCamera.transform.position.y;
-            areaHighlight.transform.position = newPos;
+            Debug.Log("BlueprintServer: Fresh spawn found! Instruction is " + instruction);
+            SpawnInfo spawnInfo = new SpawnInfo(instruction);
+            Spawn(instruction, spawnInfo.type, spawnInfo.GetPosition());
         }
     }
 
     private void Spawn(string instruction, string type, Vector3 position) {
         Debug.Log("BlueprintServer: loading " + type);
         infoText.text = "";
-        areaHighlight = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
-        areaHighlight.transform.position = position;
-
-        minigameManager.StartMinigame(instruction, type, position);
-    }
-
-    public void HideAreaHighlight()
-    {
-        Destroy(areaHighlight);
+        minigameManager.PlaceMinigame(instruction, type, position);
     }
 }

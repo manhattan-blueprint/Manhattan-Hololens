@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4973699602188424813}
   - component: {fileID: 4567663589338630533}
   m_Layer: 0
-  m_Name: wood
+  m_Name: woo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2928f8da53147c49b1b1979e1fe4907, type: 2}
+  - {fileID: 2100000, guid: 9c8d4a8dc8afc18418bd451f02895586, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
