@@ -11,7 +11,8 @@ namespace Minigames
     {
         Idle,       // Ready to start but not doing anything
         Started,    // Currently in progress
-        Completed  // Completed and ready to notify of completion
+        Timing,     // Currently in progress and timer started
+        Completed   // Completed and ready to notify of completion
     }
 
     /// <summary>
@@ -21,6 +22,7 @@ namespace Minigames
     {
         Vector3 epicentre { get; set; }         // Center of the minigame zone.
         MinigameState state { get; set; }       // Current state of the minigame.
+        MinigameState lastState { get; set; }   // State of the minigame last tick.
         List<GameObject> objects { get; set; }  // Objects to collect in the minigame.
         GameObject areaHighlight { get; set; }  // The big hexagonal pillar showing the center of the minigame from a distance.
         int collectedAmount { get; set; }       // The amount of resources collected during the minigame (original amount minus failed collections).
@@ -28,9 +30,12 @@ namespace Minigames
         int amount { get; set; }                // The amount of resources to spawn at the start.
         string resourceType { get; set; }       // The type of resources to spawn.
         int uniqueID { get; set; }              // The unique ID of the instruction this minigame is attached to.
-        
+        GameObject floor { get; set; }          // The floor (to prevent objects falling through).
+        int timeLeft { get; set; }              // The amount of time left.
+
         void OnStart();
-        void Update();
+        void OnUpdate();
+        void OnComplete();
     }
 
     /// <summary>
@@ -60,7 +65,6 @@ namespace Minigames
 
             minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + game, typeof(GameObject))) as GameObject;
             minigame.areaHighlight.transform.position = minigame.epicentre;
-
         }
 
         /// <summary>
@@ -72,7 +76,30 @@ namespace Minigames
             MonoBehaviour.Destroy(minigame.areaHighlight);
             minigame.state = MinigameState.Started;
 
+            minigame.floor = MonoBehaviour.Instantiate(Resources.Load("Floor", typeof(GameObject))) as GameObject;
+            minigame.floor.transform.position = minigame.epicentre + new Vector3(0.0f, -1.0f, 0.0f);
+
             minigame.OnStart();
+        }
+
+        public static void Update(this Minigame minigame)
+        {
+            if (minigame.lastState == MinigameState.Started && minigame.state == MinigameState.Timing)
+            {
+                minigame.textManager.RequestTimer(30);
+            }
+            minigame.lastState = minigame.state;
+            minigame.OnUpdate();
+            if (minigame.textManager.GetTimeLeft() <= 0 || minigame.collectedAmount >= minigame.amount)
+            {
+                Complete(minigame);
+            }
+        }
+
+        public static void Complete(this Minigame minigame)
+        {
+            minigame.state = MinigameState.Completed;
+            MonoBehaviour.Destroy(minigame.floor);
         }
     }
 }

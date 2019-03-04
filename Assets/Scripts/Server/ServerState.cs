@@ -48,6 +48,10 @@ namespace Server
                     }
                 }
             }
+            else if (instruction[0] == 'D')
+            {
+                return "NO RESPONSE";
+            }
             else
             {
                 Debug.Log("Message is not an instruction");

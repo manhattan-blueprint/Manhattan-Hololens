@@ -1,10 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using HoloToolkit.Unity.InputModule;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 public enum InteractType {Drag, Rotate, ClickShrink};
 public enum InteractState {Idle, Touched, Hidden};
@@ -17,7 +12,13 @@ namespace Utils
     public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IManipulationHandler, INavigationHandler
     {
         readonly float rotSensitivity = 10.0f;
+
+
+#if NETFX_CORE
         readonly float dragSensitivity = 1.0f;
+#else
+        readonly float dragSensitivity = 5.0f;
+#endif
 
         [Tooltip("Sets the way an object is interacted with the options available being defined in InteractType.")]
         public InteractType interactType;
@@ -135,6 +136,7 @@ namespace Utils
         /// <param name="eventData"></param>
         void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
         {
+            interactState = InteractState.Idle;
             if (interactType == InteractType.Drag)
             {
                 InputManager.Instance.PopModalInputHandler();
@@ -147,6 +149,7 @@ namespace Utils
         /// <param name="eventData"></param>
         void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
         {
+            interactState = InteractState.Idle;
             if (interactType == InteractType.Drag)
             {
                 InputManager.Instance.PopModalInputHandler();

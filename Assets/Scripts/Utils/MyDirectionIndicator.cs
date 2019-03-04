@@ -24,7 +24,7 @@ namespace Utils
             private GameObject ForwardIndicatorObject;
 
             [Tooltip("Color to shade the direction indicator.")]
-            public Color DirectionIndicatorColor = Color.blue;
+            public Color DirectionIndicatorColor;
 
             [Tooltip("Allowable percentage inside the holographic frame to continue to show a directional indicator.")]
             [Range(-0.3f, 0.3f)]

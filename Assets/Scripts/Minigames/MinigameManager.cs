@@ -33,17 +33,26 @@ namespace Minigames
 
             Minigame minigame;
 
+            // This is the only place where strings from instructions are converted to minigames
             switch (game)
             {
-                case "Wood":
-                    minigame = new Wood();
-                    minigame.Initialize(game, position + new Vector3(0, -1.0f, 0), amount, uniqueID, textManager);
-                    break;
+                case "Wood": minigame = new Wood(); break;
+                case "Ston": minigame = new Stone(); break;
+                case "Clay": minigame = new Clay(); break;
+                case "Sand": minigame = new Sand(); break;
+                case "Iron": minigame = new IronOre(); break;
+                case "Coal": minigame = new Coal(); break;
+                case "Copp": minigame = new CopperOre(); break;
+                case "Rubb": minigame = new Rubber(); break;
+                case "Sili": minigame = new SilicaOre(); break;
+                case "Alum": minigame = new AluminiumOre(); break;
+                case "Quar": minigame = new Quartz(); break;
 
                 default:
                     Debug.Log("ERROR: no minigame decodeable from '" + game + "'; not proceeding with starting game");
                     return;
             }
+            minigame.Initialize(game, position + new Vector3(0, -1.0f, 0), amount, uniqueID, textManager);
             minigames.Add(minigame);
         }
 
@@ -55,13 +64,17 @@ namespace Minigames
                 switch (state)
                 {
                     case MinigameState.Idle:
-                        if (Vector3.Distance(minigame.epicentre, CameraCache.Main.transform.position) < 3.0f)
+                        if (Vector3.Distance(minigame.epicentre, CameraCache.Main.transform.position) < 4.0f)
                         {
                             minigame.Start();
                         }
                         break;
 
                     case MinigameState.Started:
+                        minigame.Update();
+                        break;
+
+                    case MinigameState.Timing:
                         minigame.Update();
                         break;
 

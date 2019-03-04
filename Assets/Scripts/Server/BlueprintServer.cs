@@ -65,7 +65,7 @@ namespace Server
             //serverThread.Start();
 
             // Uncomment to spawn a single object (unity version only)
-            Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
+            Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00004.00;Ston;004"));
 #endif
         }
 

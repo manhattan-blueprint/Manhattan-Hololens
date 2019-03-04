@@ -572,8 +572,17 @@
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UICollection.cs" />
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityScaler.cs" />
     <Compile Include="Assets\HoloToolkit\UX\Scripts\UsabilityUtilities.cs" />
+    <Compile Include="Assets\Scripts\Minigames\AluminiumOre.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Clay.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Coal.cs" />
+    <Compile Include="Assets\Scripts\Minigames\CopperOre.cs" />
+    <Compile Include="Assets\Scripts\Minigames\IronOre.cs" />
     <Compile Include="Assets\Scripts\Minigames\Minigame.cs" />
     <Compile Include="Assets\Scripts\Minigames\MinigameManager.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Quartz.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Rubber.cs" />
+    <Compile Include="Assets\Scripts\Minigames\Sand.cs" />
+    <Compile Include="Assets\Scripts\Minigames\SilicaOre.cs" />
     <Compile Include="Assets\Scripts\Minigames\Stone.cs" />
     <Compile Include="Assets\Scripts\Minigames\Wood.cs" />
     <Compile Include="Assets\Scripts\Server\BlueprintServer.cs" />

@@ -73,15 +73,18 @@ namespace Server
                 UnityEngine.Debug.Log("Server: Received '" + input + "'");
 
                 //string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
-                response = serverState.ProcessInstruction(input);
             }
+        
+            response = serverState.ProcessInstruction(input);
 
-            using (var dw = new DataWriter(args.Socket.OutputStream))
-            {
-                UnityEngine.Debug.Log("Server: Sending '" + response + "'");
-                dw.WriteString(response + "\n");
-                await dw.StoreAsync();
-                dw.DetachStream();
+            if (!response.Equals("NO RESPONSE")) {
+                using (var dw = new DataWriter(args.Socket.OutputStream))
+                {
+                    UnityEngine.Debug.Log("Server: Sending '" + response + "'");
+                    dw.WriteString(response + "\n");
+                    await dw.StoreAsync();
+                    dw.DetachStream();
+                }
             }
         }
 #else
