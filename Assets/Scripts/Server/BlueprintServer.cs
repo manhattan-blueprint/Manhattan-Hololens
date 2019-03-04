@@ -19,6 +19,7 @@ using UnityEngine;
 using HoloToolkit.Unity;
 using Minigames;
 using System.Collections.Generic;
+using Utils;
 
 namespace Server
 {
@@ -60,7 +61,7 @@ namespace Server
             //serverThread.Start();
 
             // Uncomment for object spawn testing
-            Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
 #endif
         }
 

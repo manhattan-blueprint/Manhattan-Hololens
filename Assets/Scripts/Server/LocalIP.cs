@@ -13,6 +13,7 @@ Retrieves the IP address and port to communicate on
     using System.Net.Sockets;
     using System.Threading;
 #endif
+using Utils;
 
 namespace Server
 {

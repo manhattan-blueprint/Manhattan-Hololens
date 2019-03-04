@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity;
+using Utils;
 
 namespace Minigames
 {

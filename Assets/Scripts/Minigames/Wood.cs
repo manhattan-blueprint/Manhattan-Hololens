@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity;
 using System.Linq;
+using Utils;
 
 namespace Minigames
 {
@@ -26,7 +27,7 @@ namespace Minigames
             {
                 GameObject tree = MonoBehaviour.Instantiate(Resources.Load("Objects/tree", typeof(GameObject))) as GameObject;
                 tree.transform.position = epicentre + new Vector3(Random.Range(-2.0f, 2.0f), 
-                    CameraCache.Main.transform.position.y, Random.Range(-2.0f, 2.0f));
+                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-2.0f, 2.0f));
                 HoloInteractive holoInteractive = tree.AddComponent<HoloInteractive>() as HoloInteractive;
                 holoInteractive.SetAttributes(InteractType.ClickShrink, 4);
                 objects.Add(tree);

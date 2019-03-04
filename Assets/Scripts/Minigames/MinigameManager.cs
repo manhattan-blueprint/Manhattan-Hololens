@@ -6,6 +6,7 @@ using UnityEngine;
 using HoloToolkit.Unity;
 using System.Collections.Generic;
 using Server;
+using Utils;
 
 namespace Minigames
 {
