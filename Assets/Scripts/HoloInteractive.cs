@@ -9,6 +9,9 @@ using System.Linq;
 public enum InteractType {Drag, Rotate, ClickShrink};
 public enum InteractState {Idle, Touched, Hidden};
 
+/// <summary>
+/// Adds movement capabilities to objects such as dragging, clicking and rotating.
+/// </summary>
 public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IManipulationHandler, INavigationHandler
 {
     readonly float rotSensitivity = 10.0f;
@@ -21,39 +24,63 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
     private float shrinkAmount;
     private Vector3 manipulationOriginalPosition = Vector3.zero;
 
+    /// <summary>
+    /// Automatically called when the Unity scene is made, as described by MonoBehaviour.
+    /// </summary>
     public void Start()
     {
         interactState = InteractState.Idle;
         originalScale = this.transform.localScale;
     }
 
+    /// <summary>
+    /// Automatically called every scene update by Unity, as described by MonoBehaviour
+    /// </summary>
     public void Update()
     {
 
     }
 
+    /// <summary>
+    /// Sets the way objects interact if this script is attached.
+    /// </summary>
+    /// <param name="interactType"></param>
+    /// <param name="divs"></param>
     public void SetAttributes(InteractType interactType, int divs = 8)
     {
         this.interactType = interactType;
         shrinkAmount = this.transform.localScale.y / (divs + 1);
     }
 
+    /// <summary>
+    /// Hides the object.
+    /// </summary>
     public void Hide ()
     {
         this.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
         interactState = InteractState.Hidden;
     }
 
+    /// <summary>
+    /// Effect when object is looked at, as described by IFocusable interface.
+    /// </summary>
     public void OnFocusEnter()
     {
 
     }
 
+    /// <summary>
+    /// Effect when object is looked away from after being looked at, as described by IFocusable interface.
+    /// </summary>
     public void OnFocusExit() 
     {
 
     }
 
+    /// <summary>
+    /// Effect when an object is clicked, as described by IInputClickHandler interace.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnInputClicked(InputClickedEventData eventData)
     {
         interactState = InteractState.Touched;
@@ -70,9 +97,11 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
             }
         }
     }
-
-
-    // Click and hold to drag
+    
+    /// <summary>
+    /// Effect when an object is initially tapped and held to translate the object, as described by IManipulationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void IManipulationHandler.OnManipulationStarted(ManipulationEventData eventData)
     {
         interactState = InteractState.Touched;
@@ -83,6 +112,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object remains held to translate the object, as described by IManipulationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void IManipulationHandler.OnManipulationUpdated(ManipulationEventData eventData)
     {
         if (interactType == InteractType.Drag)
@@ -91,6 +124,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object is released after being held to translate, as described by IManipulationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
     {
         if (interactType == InteractType.Drag)
@@ -99,6 +136,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object is tapped and then the hold cancelled due to an external event, as described by IManipulationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
     {
         if (interactType == InteractType.Drag)
@@ -107,8 +148,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
-
-    // Click and hold to rotate.
+    /// <summary>
+    /// Effect when an object is initially tapped and held to rotate the object, as described by INavigationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void INavigationHandler.OnNavigationStarted(NavigationEventData eventData)
     {
         interactState = InteractState.Touched;
@@ -118,6 +161,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object has already been tapped and held to rotate the object, as described by INavigationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void INavigationHandler.OnNavigationUpdated(NavigationEventData eventData)
     {
         if (interactType == InteractType.Rotate)
@@ -127,6 +174,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object is released when being held to rotate the object, as described by INavigationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void INavigationHandler.OnNavigationCompleted(NavigationEventData eventData)
     {
         if (interactType == InteractType.Rotate)
@@ -135,6 +186,10 @@ public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IM
         }
     }
 
+    /// <summary>
+    /// Effect when an object is tapped and held to rotate the object but then the interaction is cancelled, as described by INavigationHandler interface.
+    /// </summary>
+    /// <param name="eventData"></param>
     void INavigationHandler.OnNavigationCanceled(NavigationEventData eventData)
     {
         if (interactType == InteractType.Rotate)

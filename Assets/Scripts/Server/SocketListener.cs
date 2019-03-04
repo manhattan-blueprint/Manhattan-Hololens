@@ -82,7 +82,7 @@ namespace Server
 
             using (var dw = new DataWriter(args.Socket.OutputStream)) 
             {
-                UnityEngine.Debug.Log("Server: Sending '" + input + "'");
+                UnityEngine.Debug.Log("Server: Sending '" + response + "'");
                 dw.WriteString(response);
                 await dw.StoreAsync();
                 dw.DetachStream();
