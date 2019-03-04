@@ -2,11 +2,7 @@
 #if NETFX_CORE
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using System.Diagnostics;
-using System.Net.Sockets;
 using System;
-using System.Text;
-using System.IO;
 #else
 using System;
 using System.Net;
@@ -14,7 +10,6 @@ using System.Net.Sockets;
 using System.Text;
 #endif
 using UnityEngine;
-using Utils;
 
 namespace Server
 {
@@ -73,7 +68,7 @@ namespace Server
 
                 await dr.LoadAsync(32);
 
-                input = dr.ReadString(32) + "\n";
+                input = dr.ReadString(32);
 
                 UnityEngine.Debug.Log("Server: Received '" + input + "'");
 
@@ -81,10 +76,10 @@ namespace Server
                 response = serverState.ProcessInstruction(input);
             }
 
-            using (var dw = new DataWriter(args.Socket.OutputStream)) 
+            using (var dw = new DataWriter(args.Socket.OutputStream))
             {
                 UnityEngine.Debug.Log("Server: Sending '" + response + "'");
-                dw.WriteString(response);
+                dw.WriteString(response + "\n");
                 await dw.StoreAsync();
                 dw.DetachStream();
             }

@@ -1,13 +1,5 @@
-/*
-Manages all the server and interacts with the game.
-Attach this script to a GameObject. Create a Text GameObject (Create>UI>Text)
-and attach it to the My Text field in the Inspector of your GameObject. Press
-the space bar in Play Mode to see the Text change.
-*/
-
 #if NETFX_CORE
 using Windows.Foundation;
-using System.Text.RegularExpressions;
 #else
 using System;
 using System.Net;
@@ -16,16 +8,21 @@ using System.Threading;
 #endif
 
 using UnityEngine;
-using HoloToolkit.Unity;
 using Minigames;
 using System.Collections.Generic;
 using Utils;
 
 namespace Server
 {
+    /// <summary>
+    /// Manages the interaction between the low level socket listener and the game.
+    /// </summary>
     public class BlueprintServer : MonoBehaviour
     {
+        [Tooltip("Cursor object the user sees.")]
         public GameObject cursor;
+
+        [Tooltip("Script in charge of managing the information text.")]
         public TextManager textManager;
 
         private LocalIP localIP;
@@ -37,9 +34,11 @@ namespace Server
         private Thread serverThread;
 #endif
 
+        /// <summary>
+        /// Automatically called when the Unity scene is made, as described by MonoBehaviour.
+        /// </summary>
         public void Start()
         {
-            // Initialize the synchronous socket listener
             localIP = new LocalIP();
             serverState = new ServerState();
             listener = new SocketListener(localIP, serverState);
@@ -50,24 +49,32 @@ namespace Server
             minigameManager = new MinigameManager(serverState);
 
 #if NETFX_CORE
+            // Runs a socket listener asynchronously.
             IAsyncAction asyncAction = Windows.System.Threading.ThreadPool.RunAsync(
                 (workItem) =>
             {
                 listener.StartListening();
             });
 #else
-            // Uncomment for full unity server testing
+            // Note: uncommenting code for testing in general is bad, but in this case is the
+            // simplest and extremely effective way for developing; when on the desktop I only
+            // need to be testing the minigames and this lets me spawn them in easily.
+
+            // Uncomment for full server (unity version only)
             //serverThread = new Thread(new ThreadStart(listener.StartListening));
             //serverThread.Start();
 
-            // Uncomment for object spawn testing
-            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
+            // Uncomment to spawn a single object (unity version only)
+            Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
 #endif
         }
 
+        /// <summary>
+        /// Automatically called every scene update by Unity, as described by MonoBehaviour.
+        /// </summary>
         public void Update()
         {
-            foreach (KeyValuePair<int, Spawnable> entry in serverState.spawnables)
+            foreach (KeyValuePair<int, Spawnable> entry in serverState.GetSpawnables())
             {
                 Spawnable spawnable = entry.Value;
                 if (!spawnable.spawned)
@@ -80,15 +87,6 @@ namespace Server
             }
 
             minigameManager.Update();
-
-            if (Input.GetKeyDown("u"))
-            {
-                Debug.Log(serverState.ProcessInstruction("I;000;00000.00;-0005.00;Wood;004"));
-            }
-            if (Input.GetKeyDown("o"))
-            {
-                Debug.Log(serverState.ProcessInstruction("I;001;00020.00;-0005.00;Wood;003"));
-            }
         }
     }
 }

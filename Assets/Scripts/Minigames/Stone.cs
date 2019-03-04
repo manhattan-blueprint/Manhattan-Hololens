@@ -1,12 +1,13 @@
-﻿/* Minigame for collecting wood. */
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity;
 using Utils;
 
 namespace Minigames
 {
+    /// <summary>
+    /// Minigame for collecting stone.
+    /// </summary>
     public class Stone : Minigame
     {
         public Vector3 epicentre { get; set; }

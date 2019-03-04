@@ -1,6 +1,4 @@
-﻿/* Minigame for collecting wood. */
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity;
 using System.Linq;
@@ -8,6 +6,9 @@ using Utils;
 
 namespace Minigames
 {
+    /// <summary>
+    /// Minigame for collecting wood.
+    /// </summary>
     public class Wood : Minigame
     {
         public Vector3 epicentre { get; set; }

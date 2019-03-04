@@ -1,31 +1,30 @@
-/*
-Retrieves the IP address and port to communicate on
-*/
-
 #if NETFX_CORE
-    using Windows.Networking.Sockets;
     using Windows.Networking.Connectivity;
     using System.Linq;
 #else
-    using UnityEngine;
-    using UnityEngine.Networking;
     using System.Net;
     using System.Net.Sockets;
-    using System.Threading;
 #endif
-using Utils;
 
 namespace Server
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LocalIP
     {
-        // Get local IP address of device.
+        /// <summary>
+        /// Gets the local IP address of the device.
+        /// ISSUE: THIS WILL FAIL AND CRASH THE PROGRAM IF THE DEVICE HAS MORE THAN ONE IP ADDRESS.
+        /// </summary>
+        /// <returns></returns>
         public string Address()
         {
             string localIP = "";
 #if NETFX_CORE
                 var icp = NetworkInformation.GetInternetConnectionProfile();
 
+                // TODO: Add multiple IP address handling for this.
                 if (icp?.NetworkAdapter == null) return null;
                 var hostname =
                     NetworkInformation.GetHostNames()
@@ -34,7 +33,7 @@ namespace Server
                                 hn.IPInformation?.NetworkAdapter != null && hn.IPInformation.NetworkAdapter.NetworkAdapterId
                                 == icp.NetworkAdapter.NetworkAdapterId);
 
-                // the ip address
+                // TODO: add null error handling for this.
                 localIP = hostname?.CanonicalName;
 #else
             IPHostEntry host;
@@ -51,6 +50,10 @@ namespace Server
             return localIP;
         }
 
+        /// <summary>
+        /// Gets the port for the Blueprint socket.
+        /// </summary>
+        /// <returns></returns>
         public int Port()
         {
             int port = 9050;
