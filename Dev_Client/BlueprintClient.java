@@ -16,7 +16,8 @@ public class BlueprintClient {
             client.SetSocket("192.168.43.160", 9050);
             // client.AddItemToBuffer("I;0.0;0.5;3.5;wood\r\n");
             // client.AddItemToBuffer("18");
-            client.AddItemToBuffer("I;0.0;0.5;3.5;wood\r\n");
+            client.SendAndRecv("I;000;-0002.00;-0002.00;Wood;004");
+            // client.AddItemToBuffer("I;3.50;0.00;-3.5;wood");
         }
         catch(Exception e) {
             System.out.println("Error initializing server; " + e.getMessage());

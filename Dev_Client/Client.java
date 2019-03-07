@@ -113,7 +113,7 @@ public class Client {
             // System.out.println("Checking bytes <" + objB + "> equals <" + resB + ">");
 
             // if (object.equals(response)) {
-            System.out.println("Object display acknowledged for " + object + "!");
+            System.out.println("Received response " + response + "!");
             buffer.remove(object);
             // }
         }
