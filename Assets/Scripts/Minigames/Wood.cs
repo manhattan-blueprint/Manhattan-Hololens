@@ -18,6 +18,7 @@ namespace Minigames
         public GameObject areaHighlight { get; set; }
         public int collectedAmount { get; set; }
         public TextManager textManager { get; set; }
+        public GestureInfoManager gestureInfoManager { get; set; }
         public int amount { get; set; }
         public string resourceType { get; set; }
         public int uniqueID { get; set; }
@@ -37,6 +38,7 @@ namespace Minigames
                 objects.Add(tree);
             }
             textManager.RequestText("Chop the trees down!", 2.0f);
+            gestureInfoManager.RequestShowTapInfo();
         }
 
         void Minigame.OnUpdate()
@@ -44,10 +46,6 @@ namespace Minigames
             foreach (var item in objects)
             {
                 HoloInteractive holoInteractive = item.GetComponent<HoloInteractive>();
-                if (holoInteractive.interactState == InteractState.Touched)
-                {
-                    textManager.RequestReset();
-                }
                 if (holoInteractive.interactState == InteractState.Hidden)
                 {
                     objects.Remove(item);
@@ -55,16 +53,16 @@ namespace Minigames
                     collectedAmount += 1;
                     return;
                 }
-            }
-            if (!objects.Any())
-            {
-                state = MinigameState.Completed;
-                MonoBehaviour.Destroy(floor);
+                if (holoInteractive.interactState == InteractState.Touched)
+                {
+                    gestureInfoManager.RequestHide();
+                }
             }
         }
 
         void Minigame.OnComplete()
         {
+            textManager.RequestText("You collected " + collectedAmount + " wood!", 3.0f);
         }
     }
 }

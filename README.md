@@ -44,5 +44,8 @@ Hololens implementation for the Manhattan Games Project, Blueprint.
 
  * [Hololens Emulator (useful for quick builds)](https://docs.microsoft.com/en-us/windows/mixed-reality/using-the-hololens-emulator)
 
+## Image Sources
+ * [Hand icon](https://docs.microsoft.com/en-us/power-bi/consumer/mobile/mobile-mixed-reality-app)
+
 ## Other stuff
  * Installing Eduroam certificate: connect hololens to computer with certificate using the device portal and install transfer security certificate between hololens and computer. Afterwards connect back to Eduroam using the Hololens and put in student username and password. The page will say insecure, but proceed anyway. Log in using the Hololens log in details.

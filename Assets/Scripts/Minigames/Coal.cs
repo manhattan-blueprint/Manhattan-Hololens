@@ -18,6 +18,7 @@ namespace Minigames
         public GameObject areaHighlight { get; set; }
         public int collectedAmount { get; set; }
         public TextManager textManager { get; set; }
+        public GestureInfoManager gestureInfoManager { get; set; }
         public int amount { get; set; }
         public string resourceType { get; set; }
         public int uniqueID { get; set; }

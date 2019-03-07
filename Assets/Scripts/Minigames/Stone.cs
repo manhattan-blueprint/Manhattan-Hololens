@@ -18,6 +18,7 @@ namespace Minigames
         public GameObject areaHighlight { get; set; }
         public int collectedAmount { get; set; }
         public TextManager textManager { get; set; }
+        public GestureInfoManager gestureInfoManager { get; set; }
         public int amount { get; set; }
         public string resourceType { get; set; }
         public int uniqueID { get; set; }
@@ -37,7 +38,7 @@ namespace Minigames
             {
                 GameObject stone = MonoBehaviour.Instantiate(Resources.Load("Objects/Rocks", typeof(GameObject))) as GameObject;
                 stone.transform.position = epicentre + new Vector3(Random.Range(-2.0f, 2.0f),
-                    CameraCache.Main.transform.position.y, Random.Range(-2.0f, 2.0f));
+                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-2.0f, 2.0f));
                 HoloInteractive holoInteractive = stone.AddComponent<HoloInteractive>() as HoloInteractive;
                 holoInteractive.SetAttributes(InteractType.Drag);
                 objects.Add(stone);
@@ -47,31 +48,36 @@ namespace Minigames
 
             bag = MonoBehaviour.Instantiate(Resources.Load("Bag", typeof(GameObject))) as GameObject;
             bag.transform.position = epicentre + new Vector3(0.0f, CameraCache.Main.transform.position.y + 0.8f, 0.0f);
+
+            gestureInfoManager.RequestShowDragInfo();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         void Minigame.OnUpdate()
         {
             foreach (var item in objects)
             {
                 HoloInteractive holoInteractive = item.GetComponent<HoloInteractive>();
-                if (holoInteractive.interactState == InteractState.Idle)
+                if (Vector3.Distance(bag.transform.position, item.transform.position) < 0.5f)
                 {
-                    if (Vector3.Distance(bag.transform.position, item.transform.position) < 0.5f)
-                    {
-                        objects.Remove(item);
-                        MonoBehaviour.Destroy(item);
-                        collectedAmount += 1;
-                    }
+                    MonoBehaviour.Destroy(item);
+                    collectedAmount += 1;
+                    objects.Remove(item);
+                    return;
                 }
-                else if (holoInteractive.interactState == InteractState.Touched)
+                if (holoInteractive.interactState == InteractState.Touched)
                 {
-                    state = MinigameState.Timing;
+                    gestureInfoManager.RequestHide();
                 }
             }
         }
 
         void Minigame.OnComplete()
         {
+            MonoBehaviour.Destroy(bag);
+            textManager.RequestText("You collected " + collectedAmount + " stone!", 3.0f);
         }
     }
 }

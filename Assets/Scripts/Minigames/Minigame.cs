@@ -20,18 +20,19 @@ namespace Minigames
     /// </summary>
     public interface Minigame
     {
-        Vector3 epicentre { get; set; }         // Center of the minigame zone.
-        MinigameState state { get; set; }       // Current state of the minigame.
-        MinigameState lastState { get; set; }   // State of the minigame last tick.
-        List<GameObject> objects { get; set; }  // Objects to collect in the minigame.
-        GameObject areaHighlight { get; set; }  // The big hexagonal pillar showing the center of the minigame from a distance.
-        int collectedAmount { get; set; }       // The amount of resources collected during the minigame (original amount minus failed collections).
-        TextManager textManager { get; set; }   // The informative text manager, to show the amount collected or how to collect.
-        int amount { get; set; }                // The amount of resources to spawn at the start.
-        string resourceType { get; set; }       // The type of resources to spawn.
-        int uniqueID { get; set; }              // The unique ID of the instruction this minigame is attached to.
-        GameObject floor { get; set; }          // The floor (to prevent objects falling through).
-        int timeLeft { get; set; }              // The amount of time left.
+        Vector3 epicentre { get; set; }                     // Center of the minigame zone.
+        MinigameState state { get; set; }                   // Current state of the minigame.
+        MinigameState lastState { get; set; }               // State of the minigame last tick.
+        List<GameObject> objects { get; set; }              // Objects to collect in the minigame.
+        GameObject areaHighlight { get; set; }              // The big hexagonal pillar showing the center of the minigame from a distance.
+        int collectedAmount { get; set; }                   // The amount of resources collected during the minigame (original amount minus failed collections).
+        TextManager textManager { get; set; }               // The informative text manager, to show the amount collected or how to collect.
+        GestureInfoManager gestureInfoManager { get; set; } // The informative gesture manager, to show how to collect a resource
+        int amount { get; set; }                            // The amount of resources to spawn at the start.
+        string resourceType { get; set; }                   // The type of resources to spawn.
+        int uniqueID { get; set; }                          // The unique ID of the instruction this minigame is attached to.
+        GameObject floor { get; set; }                      // The floor (to prevent objects falling through).
+        int timeLeft { get; set; }                          // The amount of time left.
 
         void OnStart();
         void OnUpdate();
@@ -52,7 +53,7 @@ namespace Minigames
         /// <param name="amount"></param>
         /// <param name="uniqueID"></param>
         /// <param name="textManager"></param>
-        public static void Initialize(this Minigame minigame, string game, Vector3 epicentre, int amount, int uniqueID, TextManager textManager)
+        public static void Initialize(this Minigame minigame, string game, Vector3 epicentre, int amount, int uniqueID, TextManager textManager, GestureInfoManager gestureInfoManager)
         {
             minigame.epicentre = epicentre;
             minigame.state = MinigameState.Idle;
@@ -65,6 +66,8 @@ namespace Minigames
 
             minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + game, typeof(GameObject))) as GameObject;
             minigame.areaHighlight.transform.position = minigame.epicentre;
+
+            minigame.gestureInfoManager = gestureInfoManager;
         }
 
         /// <summary>
@@ -78,17 +81,14 @@ namespace Minigames
 
             minigame.floor = MonoBehaviour.Instantiate(Resources.Load("Floor", typeof(GameObject))) as GameObject;
             minigame.floor.transform.position = minigame.epicentre + new Vector3(0.0f, -1.0f, 0.0f);
+            
+            minigame.textManager.RequestTimer(15);
 
             minigame.OnStart();
         }
 
         public static void Update(this Minigame minigame)
         {
-            if (minigame.lastState == MinigameState.Started && minigame.state == MinigameState.Timing)
-            {
-                minigame.textManager.RequestTimer(30);
-            }
-            minigame.lastState = minigame.state;
             minigame.OnUpdate();
             if (minigame.textManager.GetTimeLeft() <= 0 || minigame.collectedAmount >= minigame.amount)
             {
@@ -98,6 +98,12 @@ namespace Minigames
 
         public static void Complete(this Minigame minigame)
         {
+            foreach (var item in minigame.objects)
+            {
+                MonoBehaviour.Destroy(item);
+            }
+            minigame.textManager.RequestTimerStop();
+            minigame.OnComplete();
             minigame.state = MinigameState.Completed;
             MonoBehaviour.Destroy(minigame.floor);
         }
