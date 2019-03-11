@@ -27,7 +27,7 @@ namespace Minigames
             this.serverState = serverState;
         }
 
-        public void PlaceMinigame(string game, Vector3 position, int amount, int uniqueID)
+        public void PlaceMinigame(int game, Vector3 position, int amount, int uniqueID)
         {
             Debug.Log("New minigame being placed at " + position + " of game type " + game + " with unique ID of " + uniqueID);
 
@@ -36,17 +36,17 @@ namespace Minigames
             // This is the only place where strings from instructions are converted to minigames
             switch (game)
             {
-                case "Wood": minigame = new Wood(); break;
-                case "Ston": minigame = new Stone(); break;
-                case "Clay": minigame = new Clay(); break;
-                case "Sand": minigame = new Sand(); break;
-                case "Iron": minigame = new IronOre(); break;
-                case "Coal": minigame = new Coal(); break;
-                case "Copp": minigame = new CopperOre(); break;
-                case "Rubb": minigame = new Rubber(); break;
-                case "Sili": minigame = new SilicaOre(); break;
-                case "Alum": minigame = new AluminiumOre(); break;
-                case "Quar": minigame = new Quartz(); break;
+                case 1: minigame = new Wood(); break;
+                case 2: minigame = new Stone(); break;
+                //case "Clay": minigame = new Clay(); break;
+                //case "Sand": minigame = new Sand(); break;
+                //case "Iron": minigame = new IronOre(); break;
+                //case "Coal": minigame = new Coal(); break;
+                //case "Copp": minigame = new CopperOre(); break;
+                //case "Rubb": minigame = new Rubber(); break;
+                //case "Sili": minigame = new SilicaOre(); break;
+                //case "Alum": minigame = new AluminiumOre(); break;
+                //case "Quar": minigame = new Quartz(); break;
 
                 default:
                     Debug.Log("ERROR: no minigame decodeable from '" + game + "'; not proceeding with starting game");

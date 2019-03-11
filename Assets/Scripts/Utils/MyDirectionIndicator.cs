@@ -16,6 +16,9 @@ namespace Utils
             readonly float indicatorScale = 0.5f;
             readonly float forwardCutoff = 3.0f;
 
+            [Tooltip("Modifier of the direction indicators object centre point")]
+            public Vector3 objectCentreModifier;
+
             private GameObject Cursor;
 
             // Default object.
@@ -97,6 +100,12 @@ namespace Utils
                 Destroy(DirectionIndicatorObject);
             }
 
+            public void HideIndicators()
+            {
+                DirectionIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+                ForwardIndicatorObject.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            }
+
             /// <summary>
             /// Instantiates the object, sets material and visibility.
             /// </summary>
@@ -153,7 +162,7 @@ namespace Utils
                 }
                 Camera mainCamera = CameraCache.Main;
                 // Direction from the Main Camera to this script's parent gameObject.
-                Vector3 camToObjectDirection = gameObject.transform.position - mainCamera.transform.position;
+                Vector3 camToObjectDirection = (gameObject.transform.position - objectCentreModifier) - mainCamera.transform.position;
                 camToObjectDirection.Normalize();
 
                 // The cursor indicator should only be visible if the target is not visible.
@@ -205,7 +214,7 @@ namespace Utils
             private bool IsTargetVisible(Camera mainCamera)
             {
                 // This will return true if the target's mesh is within the Main Camera's view frustums.
-                Vector3 targetViewportPosition = mainCamera.WorldToViewportPoint(gameObject.transform.position);
+                Vector3 targetViewportPosition = mainCamera.WorldToViewportPoint(gameObject.transform.position - objectCentreModifier);
                 return (targetViewportPosition.x > VisibilitySafeFactor &&
                         targetViewportPosition.x < 1 - VisibilitySafeFactor &&
                         targetViewportPosition.y > VisibilitySafeFactor &&

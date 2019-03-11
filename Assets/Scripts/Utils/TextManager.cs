@@ -9,7 +9,7 @@ namespace Utils
     /// </summary>
     public class TextManager : MonoBehaviour
     {
-        private TextMesh infoText;
+        public TextMesh infoText;
         private bool inUse;
         private int timeLeft;
         private IEnumerator timerCoroutine;
@@ -19,7 +19,6 @@ namespace Utils
         /// </summary>
         public void Start()
         {
-            infoText = GameObject.Find("InfoText").GetComponent(typeof(TextMesh)) as TextMesh;
             inUse = false;
         }
 

@@ -8,6 +8,7 @@ namespace Utils
         private SpriteRenderer gestureReady;
         private SpriteRenderer gestureHold;
         private IEnumerator timerCoroutine;
+        private TextManager gestureTextManager;
 
         /// <summary>
         /// Automatically called when the Unity scene is made, as described by MonoBehaviour.
@@ -17,6 +18,10 @@ namespace Utils
             gestureReady = GameObject.Find("GestureReady").GetComponent(typeof(SpriteRenderer)) as SpriteRenderer;
             gestureHold = GameObject.Find("GestureHold").GetComponent(typeof(SpriteRenderer)) as SpriteRenderer;
             Hide();
+            
+            gestureTextManager = gameObject.AddComponent<TextManager>() as TextManager;
+            gestureTextManager.infoText = GameObject.Find("GestureText").GetComponent(typeof(TextMesh)) as TextMesh;
+            gestureTextManager.RequestReset();
         }
 
         /// <summary>
@@ -29,18 +34,21 @@ namespace Utils
 
         public void RequestShowTapInfo()
         {
+            gestureTextManager.RequestText("Tap objects to collect");
             timerCoroutine = TapInfoAnimation();
             StartCoroutine(timerCoroutine);
         }
 
         public void RequestShowDragInfo()
         {
+            gestureTextManager.RequestText("Tap and hold objects to drag");
             timerCoroutine = TapDragInfo();
             StartCoroutine(timerCoroutine);
         }
 
         public void RequestHide()
         {
+            gestureTextManager.RequestReset();
             StopCoroutine(timerCoroutine);
             Hide();
         }

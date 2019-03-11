@@ -66,9 +66,9 @@ namespace Server
                 dr.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
                 dr.ByteOrder = ByteOrder.LittleEndian;
 
-                await dr.LoadAsync(32);
+                await dr.LoadAsync(30);
 
-                input = dr.ReadString(32);
+                input = dr.ReadString(30);
 
                 UnityEngine.Debug.Log("Server: Received '" + input + "'");
 

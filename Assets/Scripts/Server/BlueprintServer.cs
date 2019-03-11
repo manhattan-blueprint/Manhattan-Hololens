@@ -65,8 +65,8 @@ namespace Server
             //serverThread.Start();
 
             // Uncomment to spawn a single object (unity version only)
-            Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00004.00;Ston;004"));
-            Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;Wood;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00004.00;01;004"));
+            Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;02;004"));
 #endif
         }
 
@@ -84,6 +84,7 @@ namespace Server
                     textManager.RequestReset();
                     minigameManager.PlaceMinigame(spawnable.type, spawnable.GetPosition(), spawnable.amount, spawnable.uniqueID);
                     spawnable.spawned = true;
+                    textManager.RequestText("Head towards the pillar", 2.0f);
                 }
             }
 

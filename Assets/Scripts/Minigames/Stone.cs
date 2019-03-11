@@ -20,7 +20,6 @@ namespace Minigames
         public TextManager textManager { get; set; }
         public GestureInfoManager gestureInfoManager { get; set; }
         public int amount { get; set; }
-        public string resourceType { get; set; }
         public int uniqueID { get; set; }
         public GameObject floor { get; set; }
         public int timeLeft { get; set; }
@@ -30,8 +29,6 @@ namespace Minigames
         void Minigame.OnStart()
         {
             this.amount = amount;
-
-            MonoBehaviour.Destroy(areaHighlight);
 
             // Spawn in loads of trees and make them draggable.
             for (int i = 0; i < amount; i++)
@@ -48,6 +45,9 @@ namespace Minigames
 
             bag = MonoBehaviour.Instantiate(Resources.Load("Bag", typeof(GameObject))) as GameObject;
             bag.transform.position = epicentre + new Vector3(0.0f, CameraCache.Main.transform.position.y + 0.8f, 0.0f);
+
+            MyAnimation animation = bag.AddComponent<MyAnimation>() as MyAnimation;
+            animation.StartAnimation(Anims.oscillate, Vector3.zero);
 
             gestureInfoManager.RequestShowDragInfo();
         }

@@ -21,8 +21,8 @@ namespace Server
         [Tooltip("Whether the instructions minigame has been completed or not.")]
         public Boolean collected;
         
-        [Tooltip("The type of the object to spawn (4 letters).")]
-        public string type;
+        [Tooltip("The type of the object to spawn (see server schema).")]
+        public int type;
 
         [Tooltip("The unique code associated with the instruction.")]
         public int uniqueID;
@@ -46,11 +46,18 @@ namespace Server
             string[] temp = instruction.Split(new string[] { ";" }, StringSplitOptions.None);
 #endif
             // Weirdness required for UWP.
-            uniqueID = int.Parse(temp[1], System.Globalization.CultureInfo.InvariantCulture);
-            xCo = float.Parse(temp[2], System.Globalization.CultureInfo.InvariantCulture);
-            zCo = float.Parse(temp[3], System.Globalization.CultureInfo.InvariantCulture);
-            type = temp[4];
-            amount = int.Parse(temp[5], System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                uniqueID = int.Parse(temp[1], System.Globalization.CultureInfo.InvariantCulture);
+                xCo = float.Parse(temp[2], System.Globalization.CultureInfo.InvariantCulture);
+                zCo = float.Parse(temp[3], System.Globalization.CultureInfo.InvariantCulture);
+                type = int.Parse(temp[4], System.Globalization.CultureInfo.InvariantCulture);
+                amount = int.Parse(temp[5], System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Incorrect message sent!" + e);
+            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Utils;
+using Utils.HoloToolkit.Unity;
 
 namespace Minigames
 {
@@ -29,7 +30,6 @@ namespace Minigames
         TextManager textManager { get; set; }               // The informative text manager, to show the amount collected or how to collect.
         GestureInfoManager gestureInfoManager { get; set; } // The informative gesture manager, to show how to collect a resource
         int amount { get; set; }                            // The amount of resources to spawn at the start.
-        string resourceType { get; set; }                   // The type of resources to spawn.
         int uniqueID { get; set; }                          // The unique ID of the instruction this minigame is attached to.
         GameObject floor { get; set; }                      // The floor (to prevent objects falling through).
         int timeLeft { get; set; }                          // The amount of time left.
@@ -53,19 +53,26 @@ namespace Minigames
         /// <param name="amount"></param>
         /// <param name="uniqueID"></param>
         /// <param name="textManager"></param>
-        public static void Initialize(this Minigame minigame, string game, Vector3 epicentre, int amount, int uniqueID, TextManager textManager, GestureInfoManager gestureInfoManager)
+        public static void Initialize(this Minigame minigame, int game, Vector3 epicentre, int amount, int uniqueID, TextManager textManager, GestureInfoManager gestureInfoManager)
         {
             minigame.epicentre = epicentre;
             minigame.state = MinigameState.Idle;
             minigame.objects = new List<GameObject>();
             minigame.amount = amount;
             minigame.collectedAmount = 0;
-            minigame.resourceType = game;
             minigame.uniqueID = uniqueID;
             minigame.textManager = textManager;
 
-            minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + game, typeof(GameObject))) as GameObject;
-            minigame.areaHighlight.transform.position = minigame.epicentre;
+            string highlightPath;
+            switch (game)
+            {
+                case 1: highlightPath = "Wood"; break;
+                case 2: highlightPath = "Stone"; break;
+                default: Debug.Log("Minigame: Error decoding"); highlightPath = "Wood";  break;
+            }
+
+            minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + highlightPath, typeof(GameObject))) as GameObject;
+            minigame.areaHighlight.transform.position = minigame.epicentre + new Vector3(0.0f, 50.0f, 0.0f);
 
             minigame.gestureInfoManager = gestureInfoManager;
         }
@@ -76,13 +83,19 @@ namespace Minigames
         /// <param name="minigame"></param>
         public static void Start(this Minigame minigame)
         {
-            MonoBehaviour.Destroy(minigame.areaHighlight);
+            MyAnimation areaHighlightAnimation = minigame.areaHighlight.AddComponent<MyAnimation>() as MyAnimation;
+            areaHighlightAnimation.StartAnimation(Anims.moveAccelerate, new Vector3(0.0f, 200.0f, 0.0f), 0.000001f, true);
+
+            MyDirectionIndicator indicator = minigame.areaHighlight.GetComponent<MyDirectionIndicator>();
+            indicator.HideIndicators();
+            MonoBehaviour.Destroy(indicator);
+
             minigame.state = MinigameState.Started;
 
             minigame.floor = MonoBehaviour.Instantiate(Resources.Load("Floor", typeof(GameObject))) as GameObject;
             minigame.floor.transform.position = minigame.epicentre + new Vector3(0.0f, -1.0f, 0.0f);
             
-            minigame.textManager.RequestTimer(15);
+            minigame.textManager.RequestTimer(30);
 
             minigame.OnStart();
         }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using HoloToolkit.Unity.InputModule;
+using System.Collections;
 
 public enum InteractType {Drag, Rotate, ClickShrink};
 public enum InteractState {Idle, Touched, Hidden};
@@ -28,7 +29,8 @@ namespace Utils
 
         private Vector3 originalScale;
         private float shrinkAmount;
-        private Vector3 manipulationOriginalPosition = Vector3.zero;
+        private Vector3 manipulationOriginalPosition;
+        private bool gravity;
 
         /// <summary>
         /// Automatically called when the Unity scene is made, as described by MonoBehaviour.
@@ -37,6 +39,7 @@ namespace Utils
         {
             interactState = InteractState.Idle;
             originalScale = this.transform.localScale;
+            manipulationOriginalPosition = Vector3.zero;
         }
 
         /// <summary>
@@ -113,6 +116,10 @@ namespace Utils
             interactState = InteractState.Touched;
             if (this.interactType == InteractType.Drag)
             {
+                if (gravity)
+                {
+                    gameObject.GetComponent<Rigidbody>().useGravity = false;
+                }
                 InputManager.Instance.PushModalInputHandler(gameObject);
                 manipulationOriginalPosition = transform.position;
             }
@@ -136,6 +143,10 @@ namespace Utils
         /// <param name="eventData"></param>
         void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
         {
+            if (gravity)
+            {
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+            }
             interactState = InteractState.Idle;
             if (interactType == InteractType.Drag)
             {
@@ -149,6 +160,10 @@ namespace Utils
         /// <param name="eventData"></param>
         void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
         {
+            if (gravity)
+            {
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+            }
             interactState = InteractState.Idle;
             if (interactType == InteractType.Drag)
             {

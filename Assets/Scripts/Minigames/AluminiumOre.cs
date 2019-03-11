@@ -20,7 +20,6 @@ namespace Minigames
         public TextManager textManager { get; set; }
         public GestureInfoManager gestureInfoManager { get; set; }
         public int amount { get; set; }
-        public string resourceType { get; set; }
         public int uniqueID { get; set; }
         public GameObject floor { get; set; }
         public int timeLeft { get; set; }

@@ -592,6 +592,7 @@
     <Compile Include="Assets\Scripts\Server\Spawnable.cs" />
     <Compile Include="Assets\Scripts\Utils\GestureInfoManager.cs" />
     <Compile Include="Assets\Scripts\Utils\HoloInteractive.cs" />
+    <Compile Include="Assets\Scripts\Utils\MyAnimation.cs" />
     <Compile Include="Assets\Scripts\Utils\MyDirectionIndicator.cs" />
     <Compile Include="Assets\Scripts\Utils\TextManager.cs" />
     <Compile Include="Assets\Scripts\Utils\TrackCamera.cs" />
