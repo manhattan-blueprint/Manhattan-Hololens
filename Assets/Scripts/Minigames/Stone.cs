@@ -34,17 +34,18 @@ namespace Minigames
             for (int i = 0; i < amount; i++)
             {
                 GameObject stone = MonoBehaviour.Instantiate(Resources.Load("Objects/Rocks", typeof(GameObject))) as GameObject;
-                stone.transform.position = epicentre + new Vector3(Random.Range(-2.0f, 2.0f),
-                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-2.0f, 2.0f));
+                stone.transform.position = epicentre + new Vector3(Random.Range(-1.2f, 1.2f),
+                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-1.2f, 1.2f));
                 HoloInteractive holoInteractive = stone.AddComponent<HoloInteractive>() as HoloInteractive;
-                holoInteractive.SetAttributes(InteractType.Drag);
+                holoInteractive.SetAttributes(InteractType.Drag, 8, true);
                 objects.Add(stone);
             }
             state = MinigameState.Started;
-            textManager.RequestText("Put the rocks in the sack!", 2.0f);
 
             bag = MonoBehaviour.Instantiate(Resources.Load("Bag", typeof(GameObject))) as GameObject;
-            bag.transform.position = epicentre + new Vector3(0.0f, CameraCache.Main.transform.position.y + 0.8f, 0.0f);
+            bag.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 3.0f;
+            bag.transform.position -= new Vector3(0.0f, Camera.main.transform.forward.y * 3.0f + 0.5f, 0.0f);
+                //epicentre + new Vector3(0.0f, CameraCache.Main.transform.position.y + 0.5f, 0.0f);
 
             MyAnimation animation = bag.AddComponent<MyAnimation>() as MyAnimation;
             animation.StartAnimation(Anims.oscillate, Vector3.zero);
@@ -59,6 +60,12 @@ namespace Minigames
         {
             foreach (var item in objects)
             {
+                if (item.transform.position.y < floor.transform.position.y - 0.2f)
+                {
+                    item.transform.position = new Vector3(item.transform.position.x, 
+                        floor.transform.position.y + 0.2f, item.transform.position.y);
+                }
+
                 HoloInteractive holoInteractive = item.GetComponent<HoloInteractive>();
                 if (Vector3.Distance(bag.transform.position, item.transform.position) < 0.5f)
                 {
@@ -72,12 +79,20 @@ namespace Minigames
                     gestureInfoManager.RequestHide();
                 }
             }
+
+            // Make bag face towards player.
+            //gameObject.transform.rotation = mainCamera.transform.rotation;
+            //transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward,
+            //    mainCamera.transform.rotation * Vector3.up);
         }
 
         void Minigame.OnComplete()
         {
             MonoBehaviour.Destroy(bag);
-            textManager.RequestText("You collected " + collectedAmount + " stone!", 3.0f);
+            if (amount == collectedAmount)
+                textManager.RequestText("You collected " + collectedAmount + " stone!", 3.0f);
+            else
+                textManager.RequestText("...Failure...", 3.0f);
         }
     }
 }

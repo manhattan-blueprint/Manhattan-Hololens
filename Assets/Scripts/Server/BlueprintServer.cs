@@ -65,8 +65,8 @@ namespace Server
             //serverThread.Start();
 
             // Uncomment to spawn a single object (unity version only)
-            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00004.00;01;004"));
-            Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;02;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00000.00;01;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;02;004"));
 #endif
         }
 
@@ -81,14 +81,32 @@ namespace Server
                 if (!spawnable.spawned)
                 {
                     Debug.Log("BlueprintServer: loading " + spawnable.type);
-                    textManager.RequestReset();
-                    minigameManager.PlaceMinigame(spawnable.type, spawnable.GetPosition(), spawnable.amount, spawnable.uniqueID);
+                    textManager.RequestReset(); ;
+
+                    Vector3 spawnPos = Camera.main.transform.position;
+                    spawnPos -= new Vector3(0.0f, spawnPos.y, 0.0f);
+
+                    Debug.Log("Centre of minigame:" + spawnPos);
+
+                    minigameManager.PlaceMinigame(spawnable.type, spawnPos, 
+                        spawnable.amount, spawnable.uniqueID);
                     spawnable.spawned = true;
-                    textManager.RequestText("Head towards the pillar", 2.0f);
+                    // Uncomment when reenabling pillars
+                    //textManager.RequestText("Head towards the pillar", 2.0f);
                 }
             }
 
             minigameManager.Update();
+
+            if (Input.GetKey("u"))
+            {
+                serverState.ProcessInstruction("I;000;00000.00;00000.00;01;004");
+            }
+
+            if (Input.GetKey("i"))
+            {
+                serverState.ProcessInstruction("I;001;00000.00;00000.00;02;004");
+            }
         }
     }
 }

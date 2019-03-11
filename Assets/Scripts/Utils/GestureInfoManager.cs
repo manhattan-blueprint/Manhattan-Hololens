@@ -46,6 +46,16 @@ namespace Utils
             StartCoroutine(timerCoroutine);
         }
 
+        public void RequestText(string text)
+        {
+            gestureTextManager.RequestText(text);
+        }
+
+        public void RequestReset()
+        {
+            gestureTextManager.RequestReset();
+        }
+
         public void RequestHide()
         {
             gestureTextManager.RequestReset();

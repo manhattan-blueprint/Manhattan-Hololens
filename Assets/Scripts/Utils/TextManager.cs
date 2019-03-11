@@ -48,7 +48,7 @@ namespace Utils
         public void RequestText(string text, float duration)
         {
             RequestText(text);
-            Invoke("RequestReset", duration);
+            RequestReset(duration);
         }
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace Utils
             return timeLeft;
         }
 
-        public void RequestTimer(int time)
+        public void RequestTimer(int time, float delay)
         {
             timeLeft = time;
-            timerCoroutine = DecreaseTime(1, 1);
+            timerCoroutine = DecreaseTime(1, 1, delay);
             StartCoroutine(timerCoroutine);
         }
 
@@ -85,8 +85,10 @@ namespace Utils
             StopCoroutine(timerCoroutine);
         }
 
-        private IEnumerator DecreaseTime(int time, int timestep=1)
+        private IEnumerator DecreaseTime(int time, int timestep = 1, float delay = 2.0f)
         {
+            yield return new WaitForSeconds(delay);
+
             for (; timeLeft >= 0; timeLeft -= timestep)
             {
                 yield return new WaitForSeconds(timestep);

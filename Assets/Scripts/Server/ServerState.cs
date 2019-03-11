@@ -73,9 +73,10 @@ namespace Server
         /// Notifies the ServerState of a minigame being complete.
         /// </summary>
         /// <param name="uniqueID"></param>
-        public void NotifyComplete(int uniqueID)
+        public void NotifyComplete(int uniqueID, int amount)
         {
             spawnables[uniqueID].collected = true;
+            spawnables[uniqueID].amount = amount;
         }
     }
 }

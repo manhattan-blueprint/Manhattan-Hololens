@@ -26,17 +26,19 @@ namespace Minigames
 
         void Minigame.OnStart()
         {
+            Debug.Log("Minigame started");
             // Spawn in loads of trees and make them click to shrink.
             for (int i = 0; i < amount; i++)
             {
                 GameObject tree = MonoBehaviour.Instantiate(Resources.Load("Objects/tree", typeof(GameObject))) as GameObject;
                 tree.transform.position = epicentre + new Vector3(Random.Range(-2.0f, 2.0f),
-                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-2.0f, 2.0f));
+                    CameraCache.Main.transform.position.y + 0.3f, Random.Range(-2.0f, 2.0f));
                 HoloInteractive holoInteractive = tree.AddComponent<HoloInteractive>() as HoloInteractive;
                 holoInteractive.SetAttributes(InteractType.ClickShrink, 4);
+                MyAnimation animation = tree.AddComponent<MyAnimation>() as MyAnimation;
+                animation.StartAnimation(Anims.grow, Vector3.zero, 0.15f);
                 objects.Add(tree);
             }
-            textManager.RequestText("Chop the trees down!", 2.0f);
             gestureInfoManager.RequestShowTapInfo();
         }
 
@@ -61,7 +63,10 @@ namespace Minigames
 
         void Minigame.OnComplete()
         {
-            textManager.RequestText("You collected " + collectedAmount + " wood!", 3.0f);
+            if (amount == collectedAmount)
+                textManager.RequestText("You collected " + collectedAmount + " wood!", 3.0f);
+            else
+                textManager.RequestText("...Failure...", 3.0f);
         }
     }
 }

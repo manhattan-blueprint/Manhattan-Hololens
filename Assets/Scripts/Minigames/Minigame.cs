@@ -72,7 +72,9 @@ namespace Minigames
             }
 
             minigame.areaHighlight = MonoBehaviour.Instantiate(Resources.Load("Areas/" + highlightPath, typeof(GameObject))) as GameObject;
-            minigame.areaHighlight.transform.position = minigame.epicentre + new Vector3(0.0f, 50.0f, 0.0f);
+
+            // Set to 50 to re-enable the pillars
+            minigame.areaHighlight.transform.position = minigame.epicentre + new Vector3(0.0f, 1000.0f, 0.0f);
 
             minigame.gestureInfoManager = gestureInfoManager;
         }
@@ -93,11 +95,11 @@ namespace Minigames
             minigame.state = MinigameState.Started;
 
             minigame.floor = MonoBehaviour.Instantiate(Resources.Load("Floor", typeof(GameObject))) as GameObject;
-            minigame.floor.transform.position = minigame.epicentre + new Vector3(0.0f, -1.0f, 0.0f);
-            
-            minigame.textManager.RequestTimer(30);
+            minigame.floor.transform.position = minigame.epicentre + new Vector3(0.0f, -0.8f, 0.0f);
 
             minigame.OnStart();
+
+            minigame.textManager.RequestTimer(30, 1.0f);
         }
 
         public static void Update(this Minigame minigame)
@@ -106,6 +108,24 @@ namespace Minigames
             if (minigame.textManager.GetTimeLeft() <= 0 || minigame.collectedAmount >= minigame.amount)
             {
                 Complete(minigame);
+                return;
+            }
+
+            if (minigame.textManager.GetTimeLeft() <= 20 && minigame.textManager.GetTimeLeft() >= 17)
+            {
+                minigame.gestureInfoManager.RequestText("Look around");
+            }
+            else if (minigame.textManager.GetTimeLeft() <= 10 && minigame.textManager.GetTimeLeft() >= 8)
+            {
+                minigame.gestureInfoManager.RequestText("Check behind you");
+            }
+            else if (minigame.textManager.GetTimeLeft() <= 5 && minigame.textManager.GetTimeLeft() >= 1)
+            {
+                minigame.gestureInfoManager.RequestText("Quickly! " + (minigame.amount - minigame.collectedAmount) + " more to go");
+            }
+            else if (minigame.collectedAmount >= 1 && minigame.textManager.GetTimeLeft() >= 1)
+            {
+                minigame.gestureInfoManager.RequestText(minigame.collectedAmount + " out of " + minigame.amount + " collected");
             }
         }
 
@@ -116,9 +136,14 @@ namespace Minigames
                 MonoBehaviour.Destroy(item);
             }
             minigame.textManager.RequestTimerStop();
+            minigame.gestureInfoManager.RequestReset();
+            minigame.gestureInfoManager.RequestHide();
             minigame.OnComplete();
             minigame.state = MinigameState.Completed;
             MonoBehaviour.Destroy(minigame.floor);
+
+            if (minigame.collectedAmount < minigame.amount)
+                minigame.collectedAmount = 0;
         }
     }
 }

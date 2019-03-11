@@ -69,7 +69,7 @@ namespace Server
         public string GetCollectedString()
         {
             string returnString = instruction;
-            returnString = returnString.Substring(0, 29);
+            returnString = returnString.Substring(0, 27);
             returnString += amount.ToString().PadLeft(3, '0');
             return returnString;
         }
@@ -80,6 +80,7 @@ namespace Server
         /// <returns></returns>
         public Vector3 GetPosition()
         {
+            // Uncomment once true positioning is re enabled.
             return new Vector3(xCo, 0.0f, zCo);
         }
 

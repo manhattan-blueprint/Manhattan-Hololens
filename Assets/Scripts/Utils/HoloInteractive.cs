@@ -16,7 +16,7 @@ namespace Utils
 
 
 #if NETFX_CORE
-        readonly float dragSensitivity = 1.0f;
+        readonly float dragSensitivity = 3.0f;
 #else
         readonly float dragSensitivity = 5.0f;
 #endif
@@ -55,10 +55,11 @@ namespace Utils
         /// </summary>
         /// <param name="interactType"></param>
         /// <param name="divs"></param>
-        public void SetAttributes(InteractType interactType, int divs = 8)
+        public void SetAttributes(InteractType interactType, int divs = 8, bool gravity = false)
         {
             this.interactType = interactType;
             shrinkAmount = this.transform.localScale.y / (divs + 1);
+            this.gravity = gravity;
         }
 
         /// <summary>

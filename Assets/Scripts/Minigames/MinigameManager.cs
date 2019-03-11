@@ -64,7 +64,8 @@ namespace Minigames
                 switch (state)
                 {
                     case MinigameState.Idle:
-                        if (Vector3.Distance(minigame.epicentre, CameraCache.Main.transform.position) < 4.0f)
+                        // Set to 4 to reenable pillars
+                        if (Vector3.Distance(minigame.epicentre, CameraCache.Main.transform.position) < 8.0f)
                         {
                             minigame.Start();
                         }
@@ -80,8 +81,8 @@ namespace Minigames
 
                     case MinigameState.Completed:
                         Debug.Log("Minigame Complete");
+                        serverState.NotifyComplete(minigame.uniqueID, minigame.collectedAmount);
                         minigames.Remove(minigame);
-                        serverState.NotifyComplete(minigame.uniqueID);
                         return;
                 }
             }

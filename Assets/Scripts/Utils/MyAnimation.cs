@@ -7,7 +7,8 @@ namespace Utils
     {
         moveAccelerate,
         moveDecelerate,
-        oscillate
+        oscillate,
+        grow
     }
 
     class MyAnimation : MonoBehaviour
@@ -34,6 +35,10 @@ namespace Utils
 
                 case Anims.oscillate:
                     timedCoroutine = Oscillate();
+                    break;
+
+                case Anims.grow:
+                    timedCoroutine = Grow(speed, delay);
                     break;
 
                 default:
@@ -66,23 +71,31 @@ namespace Utils
         private IEnumerator Oscillate()
         {
             float maxDifference = 0.5f;
-            int direction = 1;
-            float currentPosition = 0.0f;
 
             for (int count = 0; ; count++)
             {
                 yield return new WaitForSeconds(0.01f);
-                
-                float positionModifier = (direction * maxDifference - currentPosition) / 100;
-                
-                currentPosition += positionModifier;
+
+                float positionModifier = maxDifference * Mathf.Sin((Mathf.PI * count) / 90) / 200;
 
                 gameObject.transform.position += new Vector3(0.0f, positionModifier, 0.0f);
+            }
+        }
 
-                if (count % 100 == 0)
-                {
-                    direction *= -1;
-                }
+        private IEnumerator Grow(float targetSize, float delay)
+        {
+            gameObject.transform.localScale = Vector3.zero;
+
+            yield return new WaitForSeconds(delay);
+
+            for (float count = 0.0f; count < 110.0f; count += 1.5f)
+            {
+                yield return new WaitForSeconds(0.01f);
+
+                // Overshoots and then shrinks back a little bit
+                float size = targetSize * 1.05f * Mathf.Sin((Mathf.PI * count) / 180);
+
+                gameObject.transform.localScale = new Vector3(size, size, size);
             }
         }
     }
