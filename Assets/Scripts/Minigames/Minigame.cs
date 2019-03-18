@@ -102,6 +102,10 @@ namespace Minigames
             minigame.textManager.RequestTimer(30, 1.0f);
         }
 
+        /// <summary>
+        /// Should be called inline with MonoBehaviour Update.
+        /// </summary>
+        /// <param name="minigame"></param>
         public static void Update(this Minigame minigame)
         {
             minigame.OnUpdate();
@@ -129,6 +133,10 @@ namespace Minigames
             }
         }
 
+        /// <summary>
+        /// Notify other states of final minigame result and end the game.
+        /// </summary>
+        /// <param name="minigame"></param>
         public static void Complete(this Minigame minigame)
         {
             foreach (var item in minigame.objects)

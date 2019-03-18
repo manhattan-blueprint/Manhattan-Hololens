@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Utils
 {
+    /// <summary>
+    /// Manages information shown regarding gestures and how to interact with the game.
+    /// </summary>
     public class GestureInfoManager : MonoBehaviour
     {
         private SpriteRenderer gestureReady;

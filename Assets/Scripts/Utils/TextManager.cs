@@ -68,11 +68,20 @@ namespace Utils
             Invoke("RequestReset", delay);
         }
 
+        /// <summary>
+        /// Gets the current time left on the timer.
+        /// </summary>
+        /// <returns></returns>
         public int GetTimeLeft()
         {
             return timeLeft;
         }
 
+        /// <summary>
+        /// Starts a new timer.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="delay"></param>
         public void RequestTimer(int time, float delay)
         {
             timeLeft = time;
@@ -80,11 +89,21 @@ namespace Utils
             StartCoroutine(timerCoroutine);
         }
 
+        /// <summary>
+        /// Stops a currently running timer.
+        /// </summary>
         public void RequestTimerStop()
         {
             StopCoroutine(timerCoroutine);
         }
 
+        /// <summary>
+        /// Coroutine for updating the timer.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="timestep"></param>
+        /// <param name="delay"></param>
+        /// <returns></returns>
         private IEnumerator DecreaseTime(int time, int timestep = 1, float delay = 2.0f)
         {
             yield return new WaitForSeconds(delay);

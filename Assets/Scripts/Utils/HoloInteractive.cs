@@ -13,8 +13,6 @@ namespace Utils
     public class HoloInteractive : MonoBehaviour, IFocusable, IInputClickHandler, IManipulationHandler, INavigationHandler
     {
         readonly float rotSensitivity = 10.0f;
-
-
 #if NETFX_CORE
         readonly float dragSensitivity = 3.0f;
 #else

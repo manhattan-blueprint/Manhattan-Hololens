@@ -1,25 +1,22 @@
-﻿namespace Utils
-{
-    using UnityEngine;
+﻿using UnityEngine;
 
+namespace Utils
+{
+    /// <summary>
+    /// Makes an object billboard (constant facing towards a camera).
+    /// </summary>
     public class FaceTowardsCamera : MonoBehaviour
     {
-
-        public Camera camera;
-        GameObject myContainer;
+        private Camera targetCamera;
 
         void Awake()
         {
-            camera = Camera.main;
-            //myContainer = new GameObject();
-            //myContainer.name = "Holder_" + transform.gameObject.name;
-            //myContainer.transform.position = transform.position;
-            //transform.parent = myContainer.transform;
+            targetCamera = Camera.main;
         }
         
         void LateUpdate()
         {
-            gameObject.transform.LookAt(camera.transform.position);
+            gameObject.transform.LookAt(targetCamera.transform.position);
         }
     }
 }

@@ -10,12 +10,19 @@ using Utils;
 
 namespace Minigames
 {
+    /// <summary>
+    /// Manages all minigame instances.
+    /// </summary>
     public class MinigameManager
     {
+        [Tooltip("The main text manager of the game.")]
+        public TextManager textManager;
+
+        [Tooltip("The gesture information manager of the game.")]
+        public GestureInfoManager gestureInfoManager;
+
         private BlueprintServer blueprintServer;
         private List<Minigame> minigames;
-        public TextManager textManager;
-        public GestureInfoManager gestureInfoManager;
         private ServerState serverState;
 
         public MinigameManager(ServerState serverState)
@@ -27,6 +34,13 @@ namespace Minigames
             this.serverState = serverState;
         }
 
+        /// <summary>
+        /// Places a new minigame in the world.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="position"></param>
+        /// <param name="amount"></param>
+        /// <param name="uniqueID"></param>
         public void PlaceMinigame(int game, Vector3 position, int amount, int uniqueID)
         {
             Debug.Log("New minigame being placed at " + position + " of game type " + game + " with unique ID of " + uniqueID);
@@ -56,6 +70,9 @@ namespace Minigames
             minigames.Add(minigame);
         }
 
+        /// <summary>
+        /// Checks for updates from the minigames, should be called inline with MonoBehaviour.Update().
+        /// </summary>
         public void Update()
         {
             foreach (var minigame in minigames)
