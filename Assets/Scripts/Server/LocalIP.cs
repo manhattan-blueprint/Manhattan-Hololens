@@ -5,6 +5,7 @@
     using System.Net;
     using System.Net.Sockets;
 #endif
+using UnityEngine;
 
 namespace Server
 {
@@ -22,19 +23,38 @@ namespace Server
         {
             string localIP = "";
 #if NETFX_CORE
-                var icp = NetworkInformation.GetInternetConnectionProfile();
+            var icp = NetworkInformation.GetInternetConnectionProfile();
 
-                // TODO: Add multiple IP address handling for this.
-                if (icp?.NetworkAdapter == null) return null;
-                var hostname =
-                    NetworkInformation.GetHostNames()
-                        .SingleOrDefault(
-                            hn =>
-                                hn.IPInformation?.NetworkAdapter != null && hn.IPInformation.NetworkAdapter.NetworkAdapterId
-                                == icp.NetworkAdapter.NetworkAdapterId);
+            // TODO: Add multiple IP address handling for this.
+            if (icp?.NetworkAdapter == null)
+                return null;
 
-                // TODO: add null error handling for this.
-                localIP = hostname?.CanonicalName;
+            var hostNames = NetworkInformation.GetHostNames();
+
+            Debug.Log("IP Hostnames:" + hostNames);
+
+            Windows.Networking.HostName hostName;
+
+            foreach (var host in hostNames)
+            {
+                Debug.Log("Available hosts:" + host);
+            }
+
+            foreach (Windows.Networking.HostName localHostName in NetworkInformation.GetHostNames())
+            {
+                if (localHostName.IPInformation != null)
+                {
+                    if (localHostName.Type == Windows.Networking.HostNameType.Ipv4)
+                    {
+                        localIP = localHostName.ToString();
+                        break;
+                    }
+                }
+            }
+            
+            localIP = localIP == null ? localIP = "No IP found" : localIP;
+
+            Debug.Log("Chosen IP:" + localIP);
 #else
             IPHostEntry host;
             host = Dns.GetHostEntry(Dns.GetHostName());
