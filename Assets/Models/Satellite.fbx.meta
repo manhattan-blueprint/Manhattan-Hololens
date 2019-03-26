@@ -16,6 +16,25 @@ ModelImporter:
     100020: pSphere53
     100022: pSphere54
     100024: //RootNode
+    100026: Dish_Holder
+    100028: Satellite:pCube51
+    100030: Satellite:pCylinder134
+    100032: Satellite:pCylinder135
+    100034: Satellite:pCylinder136
+    100036: Satellite:pCylinder137
+    100038: Satellite:pCylinder138
+    100040: Satellite:pCylinder139
+    100042: Satellite:pCylinder140
+    100044: Satellite:pCylinder142
+    100046: Satellite:pCylinder143
+    100048: Satellite:pCylinder50
+    100050: Satellite:pCylinder53
+    100052: Satellite:pCylinder54
+    100054: Satellite:pCylinder61
+    100056: Satellite:pCylinder62
+    100058: Satellite:pCylinder63
+    100060: Satellite:pCylinder64
+    100062: Satellite:pSphere54
     400000: Base
     400002: Body
     400004: Dish
@@ -29,7 +48,27 @@ ModelImporter:
     400020: pSphere53
     400022: pSphere54
     400024: //RootNode
+    400026: Dish_Holder
+    400028: Satellite:pCube51
+    400030: Satellite:pCylinder134
+    400032: Satellite:pCylinder135
+    400034: Satellite:pCylinder136
+    400036: Satellite:pCylinder137
+    400038: Satellite:pCylinder138
+    400040: Satellite:pCylinder139
+    400042: Satellite:pCylinder140
+    400044: Satellite:pCylinder142
+    400046: Satellite:pCylinder143
+    400048: Satellite:pCylinder50
+    400050: Satellite:pCylinder53
+    400052: Satellite:pCylinder54
+    400054: Satellite:pCylinder61
+    400056: Satellite:pCylinder62
+    400058: Satellite:pCylinder63
+    400060: Satellite:pCylinder64
+    400062: Satellite:pSphere54
     2100000: lambert1
+    2100002: Satellite3
     2300000: Base
     2300002: Body
     2300004: Frame
@@ -41,6 +80,24 @@ ModelImporter:
     2300016: pCylinder64
     2300018: pSphere53
     2300020: pSphere54
+    2300022: Satellite:pCube51
+    2300024: Satellite:pCylinder134
+    2300026: Satellite:pCylinder135
+    2300028: Satellite:pCylinder136
+    2300030: Satellite:pCylinder137
+    2300032: Satellite:pCylinder138
+    2300034: Satellite:pCylinder139
+    2300036: Satellite:pCylinder140
+    2300038: Satellite:pCylinder142
+    2300040: Satellite:pCylinder143
+    2300042: Satellite:pCylinder50
+    2300044: Satellite:pCylinder53
+    2300046: Satellite:pCylinder54
+    2300048: Satellite:pCylinder61
+    2300050: Satellite:pCylinder62
+    2300052: Satellite:pCylinder63
+    2300054: Satellite:pCylinder64
+    2300056: Satellite:pSphere54
     3300000: Base
     3300002: Body
     3300004: Frame
@@ -52,6 +109,24 @@ ModelImporter:
     3300016: pCylinder64
     3300018: pSphere53
     3300020: pSphere54
+    3300022: Satellite:pCube51
+    3300024: Satellite:pCylinder134
+    3300026: Satellite:pCylinder135
+    3300028: Satellite:pCylinder136
+    3300030: Satellite:pCylinder137
+    3300032: Satellite:pCylinder138
+    3300034: Satellite:pCylinder139
+    3300036: Satellite:pCylinder140
+    3300038: Satellite:pCylinder142
+    3300040: Satellite:pCylinder143
+    3300042: Satellite:pCylinder50
+    3300044: Satellite:pCylinder53
+    3300046: Satellite:pCylinder54
+    3300048: Satellite:pCylinder61
+    3300050: Satellite:pCylinder62
+    3300052: Satellite:pCylinder63
+    3300054: Satellite:pCylinder64
+    3300056: Satellite:pSphere54
     4300000: Body
     4300002: Frame
     4300004: pCylinder53
@@ -63,6 +138,24 @@ ModelImporter:
     4300016: pCylinder63
     4300018: pCylinder64
     4300020: Base
+    4300022: Satellite:pCylinder50
+    4300024: Satellite:pCylinder134
+    4300026: Satellite:pCylinder140
+    4300028: Satellite:pCylinder139
+    4300030: Satellite:pCylinder138
+    4300032: Satellite:pCylinder137
+    4300034: Satellite:pCylinder136
+    4300036: Satellite:pCylinder135
+    4300038: Satellite:pCylinder53
+    4300040: Satellite:pCylinder54
+    4300042: Satellite:pSphere54
+    4300044: Satellite:pCylinder61
+    4300046: Satellite:pCylinder62
+    4300048: Satellite:pCylinder63
+    4300050: Satellite:pCylinder64
+    4300052: Satellite:pCube51
+    4300054: Satellite:pCylinder143
+    4300056: Satellite:pCylinder142
   externalObjects: {}
   materials:
     importMaterials: 1

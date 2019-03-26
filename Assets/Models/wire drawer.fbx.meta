@@ -34,6 +34,7 @@ ModelImporter:
     100056: Wire_Drawer
     100058: Wire_Drawer1
     100060: wire_drawer1:Wire_Drawer1
+    100062: Wire_Drawer2
     400000: group19
     400002: group20
     400004: pCylinder157
@@ -65,14 +66,19 @@ ModelImporter:
     400056: Wire_Drawer
     400058: Wire_Drawer1
     400060: wire_drawer1:Wire_Drawer1
+    400062: Wire_Drawer2
     2100000: wire_drawer1_RubberTexture
     2100002: lambert1
     2100004: wire_drawer1_phong4
     2100006: wire_drawer1_IronTexture
     2100008: Steel1
+    2100010: Shiny_Light_Metal
     2300000: Wire_Drawer1
+    2300002: Wire_Drawer2
     3300000: Wire_Drawer1
+    3300002: Wire_Drawer2
     4300000: Wire_Drawer1
+    4300002: Wire_Drawer2
   externalObjects: {}
   materials:
     importMaterials: 1

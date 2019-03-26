@@ -4,11 +4,19 @@ ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Furnace
     400000: //RootNode
+    400002: Furnace
     2100000: lambert1
+    2100002: Furnace_Intake
+    2100004: Furnace_Clay
+    2100006: Furnace_Base
     2300000: //RootNode
+    2300002: Furnace
     3300000: //RootNode
+    3300002: Furnace
     4300000: furnace:furnace_base6
+    4300002: Furnace
   externalObjects: {}
   materials:
     importMaterials: 1

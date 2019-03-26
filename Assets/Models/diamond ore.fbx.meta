@@ -4,12 +4,18 @@ ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Diamond_Ore
     400000: //RootNode
+    400002: Diamond_Ore
     2100000: iron_ore1_RockTexture
     2100002: phong4
+    2100004: Diamond3
     2300000: //RootNode
+    2300002: Diamond_Ore
     3300000: //RootNode
+    3300002: Diamond_Ore
     4300000: Iron_Ore1
+    4300002: Diamond_Ore
   externalObjects: {}
   materials:
     importMaterials: 1
