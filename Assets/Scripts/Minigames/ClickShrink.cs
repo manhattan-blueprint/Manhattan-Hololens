@@ -34,12 +34,12 @@ namespace Minigames
             for (int i = 0; i < Amount; i++)
             {
                 GameObject collectableObject = MonoBehaviour.Instantiate(Resources.Load("Objects/" + FileName, typeof(GameObject))) as GameObject;
-                collectableObject.transform.position = Epicentre + new Vector3(Random.Range(-2.0f, 2.0f),
-                    CameraCache.Main.transform.position.y + 0.3f, Random.Range(-2.0f, 2.0f));
+                collectableObject.transform.position = Epicentre + new Vector3(Random.Range(-1.5f, 1.5f),
+                    CameraCache.Main.transform.position.y - 0.4f, Random.Range(-1.5f, 1.5f));
                 MyAnimation animation = collectableObject.AddComponent<MyAnimation>() as MyAnimation;
-                animation.StartAnimation(Anims.grow, Vector3.zero, 10.0f);
+                animation.StartAnimation(Anims.grow, Vector3.zero, 30.0f);
                 HoloInteractive holoInteractive = collectableObject.AddComponent<HoloInteractive>() as HoloInteractive;
-                holoInteractive.SetAttributes(InteractType.ClickShrink, 4, false, 10.0f);
+                holoInteractive.SetAttributes(InteractType.ClickShrink, 4, false, 30.0f);
                 Objects.Add(collectableObject);
             }
             GestureInfoManager.RequestShowTapInfo();

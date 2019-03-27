@@ -56,7 +56,7 @@ namespace Utils
         {
             this.originalScale = new Vector3(originalScale, originalScale, originalScale);
             this.interactType = interactType;
-            shrinkAmount = originalScale * (1 / ((float)(divs)));
+            shrinkAmount = originalScale / (float)(divs);
             this.gravity = gravity;
             Debug.Log("Holointeractive object made with shrink amount " + shrinkAmount);
             Debug.Log("Local scale is  " + this.transform.localScale);

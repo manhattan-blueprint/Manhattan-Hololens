@@ -40,8 +40,8 @@ namespace Minigames
             for (int i = 0; i < Amount; i++)
             {
                 GameObject collectableObject = MonoBehaviour.Instantiate(Resources.Load("Objects/" + FileName, typeof(GameObject))) as GameObject;
-                collectableObject.transform.position = Epicentre + new Vector3(Random.Range(-1.2f, 1.2f),
-                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-1.2f, 1.2f));
+                collectableObject.transform.position = Epicentre + new Vector3(Random.Range(-1.5f, 1.5f),
+                    CameraCache.Main.transform.position.y + 1.0f, Random.Range(-1.5f, 1.5f));
                 HoloInteractive holoInteractive = collectableObject.AddComponent<HoloInteractive>() as HoloInteractive;
                 holoInteractive.SetAttributes(InteractType.Drag, 8, true);
                 Objects.Add(collectableObject);
