@@ -65,8 +65,18 @@ namespace Server
             //serverThread.Start();
 
             // Uncomment to spawn a single object (unity version only)
-            //Debug.Log(serverState.ProcessInstruction("I;000;00000.00;00000.00;01;004"));
-            //Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;02;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;000;00004.00;00004.00;01;001"));
+            //Debug.Log(serverState.ProcessInstruction("I;001;00004.00;00004.00;02;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;002;00004.00;00004.00;03;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;003;00004.00;00004.00;04;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;004;00004.00;00004.00;05;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;005;00004.00;00004.00;06;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;006;00004.00;00004.00;07;004"));
+            Debug.Log(serverState.ProcessInstruction("I;007;00004.00;00004.00;08;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;008;00004.00;00004.00;09;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;009;00004.00;00004.00;10;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;0010;00004.00;00004.00;11;004"));
+            //Debug.Log(serverState.ProcessInstruction("I;0011;00004.00;00004.00;12;004"));
 #endif
         }
 

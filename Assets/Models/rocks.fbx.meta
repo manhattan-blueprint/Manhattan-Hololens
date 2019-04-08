@@ -4,10 +4,14 @@ ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Rocks2
     400000: //RootNode
+    400002: Rocks2
     2100000: rocks_RockTexture
     2300000: //RootNode
+    2300002: Rocks2
     3300000: //RootNode
+    3300002: Rocks2
     4300000: Rocks2
   externalObjects: {}
   materials:

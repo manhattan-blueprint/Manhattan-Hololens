@@ -36,7 +36,6 @@ namespace Utils
         public void Start()
         {
             interactState = InteractState.Idle;
-            originalScale = this.transform.localScale;
             manipulationOriginalPosition = Vector3.zero;
         }
 
@@ -53,11 +52,14 @@ namespace Utils
         /// </summary>
         /// <param name="interactType"></param>
         /// <param name="divs"></param>
-        public void SetAttributes(InteractType interactType, int divs = 8, bool gravity = false)
+        public void SetAttributes(InteractType interactType, int divs = 8, bool gravity = false, float originalScale = 10.0f)
         {
+            this.originalScale = new Vector3(originalScale, originalScale, originalScale);
             this.interactType = interactType;
-            shrinkAmount = this.transform.localScale.y / (divs + 1);
+            shrinkAmount = originalScale / (float)(divs);
             this.gravity = gravity;
+            Debug.Log("Holointeractive object made with shrink amount " + shrinkAmount);
+            Debug.Log("Local scale is  " + this.transform.localScale);
         }
 
         /// <summary>
@@ -91,13 +93,17 @@ namespace Utils
         /// <param name="eventData"></param>
         public void OnInputClicked(InputClickedEventData eventData)
         {
+            Debug.Log("Original scale is  " + originalScale.y);
+            Debug.Log("Object clicked");
+            Debug.Log("Local scale: " + this.transform.localScale.y);
+            Debug.Log("Limit: " + ((float)originalScale.y / 10.0f));
             interactState = InteractState.Touched;
             if (interactType == InteractType.ClickShrink)
             {
-                if (this.transform.localScale.y >= shrinkAmount * 1.1f)
+                if (this.transform.localScale.y >= shrinkAmount * 1.1f )
                 {
                     this.transform.localScale -= new Vector3(shrinkAmount, shrinkAmount, shrinkAmount);
-                    this.transform.position += new Vector3(0.0f, -shrinkAmount * 3.0f, 0.0f);
+                    //this.transform.position += new Vector3(0.0f, -shrinkAmount * 0.3f, 0.0f);
                 }
                 else
                 {
