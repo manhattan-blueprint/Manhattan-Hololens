@@ -111,6 +111,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
         private void Start()
         {
+            Debug.Log("SURFACE PLANE INSTANTIATED");
             UpdateSurfacePlane();
         }
 

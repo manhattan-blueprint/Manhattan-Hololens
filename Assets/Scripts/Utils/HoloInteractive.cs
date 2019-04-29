@@ -58,8 +58,6 @@ namespace Utils
             this.interactType = interactType;
             shrinkAmount = originalScale / (float)(divs);
             this.gravity = gravity;
-            Debug.Log("Holointeractive object made with shrink amount " + shrinkAmount);
-            Debug.Log("Local scale is  " + this.transform.localScale);
         }
 
         /// <summary>

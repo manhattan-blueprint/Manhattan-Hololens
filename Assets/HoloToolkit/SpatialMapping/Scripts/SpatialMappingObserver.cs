@@ -255,6 +255,8 @@ namespace HoloToolkit.Unity.SpatialMapping
                         _bakeCollider: true
                         );
 
+                    Debug.Log("SPATIAL MAPPING OBSERVER: Creating new surface data with ID: " + surfaceID);
+
                     if (observer.RequestMeshAsync(surfaceData, SurfaceObserver_OnDataReady))
                     {
                         outstandingMeshRequest = newSurface;

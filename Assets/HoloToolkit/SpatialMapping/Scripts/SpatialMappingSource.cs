@@ -21,6 +21,8 @@ namespace HoloToolkit.Unity.SpatialMapping
             public MeshRenderer Renderer;
             public MeshFilter Filter;
             public MeshCollider Collider;
+            public bool ToDrawObj;
+            public GameObject Obj;
         }
 
         public struct SurfaceUpdate
@@ -114,6 +116,10 @@ namespace HoloToolkit.Unity.SpatialMapping
             // is a side effect in the setter when setting the shared mesh to null.
             surfaceObject.Collider.sharedMesh = null;
             surfaceObject.Collider.sharedMesh = surfaceObject.Filter.sharedMesh;
+
+            surfaceObject.ToDrawObj = true;
+            surfaceObject.Obj = Instantiate(Resources.Load("Grass", typeof(GameObject))) as GameObject;
+            surfaceObject.Obj.transform.SetParent(parentObject);
 
             return surfaceObject;
         }

@@ -41,6 +41,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
                 for(int iMesh = 0; iMesh < storedMeshes.Count; iMesh++)
                 {
+                    Debug.Log("FILE SURFACE OBSERVER: Creating new mesh, iMesh: " + iMesh);
                     AddSurfaceObject(CreateSurfaceObject(
                         mesh: storedMeshes[iMesh],
                         objectName: "storedmesh-" + iMesh,

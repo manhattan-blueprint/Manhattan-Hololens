@@ -61,6 +61,8 @@ namespace HoloToolkit.Unity.SpatialMapping
                         meshID: iMesh
                         );
 
+                    Debug.Log("OBJECT SURFACE OBSERVER: Creating new mesh, iMesh: " + iMesh);
+
                     newSurfaceObject.Object.transform.localPosition = meshFilter.transform.position;
                     newSurfaceObject.Object.transform.localRotation = meshFilter.transform.rotation;
 
