@@ -39,6 +39,7 @@ namespace Server
         /// </summary>
         public void Start()
         {
+            Debug.Log("FLOOR IS AT CO: " + GameObject.Find("Floor").transform.position);
             localIP = new LocalIP();
             serverState = new ServerState();
             listener = new SocketListener(localIP, serverState);

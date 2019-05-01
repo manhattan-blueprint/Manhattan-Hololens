@@ -118,34 +118,43 @@ namespace HoloToolkit.Unity.SpatialMapping
             surfaceObject.Collider.sharedMesh = surfaceObject.Filter.sharedMesh;
 
             surfaceObject.ToDrawObj = true;
-            
-            Debug.Log("Num of mesh normals found: " + mesh.normals.Length);
-            Debug.Log("Num of mesh vertices found: " + mesh.vertices.Length);
 
-            for (int i = 0; i < 20; i++)
-                Debug.Log("Normal " + i + " val: " + mesh.normals[i]);
-
-            for (int i = 0; i < 20; i++)
-                Debug.Log("Vertex " + i + " val: " + mesh.vertices[i]);
-
-            for (int i = 0; i < mesh.vertices.Length; i++)
-            {
-                Debug.Log("Vertex " + i + " val: " + mesh.vertices[i]);
-                Debug.Log("Normal " + i + " val: " + mesh.normals[i]);
-                Vector3 norm = mesh.normals[i];
-                if (Math.Abs(norm.x) < 0.1f && Math.Abs(norm.z) < 0.1f && UnityEngine.Random.Range(0.0f, 1.0f) < 0.01f)
-                {
-                    GameObject grass = Instantiate(Resources.Load<GameObject>("Grass"));
-                    grass.transform.position = mesh.vertices[i];
-                }
-            }
+            //if (mesh != null)
+            //{
+                //for (int i = 0; i < mesh.vertices.Length / 4; i += 4)
+                //{
+                //    Vector3 norm = mesh.normals[i];
+                //    if (Math.Abs(norm.x) < 0.1f && Math.Abs(norm.z) < 0.1f && UnityEngine.Random.Range(0.0f, 1.0f) < 1.0f)
+                //    {
+                //        GameObject obj;
+                //        float flowerTypeProb = UnityEngine.Random.Range(0.0f, 1.0f);
+                //        if (flowerTypeProb >= 0.75f)
+                //        {
+                //            obj = Instantiate(Resources.Load<GameObject>("Flower01"));
+                //        }
+                //        else if (flowerTypeProb > 0.5f)
+                //        {
+                //            obj = Instantiate(Resources.Load<GameObject>("Flower02"));
+                //        }
+                //        else if (flowerTypeProb > 0.25f)
+                //        {
+                //            obj = Instantiate(Resources.Load<GameObject>("Flower03"));
+                //        }
+                //        else
+                //        {
+                //            obj = Instantiate(Resources.Load<GameObject>("Flower04"));
+                //        }
+                //        obj.transform.position = mesh.vertices[i];
+                //        Debug.Log("Drawing flower at position " + mesh.vertices[i]);
+                //    }
+                //}
+            //}
 
             return surfaceObject;
         }
 
         /// <summary>
         /// Add the surface to <see cref="SurfaceObjects"/>.
-        /// </summary>
         /// <param name="toAdd">The surface to add.</param>
         protected void AddSurfaceObject(SurfaceObject toAdd)
         {
@@ -200,6 +209,42 @@ namespace HoloToolkit.Unity.SpatialMapping
             if (replaced == null)
             {
                 AddSurfaceObject(toUpdateOrAdd);
+            }
+
+            if (toUpdateOrAdd.Filter.mesh != null)
+            {
+                float distLim = 0.01f;
+                for (int i = 0; i < 6; i += 1)
+                {
+                    int select = UnityEngine.Random.Range(0, toUpdateOrAdd.Filter.mesh.triangles.Length/3) * 3;
+                    
+                    Vector3 vert1 = toUpdateOrAdd.Filter.mesh.vertices[toUpdateOrAdd.Filter.mesh.triangles[select]];
+                    Vector3 vert2 = toUpdateOrAdd.Filter.mesh.vertices[toUpdateOrAdd.Filter.mesh.triangles[select + 1]];
+                    Vector3 vert3 = toUpdateOrAdd.Filter.mesh.vertices[toUpdateOrAdd.Filter.mesh.triangles[select + 2]];
+                    if ((vert1.y - vert2.y < distLim) && (vert1.y - vert2.y > -distLim) && (vert1.y - vert3.y < distLim) && (vert1.y - vert3.y > -distLim) && (vert3.y - vert2.y < distLim) && (vert3.y - vert2.y > -distLim))
+                    {
+                        GameObject obj;
+                        float flowerTypeProb = UnityEngine.Random.Range(0.0f, 1.0f);
+                        if (flowerTypeProb >= 0.75f)
+                        {
+                            obj = Instantiate(Resources.Load<GameObject>("Flower01"));
+                        }
+                        else if (flowerTypeProb > 0.5f)
+                        {
+                            obj = Instantiate(Resources.Load<GameObject>("Flower02"));
+                        }
+                        else if (flowerTypeProb > 0.25f)
+                        {
+                            obj = Instantiate(Resources.Load<GameObject>("Flower03"));
+                        }
+                        else
+                        {
+                            obj = Instantiate(Resources.Load<GameObject>("Flower04"));
+                        }
+                        //Debug.Log("Viable found: vert1: " + vert1 + " vert2: " + vert2 + " vert3: " + vert3);
+                        obj.transform.position = vert1 + new Vector3(0.0f, 0.1f, 0.0f);
+                    }
+                }
             }
 
             return replaced;
