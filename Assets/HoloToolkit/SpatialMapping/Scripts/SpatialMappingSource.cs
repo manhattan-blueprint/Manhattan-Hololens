@@ -118,8 +118,27 @@ namespace HoloToolkit.Unity.SpatialMapping
             surfaceObject.Collider.sharedMesh = surfaceObject.Filter.sharedMesh;
 
             surfaceObject.ToDrawObj = true;
-            surfaceObject.Obj = Instantiate(Resources.Load("Grass", typeof(GameObject))) as GameObject;
-            surfaceObject.Obj.transform.SetParent(parentObject);
+            
+            Debug.Log("Num of mesh normals found: " + mesh.normals.Length);
+            Debug.Log("Num of mesh vertices found: " + mesh.vertices.Length);
+
+            for (int i = 0; i < 20; i++)
+                Debug.Log("Normal " + i + " val: " + mesh.normals[i]);
+
+            for (int i = 0; i < 20; i++)
+                Debug.Log("Vertex " + i + " val: " + mesh.vertices[i]);
+
+            for (int i = 0; i < mesh.vertices.Length; i++)
+            {
+                Debug.Log("Vertex " + i + " val: " + mesh.vertices[i]);
+                Debug.Log("Normal " + i + " val: " + mesh.normals[i]);
+                Vector3 norm = mesh.normals[i];
+                if (Math.Abs(norm.x) < 0.1f && Math.Abs(norm.z) < 0.1f && UnityEngine.Random.Range(0.0f, 1.0f) < 0.01f)
+                {
+                    GameObject grass = Instantiate(Resources.Load<GameObject>("Grass"));
+                    grass.transform.position = mesh.vertices[i];
+                }
+            }
 
             return surfaceObject;
         }

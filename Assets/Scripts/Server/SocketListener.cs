@@ -61,18 +61,11 @@ namespace Server
 
             using (var dr = new DataReader(args.Socket.InputStream))
             {
-                //dr.InputStreamOptions = InputStreamOptions.Partial;
-
-                dr.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-                dr.ByteOrder = ByteOrder.LittleEndian;
-
                 await dr.LoadAsync(30);
 
                 input = dr.ReadString(30);
 
                 UnityEngine.Debug.Log("Server: Received '" + input + "'");
-
-                //string dataReceived = Encoding.ASCII.GetString(input, 2, bytesRead - 2);
             }
         
             response = serverState.ProcessInstruction(input);
