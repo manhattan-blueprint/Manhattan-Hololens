@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2253946879921890988}
   m_Layer: 0
-  m_Name: RubberTree
+  m_Name: rubbertree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 99cdb55946f6c414db9af6d04e918fed, type: 2}
+  - {fileID: 2100000, guid: df46628ecfd64bb46bcc3cf456b6f6f1, type: 2}
   - {fileID: 2100002, guid: f97dca3fd2e23574fb5d77da71ac3155, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0

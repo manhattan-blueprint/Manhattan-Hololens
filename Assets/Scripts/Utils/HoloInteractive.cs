@@ -1,9 +1,18 @@
 ﻿using UnityEngine;
 using HoloToolkit.Unity.InputModule;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum InteractType {Drag, Rotate, ClickShrink};
 public enum InteractState {Idle, Touched, Hidden};
+
+public enum InteractSoundType
+{
+    Chop,
+    Shovel,
+    Mine,
+    Drip
+}
 
 namespace Utils
 {
@@ -19,6 +28,8 @@ namespace Utils
         readonly float dragSensitivity = 5.0f;
 #endif
 
+        SoundManager soundManager;
+
         [Tooltip("Sets the way an object is interacted with the options available being defined in InteractType.")]
         public InteractType interactType;
 
@@ -29,6 +40,8 @@ namespace Utils
         private float shrinkAmount;
         private Vector3 manipulationOriginalPosition;
         private bool gravity;
+        private InteractSoundType soundType;
+
 
         /// <summary>
         /// Automatically called when the Unity scene is made, as described by MonoBehaviour.
@@ -37,6 +50,7 @@ namespace Utils
         {
             interactState = InteractState.Idle;
             manipulationOriginalPosition = Vector3.zero;
+            soundManager = GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)) as SoundManager;
         }
 
         /// <summary>
@@ -52,14 +66,13 @@ namespace Utils
         /// </summary>
         /// <param name="interactType"></param>
         /// <param name="divs"></param>
-        public void SetAttributes(InteractType interactType, int divs = 8, bool gravity = false, float originalScale = 10.0f)
+        public void SetAttributes(InteractType interactType, int divs = 8, bool gravity = false, float originalScale = 10.0f, InteractSoundType soundType = InteractSoundType.Chop)
         {
             this.originalScale = new Vector3(originalScale, originalScale, originalScale);
             this.interactType = interactType;
             shrinkAmount = originalScale / (float)(divs);
             this.gravity = gravity;
-            Debug.Log("Holointeractive object made with shrink amount " + shrinkAmount);
-            Debug.Log("Local scale is  " + this.transform.localScale);
+            this.soundType = soundType;
         }
 
         /// <summary>
@@ -93,11 +106,26 @@ namespace Utils
         /// <param name="eventData"></param>
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            Debug.Log("Original scale is  " + originalScale.y);
-            Debug.Log("Object clicked");
-            Debug.Log("Local scale: " + this.transform.localScale.y);
-            Debug.Log("Limit: " + ((float)originalScale.y / 10.0f));
             interactState = InteractState.Touched;
+
+            switch (soundType)
+            {
+                case InteractSoundType.Chop:
+                    soundManager.PlayChopSound();
+                    break;
+                case InteractSoundType.Mine:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Shovel:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Drip:
+                    soundManager.PlayDripSound();
+                    break;
+                default:
+                    break;
+            }
+
             if (interactType == InteractType.ClickShrink)
             {
                 if (this.transform.localScale.y >= shrinkAmount * 1.1f )

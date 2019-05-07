@@ -558,12 +558,17 @@ PlayerSettings:
   metroCertificateIssuer: DefaultCompany
   metroCertificateNotAfter: 8023505328e1d501
   metroApplicationDescription: Template_3D
-  wsaImages: {}
+  wsaImages:
+    2031716: Assets/Icons/Logo44.png
+    2097252: Assets/Icons/Logo71.png
+    2162788: Assets/Icons/Logo150.png
+    2228324: Assets/Icons/Logo310.png
+    2293860: Assets/Icons/Logo310x150.png
   metroTileShortName: Manhattan-Hololens
   metroTileShowName: 0
-  metroMediumTileShowName: 0
-  metroLargeTileShowName: 0
-  metroWideTileShowName: 0
+  metroMediumTileShowName: 1
+  metroLargeTileShowName: 1
+  metroWideTileShowName: 1
   metroSupportStreamingInstall: 0
   metroLastRequiredScene: 0
   metroDefaultTileSize: 1

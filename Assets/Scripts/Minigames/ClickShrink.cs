@@ -24,6 +24,8 @@ namespace Minigames
         public int TimeLeft { get; set; }
         public string ResourceName { get; set; }
         public string FileName { get; set; }
+        public InteractSoundType SoundType { get; set; }
+        public float GrowAmount { get; set; }
 
         /// <summary>
         /// Spawn in the resources, start the timer and show helpful text.
@@ -34,15 +36,37 @@ namespace Minigames
             for (int i = 0; i < Amount; i++)
             {
                 GameObject collectableObject = MonoBehaviour.Instantiate(Resources.Load("Objects/" + FileName, typeof(GameObject))) as GameObject;
-                collectableObject.transform.position = Epicentre + new Vector3(Random.Range(-1.5f, 1.5f),
-                    CameraCache.Main.transform.position.y - 0.4f, Random.Range(-1.5f, 1.5f));
+                float distance = 2.5f;
+                float xDist = Random.Range(-distance, distance);
+                float zDist = Mathf.Sqrt(Mathf.Pow(distance, 2) - Mathf.Pow(xDist, 2.0f)) * (Random.Range(0, 2) * 2 - 1);
+                collectableObject.transform.position = Epicentre + new Vector3(xDist, CameraCache.Main.transform.position.y - 0.3f, zDist);
                 MyAnimation animation = collectableObject.AddComponent<MyAnimation>() as MyAnimation;
-                animation.StartAnimation(Anims.grow, Vector3.zero, 30.0f);
+                animation.StartAnimation(Anims.grow, Vector3.zero, GrowAmount);
                 HoloInteractive holoInteractive = collectableObject.AddComponent<HoloInteractive>() as HoloInteractive;
-                holoInteractive.SetAttributes(InteractType.ClickShrink, 4, false, 30.0f);
+                holoInteractive.SetAttributes(InteractType.ClickShrink, 3, false, GrowAmount, SoundType);
                 Objects.Add(collectableObject);
             }
             GestureInfoManager.RequestShowTapInfo();
+
+            SoundManager soundManager = GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)) as SoundManager;
+
+            switch (SoundType)
+            {
+                case InteractSoundType.Chop:
+                    soundManager.PlayChopSound();
+                    break;
+                case InteractSoundType.Mine:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Shovel:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Drip:
+                    soundManager.PlayDripSound();
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
