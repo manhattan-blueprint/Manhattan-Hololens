@@ -46,16 +46,6 @@ public class Client {
         this.state = State.IDLE_IP;
     }
 
-    public Boolean IsRunning() throws Exception {
-        if (state != State.IDLE) { return true; }
-        return false;
-    }
-
-    public void AddItemToBuffer(String Item) throws Exception {
-        buffer.add(Item);
-        System.out.println("Item " + Item + " added to buffer");
-    }
-
     public String SendAndRecv(String message) throws Exception {
         Socket clientSocket = new Socket(serverAddress, 9050);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
@@ -67,55 +57,5 @@ public class Client {
         System.out.println("Received: " + message);
         clientSocket.close();
         return message;
-    }
-
-    public void Update() throws Exception {
-        long currentTime = System.currentTimeMillis();
-
-        if (currentTime >= delayedTime) {
-            switch(state) {
-                case IDLE:
-                    Idle();
-                    break;
-
-                case GREET:
-                    Greet();
-                    break;
-
-                case IDLE_IP:
-                    Idle_IP();
-                    break;
-            }
-            delayedTime = System.currentTimeMillis() + 1000;
-        }
-    }
-
-    public void Idle() throws Exception {
-        // Nothing to do :)
-    }
-
-    public void Greet() throws Exception {
-        String response = SendAndRecv(greetMessage);
-        if (greetMessage.equals(response)) {
-            System.out.println("Greeting established! Swapping to state 'IDLE_IP'.");
-            state = State.IDLE_IP;
-        }
-    }
-
-    public void Idle_IP() throws Exception {
-        if (buffer.size() > 0) { // No need to check anything if the buffer is empty
-            String object = buffer.get(0);
-            String response = SendAndRecv(object);
-
-            // byte[] objB = object.getBytes();
-            // byte[] resB = response.getBytes();
-            // System.out.println("Checking string <" + object + "> equals <" + response + ">");
-            // System.out.println("Checking bytes <" + objB + "> equals <" + resB + ">");
-
-            // if (object.equals(response)) {
-            System.out.println("Received response " + response + "!");
-            buffer.remove(object);
-            // }
-        }
     }
 }
