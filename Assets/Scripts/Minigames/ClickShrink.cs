@@ -24,6 +24,7 @@ namespace Minigames
         public int TimeLeft { get; set; }
         public string ResourceName { get; set; }
         public string FileName { get; set; }
+        public InteractSoundType SoundType { get; set; }
 
         /// <summary>
         /// Spawn in the resources, start the timer and show helpful text.
@@ -39,10 +40,30 @@ namespace Minigames
                 MyAnimation animation = collectableObject.AddComponent<MyAnimation>() as MyAnimation;
                 animation.StartAnimation(Anims.grow, Vector3.zero, 30.0f);
                 HoloInteractive holoInteractive = collectableObject.AddComponent<HoloInteractive>() as HoloInteractive;
-                holoInteractive.SetAttributes(InteractType.ClickShrink, 4, false, 30.0f);
+                holoInteractive.SetAttributes(InteractType.ClickShrink, 4, false, 30.0f, SoundType);
                 Objects.Add(collectableObject);
             }
             GestureInfoManager.RequestShowTapInfo();
+
+            SoundManager soundManager = GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)) as SoundManager;
+
+            switch (SoundType)
+            {
+                case InteractSoundType.Chop:
+                    soundManager.PlayChopSound();
+                    break;
+                case InteractSoundType.Mine:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Shovel:
+                    soundManager.PlayShovelSound();
+                    break;
+                case InteractSoundType.Drip:
+                    soundManager.PlayDripSound();
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>

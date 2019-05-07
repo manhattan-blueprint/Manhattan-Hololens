@@ -581,6 +581,7 @@
     <Compile Include="Assets\Scripts\Server\ServerState.cs" />
     <Compile Include="Assets\Scripts\Server\SocketListener.cs" />
     <Compile Include="Assets\Scripts\Server\Spawnable.cs" />
+    <Compile Include="Assets\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Utils\FaceTowardsCamera.cs" />
     <Compile Include="Assets\Scripts\Utils\GestureInfoManager.cs" />
     <Compile Include="Assets\Scripts\Utils\HoloInteractive.cs" />
@@ -865,9 +866,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:/Users/Hololens/Documents/GitHub/Manhattan-Hololens/Assets/HoloToolkit/Utilities/Scripts/GLTF/Plugins/JsonNet/Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>C:/Users/Hololens/Documents/GitHub/Manhattan-Hololens/Library/PackageCache/com.unity.ads@2.0.8/UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>C:/Users/Hololens/Documents/GitHub/Manhattan-Hololens/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -876,9 +874,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>C:/Users/Hololens/Documents/GitHub/Manhattan-Hololens/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>C:/Users/Hololens/Documents/GitHub/Manhattan-Hololens/Library/PackageCache/com.unity.purchasing@2.0.3/UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

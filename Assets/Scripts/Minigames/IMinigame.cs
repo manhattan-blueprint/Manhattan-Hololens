@@ -36,6 +36,7 @@ namespace Minigames
         int TimeLeft { get; set; }                          // The amount of time left.
         string ResourceName { get; set; }                   // The name of the object used when collecting.
         string FileName { get; set; }                       // The name of the object used for files, for the spawnables and area highlights.
+        InteractSoundType SoundType { get; set; }           // The type of sound to play when collecting.
 
         void OnStart();
         void OnUpdate();
@@ -71,57 +72,68 @@ namespace Minigames
                 case 1:
                     minigame.FileName = "Pine";
                     minigame.ResourceName = "wood";
+                    minigame.SoundType = InteractSoundType.Chop;
                     break;
 
                 case 2:
                     minigame.FileName = "Rocks";
                     minigame.ResourceName = "stone";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 3:
                     minigame.FileName = "Clay";
                     minigame.ResourceName = "clay";
+                    minigame.SoundType = InteractSoundType.Shovel;
                     break;
 
                 case 4:
                     minigame.FileName = "IronOre";
                     minigame.ResourceName = "iron ore";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 5:
                     minigame.FileName = "CopperOre";
                     minigame.ResourceName = "copper ore";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 6:
                     minigame.FileName = "RubberTree";
                     minigame.ResourceName = "rubber";
+                    minigame.SoundType = InteractSoundType.Drip;
                     break;
 
                 case 7:
                     minigame.FileName = "DiamondOre";
                     minigame.ResourceName = "diamond";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 8:
                     minigame.FileName = "Sand";
                     minigame.ResourceName = "sand";
+                    minigame.SoundType = InteractSoundType.Shovel;
                     break;
 
                 case 9:
                     minigame.FileName = "SilicaOre";
                     minigame.ResourceName = "silica ore";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 10:
                     minigame.FileName = "QuartzOre";
                     minigame.ResourceName = "quartz";
+                    minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 default:
                     Debug.Log("Minigame: Error decoding, spawning wood anyway.");
                     minigame.FileName = "Pine";
                     minigame.ResourceName = "wood";
+                    minigame.SoundType = InteractSoundType.Chop;
                     break;
             }
 
@@ -140,6 +152,9 @@ namespace Minigames
         /// <param name="minigame"></param>
         public static void Start(this IMinigame minigame)
         {
+            SoundManager soundManager = GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)) as SoundManager;
+            soundManager.PlayBlueprintCollecting();
+
             MyAnimation areaHighlightAnimation = minigame.AreaHighlight.AddComponent<MyAnimation>() as MyAnimation;
             areaHighlightAnimation.StartAnimation(Anims.moveAccelerate, new Vector3(0.0f, 200.0f, 0.0f), 0.000001f, true);
 
@@ -190,6 +205,9 @@ namespace Minigames
         /// <param name="minigame"></param>
         public static void Complete(this IMinigame minigame)
         {
+            SoundManager soundManager = GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)) as SoundManager;
+            soundManager.PlayAfterDelay("PlayBagOpeningSound", 0.5f);
+            soundManager.PlayBirdsSound();
 
             foreach (var item in minigame.Objects)
                 MonoBehaviour.Destroy(item);

@@ -47,17 +47,6 @@ namespace Minigames
 
             IMinigame minigame = new ClickShrink();
 
-            //// This is the only place where strings from instructions are converted to minigames
-            //switch (game)
-            //{
-            //    case 1: minigame = new ClickShrink(); break;
-            //    case 2: minigame = new BagDrag(); break;
-
-            //    default:
-            //        Debug.Log("ERROR: no minigame decodeable from '" + game + "'; not proceeding with starting game");
-            //        return;
-            //}
-
             minigame.Initialize(game, position + new Vector3(0, -1.0f, 0), amount, uniqueID, textManager, gestureInfoManager);
             minigames.Add(minigame);
         }
