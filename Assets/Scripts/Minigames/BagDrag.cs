@@ -25,6 +25,7 @@ namespace Minigames
         public string ResourceName { get; set; }
         public string FileName { get; set; }
         public InteractSoundType SoundType { get; set; }
+        public float GrowAmount { get; set; }
 
         private GameObject bag;
 

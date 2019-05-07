@@ -1,6 +1,6 @@
 WindowsStoreApps
 PlayerPath?
-C:/Users/Hololens/Documents/GitHub/builds/Blueprint-Hololens
+C:/Users/Hololens/Documents/GitHub/Builds/Blueprint
 SceneListBegin?
 Assets/Scenes/SampleScene.unity
 SceneListEnd?

@@ -63,15 +63,15 @@ public class SoundManager : MonoBehaviour
         buttonPress.Add(Resources.Load<AudioClip>("Sounds/buttonPress/buttonPress4"));
         buttonPress.Add(Resources.Load<AudioClip>("Sounds/buttonPress/buttonPress5"));
 
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop1"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop2"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop3"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop4"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop5"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop6"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop7"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop8"));
-        chop.Add(Resources.Load<AudioClip>("Sounds/Mining/WoodChop9"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop1"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop2"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop3"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop4"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop5"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop6"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop7"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop8"));
+        chop.Add(Resources.Load<AudioClip>("Sounds/WoodChop/WoodChop9"));
 
         shovel.Add(Resources.Load<AudioClip>("Sounds/Shovel/Shovel1"));
         shovel.Add(Resources.Load<AudioClip>("Sounds/Shovel/Shovel2"));
@@ -134,7 +134,7 @@ public class SoundManager : MonoBehaviour
         playerTotalDistance += Vector3.Distance(playerCurrentPos, playerLastPos);
         playerTotalTime += Time.deltaTime;
         playerLastPos = playerCurrentPos;
-        if (playerTotalDistance > playerLastStep + 4.0f)
+        if (playerTotalDistance > playerLastStep + 0.5f)
         {
             PlayStepsSound();
             playerLastStep = playerTotalDistance;

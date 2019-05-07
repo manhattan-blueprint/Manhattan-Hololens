@@ -37,6 +37,7 @@ namespace Minigames
         string ResourceName { get; set; }                   // The name of the object used when collecting.
         string FileName { get; set; }                       // The name of the object used for files, for the spawnables and area highlights.
         InteractSoundType SoundType { get; set; }           // The type of sound to play when collecting.
+        float GrowAmount { get; set; }                      // Size of objects to grow to.
 
         void OnStart();
         void OnUpdate();
@@ -66,25 +67,29 @@ namespace Minigames
             minigame.CollectedAmount = 0;
             minigame.UniqueID = uniqueID;
             minigame.TextManager = textManager;
+            minigame.GrowAmount = 30.0f;
 
             switch (game)
             {
                 case 1:
                     minigame.FileName = "Pine";
-                    minigame.ResourceName = "wood";
+                    minigame.ResourceName = "wooden tree";
                     minigame.SoundType = InteractSoundType.Chop;
+                    minigame.GrowAmount = 20.0f;
                     break;
 
                 case 2:
                     minigame.FileName = "Rocks";
-                    minigame.ResourceName = "stone";
+                    minigame.ResourceName = "stone rock";
                     minigame.SoundType = InteractSoundType.Mine;
+                    minigame.GrowAmount = 25.0f;
                     break;
 
                 case 3:
                     minigame.FileName = "Clay";
-                    minigame.ResourceName = "clay";
+                    minigame.ResourceName = "clay pile";
                     minigame.SoundType = InteractSoundType.Shovel;
+                    minigame.GrowAmount = 60.0f;
                     break;
 
                 case 4:
@@ -101,19 +106,20 @@ namespace Minigames
 
                 case 6:
                     minigame.FileName = "RubberTree";
-                    minigame.ResourceName = "rubber";
+                    minigame.ResourceName = "rubber tree";
                     minigame.SoundType = InteractSoundType.Drip;
+                    minigame.GrowAmount = 20.0f;
                     break;
 
                 case 7:
                     minigame.FileName = "DiamondOre";
-                    minigame.ResourceName = "diamond";
+                    minigame.ResourceName = "diamond ore";
                     minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 case 8:
                     minigame.FileName = "Sand";
-                    minigame.ResourceName = "sand";
+                    minigame.ResourceName = "sand pile";
                     minigame.SoundType = InteractSoundType.Shovel;
                     break;
 
@@ -125,15 +131,16 @@ namespace Minigames
 
                 case 10:
                     minigame.FileName = "QuartzOre";
-                    minigame.ResourceName = "quartz";
+                    minigame.ResourceName = "quartz ore";
                     minigame.SoundType = InteractSoundType.Mine;
                     break;
 
                 default:
                     Debug.Log("Minigame: Error decoding, spawning wood anyway.");
                     minigame.FileName = "Pine";
-                    minigame.ResourceName = "wood";
+                    minigame.ResourceName = "wooden tree";
                     minigame.SoundType = InteractSoundType.Chop;
+                    minigame.GrowAmount = 20.0f;
                     break;
             }
 
@@ -171,7 +178,7 @@ namespace Minigames
 
             minigame.TextManager.RequestTimer(30, 1.0f);
 
-            ShowLookAround(minigame.ResourceName);
+            ShowLookAround(minigame);
         }
 
         /// <summary>
@@ -190,7 +197,7 @@ namespace Minigames
             if (minigame.TextManager.GetTimeLeft() <= 27)
                 HideLookAround();
             if (minigame.TextManager.GetTimeLeft() <= 20 && minigame.TextManager.GetTimeLeft() >= 17)
-                minigame.GestureInfoManager.RequestText("Look around");
+                minigame.GestureInfoManager.RequestText("Look down");
             else if (minigame.TextManager.GetTimeLeft() <= 10 && minigame.TextManager.GetTimeLeft() >= 8)
                 minigame.GestureInfoManager.RequestText("Check behind you");
             else if (minigame.TextManager.GetTimeLeft() <= 5 && minigame.TextManager.GetTimeLeft() >= 1)
@@ -227,9 +234,9 @@ namespace Minigames
             //    minigame.CollectedAmount = 0;
         }
 
-        public static void ShowLookAround(string name)
+        public static void ShowLookAround(this IMinigame minigame)
         {
-            GameObject.Find("LookAroundText").GetComponent<TextMesh>().text = "Look Around for nearby " + name;
+            GameObject.Find("LookAroundText").GetComponent<TextMesh>().text = "Nearby " + minigame.ResourceName + (minigame.Amount > 1 ? "s" : "") + "\n3 taps" + (minigame.Amount > 1 ? " each" : "");
         }
 
         public static void HideLookAround()
